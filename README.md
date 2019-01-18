@@ -1,2 +1,2 @@
 # LaserGameSystem
-A laser project system which plays video games.
+A laser projector system which plays video games.
