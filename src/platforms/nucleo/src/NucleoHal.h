@@ -57,6 +57,9 @@ public:
    {
    }
 
+   virtual ~NucleoHal()
+   {
+   }
 
    bool Init()
    {
