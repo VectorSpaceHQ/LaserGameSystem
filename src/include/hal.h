@@ -12,58 +12,105 @@
 
 #include <stdint.h>
 
-class RotaryEncoder
+namespace HAL
 {
-protected:
-   int16_t position;
-
-   void SetPosition(int16_t _pos) { position = _pos; }
-
-public:
-   RotaryEncoder():
-      position(0)
+   enum HalId
    {
-   }
-
-   int16_t GetPosition() { return position; }
-
-};
+      HAL_ID_NONE       = 0,
+      HAL_ID_MAIN_LIGHT
+   };
 
 
-class PushButton
-{
-protected:
-   bool isPressed;
-
-public:
-   PushButton():
-      isPressed(false)
+   /**************************************
+    * A Rotary Encoder Controller
+    **************************************/
+   class RotaryEncoder
    {
-   }
+   protected:
+      int16_t position;
 
-   bool GetPressed() { return isPressed; }
+      void SetPosition(int16_t _pos) { position = _pos; }
 
-};
+   public:
+      RotaryEncoder():
+         position(0)
+      {
+      }
+
+      int16_t GetPosition() { return position; }
+
+   };
 
 
-class Servo
-{
-public:
-   Servo() {}
-   void SetPosition(int16_t _pos) = 0;
+   /**************************************
+    * A Push Button
+    **************************************/
+   class PushButton
+   {
+   protected:
+      bool isPressed;
 
-};
+   public:
+      PushButton():
+         isPressed(false)
+      {
+      }
+
+      bool GetPressed() { return isPressed; }
+   };
 
 
-class OnOffSwitch
-{
-public:
-   OnOffSwitch() {}
-   void On() = 0;
-   void Off() = 0;
-   void Toggle() = 0;
+   /**************************************
+    * A Servo controller
+    **************************************/
+   class Servo
+   {
+   public:
+      ~Servo() {}
+      virtual void SetPosition(int16_t _pos) = 0;
 
-};
+   protected:
+      Servo() {}
+   };
 
+
+   /**************************************
+    * An On/Off Toggle Switch
+    **************************************/
+   class OnOffSwitch
+   {
+   public:
+      ~OnOffSwitch() {}
+      virtual void On() = 0;
+      virtual void Off() = 0;
+      virtual void Toggle() = 0;
+
+   protected:
+      OnOffSwitch() {}
+
+   };
+
+
+   /**************************************
+    * Base class for the HAL
+    **************************************/
+   class Hal
+   {
+   public:
+      ~Hal() {};
+      virtual bool Init() = 0;
+      virtual void Delay(int ms) = 0;
+      virtual int GetNumRotaryEncoders() = 0;
+      virtual int GetNumPushButtons() = 0;
+      virtual int GetNumPushServos() = 0;
+      virtual int GetNumPushOnOffSwitches() = 0;
+
+      virtual OnOffSwitch* GetOnOffSwitch(HalId id) = 0;
+
+   protected:
+      Hal() {}
+   };
+
+}
 
 #endif /* SRC_INCLUDE_HAL_H_ */
