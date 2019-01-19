@@ -13,8 +13,8 @@
 
 int main(void)
 {
-   NucleoHal nucleoHal;
+   NucleoHal   nucleoHal;
+   GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal));
 
-   GameSystem* sys = new GameSystem(dynamic_cast<HAL::Hal&>(nucleoHal));
-   sys->Start();
+   sys.Start();
 }
