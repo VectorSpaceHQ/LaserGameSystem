@@ -32,3 +32,4 @@
 *.app
 /Debug/
 /NUCLEO-F401RE.xml
+/NucleoDebug/
