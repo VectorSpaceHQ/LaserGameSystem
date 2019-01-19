@@ -29,15 +29,11 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       }
 
       namespace Arduino {
-         class RotaryEncoder
-         class PushButton
-         class Servo
+         class ArduinoHal
       }
 
       namespace Nucleo {
-         class RotaryEncoder
-         class PushButton
-         class Servo
+         class NucleoHal
       }
    }
 
@@ -67,15 +63,26 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
          + Off(): void
          + Toggle(): void
       }
+      
+      class "Hal " as Hal{
+         + {abstract} Init(): bool
+         + {abstract} Delay(ms: int): void
+         + {abstract} GetNumRotaryEncoders(): int
+         + {abstract} GetNumPushButtons(): int
+         + {abstract} GetNumPushServos(): int
+         + {abstract} GetNumPushOnOffSwitches(): int
+         + {abstract} GetOnOffSwitch(id: HalId): OnOffSwitch*
+      }
+
+      onOffSwitch --o Hal
+      rotaryEncoder --o Hal
+      servo --o Hal
+      pushButton --o Hal
    }
 
-   pushButton <|-- Arduino.PushButton
-   pushButton <|-- Nucleo.PushButton
-   rotaryEncoder <|-- Arduino.RotaryEncoder
-   rotaryEncoder <|-- Nucleo.RotaryEncoder
-   servo <|-- Arduino.Servo
-   servo <|-- Nucleo.Servo
-   
+   Hal <|-- Arduino.ArduinoHal
+   Hal <|-- Nucleo.NucleoHal
+
    package "Game System" as gameSystem <<Frame>> {
       enum ButtonId <<enum>> {
          BUTTON_ID_A
