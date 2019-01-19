@@ -66,7 +66,7 @@ namespace HAL
    class Servo
    {
    public:
-      ~Servo() {}
+      virtual ~Servo() {}
       virtual void SetPosition(int16_t _pos) = 0;
 
    protected:
@@ -80,7 +80,7 @@ namespace HAL
    class OnOffSwitch
    {
    public:
-      ~OnOffSwitch() {}
+      virtual ~OnOffSwitch() {}
       virtual void On() = 0;
       virtual void Off() = 0;
       virtual void Toggle() = 0;
@@ -97,7 +97,7 @@ namespace HAL
    class Hal
    {
    public:
-      ~Hal() {};
+      virtual ~Hal() {};
       virtual bool Init() = 0;
       virtual void Delay(int ms) = 0;
       virtual int GetNumRotaryEncoders() = 0;
