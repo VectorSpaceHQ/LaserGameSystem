@@ -35,6 +35,6 @@ void GameSystem::Run()
    {
       currentProgram.Run();
       display.Run();
-      hal.Delay(5);
+      hal.Delay(1);
    }
 }

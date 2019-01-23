@@ -18,7 +18,7 @@ Display::Display(DisplayImpl& _displayImpl):
 
 void Display::Update()
 {
-   static int numRuns = 25;
+   static int numRuns = 125;
 
    // Update the display implementation every time we are called
    displayImpl.Update();
@@ -27,7 +27,7 @@ void Display::Update()
    if(--numRuns <= 0)
    {
       Render();
-      numRuns = 25;
+      numRuns = 125;
    }
 }
 

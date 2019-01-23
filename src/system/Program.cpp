@@ -13,7 +13,7 @@ Program::Program(Display& _display
                  //GamePad& _gamePad1,
                  //GamePad& _gamePad2
                  ):
-   ScheduledInterval(100),    // TODO: This will need to change when we get real time
+   ScheduledInterval(33),    // TODO: This will need to change when we get real time
    display(_display)
 //   gamePad1(),
 //   gamePad2()
