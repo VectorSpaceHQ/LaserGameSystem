@@ -7,24 +7,25 @@
 
 
 #include "LaserDisplay.h"
-#include "../include/Display.h"
+#include "Display.h"
 
 
 LaserDisplay::LaserDisplay()
 {
 }
 
-void LaserDisplay::Clear()
-{
-}
 
-
-void LaserDisplay::DrawCircle()
-{
-}
-
-
-void LaserDisplay::DrawRectangle()
-{
-}
+//void LaserDisplay::Clear()
+//{
+//}
+//
+//
+//void LaserDisplay::DrawCircle()
+//{
+//}
+//
+//
+//void LaserDisplay::DrawRectangle()
+//{
+//}
 

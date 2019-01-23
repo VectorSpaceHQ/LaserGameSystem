@@ -14,7 +14,13 @@
 class GiantPong: public Program
 {
 public:
-   GiantPong();
+   GiantPong(Display& _display
+            //GamePad& _gamePad1,
+            //GamePad& _gamePad2
+            );
+   ~GiantPong() {};
+
+   void Update();
 
 };
 

@@ -1,26 +1,24 @@
 /*
- * GiantPong.cpp
+ * Calibrate.cpp
  *
- *  Created on: Jan 18, 2019
+ *  Created on: Jan 22, 2019
  *      Author: athiessen
  */
 
-
-#include "GiantPong.h"
+#include "Calibrate.h"
 #include "Program.h"
 
 
-GiantPong::GiantPong(Display& _display
+Calibrate::Calibrate(Display& _display
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
          ):
    Program(_display/*, _gamePad1, _gamePad2*/)
 {
+
 }
 
 
-void GiantPong::Update()
+void Calibrate::Update()
 {
-
 }
-

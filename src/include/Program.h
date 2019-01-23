@@ -8,15 +8,30 @@
 #ifndef __program_h__
 #define __program_h__
 
+#include "Display.h"
+#include "GamePad.h"
+#include "ScheduledInterval.h"
 
-class Program
+// TODO: For now, use ScheduledInterval.
+//       When we get a clock, we will want to use TimedInterval... until we have something better.
+class Program: public ScheduledInterval
 {
-public:
-   Program();
+protected:
+   Display&    display;
+//   GamePad&    gamePad1;
+//   GamePad&    gamePad2;
 
-   void Init(void);
+public:
+   // TODO: Implement the game pads
+   Program(Display& _display
+           //GamePad& _gamePad1,
+           //GamePad& _gamePad2
+          );
+   ~Program() {};
+
+   void Init();
    void Start();
-   void Update();
+   virtual void Update() = 0;
    //void HandleEvent();
    void Stop();
 };

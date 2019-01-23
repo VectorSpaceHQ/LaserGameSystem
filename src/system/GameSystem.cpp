@@ -8,10 +8,14 @@
 
 #include "GameSystem.h"
 #include "hal.h"
+#include "Programs.h"
 
 
 GameSystem::GameSystem(HAL::Hal& _hal):
-   hal(_hal)
+   hal(_hal),
+   display(),
+   programs(display),
+   currentProgram(programs.calibrateProgram) // Set the default program to calibrate for now
 {
 }
 

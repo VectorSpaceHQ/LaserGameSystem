@@ -13,10 +13,14 @@ class Display
 {
 
 public:
-   virtual void Clear() = 0;
-   virtual void DrawLine(/* need parameters here */) = 0;
-   virtual void DrawCircle(/* need parameters here */) = 0;
-   virtual void DrawRectangle(/* need parameters here */) = 0;
+   Display();
+   ~Display() {};
+
+   void Clear();
+
+//   void DrawLine(/* need parameters here */);
+//   void DrawCircle(/* need parameters here */);
+//   void DrawRectangle(/* need parameters here */);
 
    // Future...
    //void DrawBezier(/* need parameters here */) = 0;
