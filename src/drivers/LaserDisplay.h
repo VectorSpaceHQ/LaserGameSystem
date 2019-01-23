@@ -8,21 +8,23 @@
 #ifndef SRC_DRIVERS_LASERDISPLAY_H_
 #define SRC_DRIVERS_LASERDISPLAY_H_
 
-#include "Display.h"
+#include "DisplayImpl.h"
+#include "Hal.h"
 
 
-//class LaserDisplay: public Display
-class LaserDisplay
+class LaserDisplay: public DisplayImpl
 {
-public:
-   LaserDisplay();
-   ~LaserDisplay();
+private:
+   HAL::Hal&   hal;
 
 public:
-//   void Clear();
-//   void DrawLine(/* need parameters here */) = 0;
-//   void DrawCircle(/* need parameters here */) = 0;
-//   void DrawRectangle(/* need parameters here */) = 0;
+   LaserDisplay(HAL::Hal& _hal);
+   ~LaserDisplay() {};
+
+public:
+   void Update();
+   void Render();
+
 };
 
 

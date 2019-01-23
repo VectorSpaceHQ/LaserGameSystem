@@ -8,6 +8,7 @@
 #ifndef INCLUDE_GAMESYSTEM_H_
 #define INCLUDE_GAMESYSTEM_H_
 
+#include <DisplayImpl.h>
 #include "Display.h"
 #include "Hal.h"
 #include "Program.h"
@@ -23,7 +24,7 @@ private:
    Program&    currentProgram;
 
 public:
-   GameSystem(HAL::Hal& _hal);
+   GameSystem(HAL::Hal& _hal, DisplayImpl& _displayImpl);
 
    void Start();
    void Run();

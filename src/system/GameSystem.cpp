@@ -11,9 +11,9 @@
 #include "Programs.h"
 
 
-GameSystem::GameSystem(HAL::Hal& _hal):
+GameSystem::GameSystem(HAL::Hal& _hal, DisplayImpl& _displayImpl):
    hal(_hal),
-   display(),
+   display(_displayImpl),
    programs(display),
    currentProgram(programs.calibrateProgram) // Set the default program to calibrate for now
 {
@@ -24,7 +24,6 @@ void GameSystem::Start()
 {
    if(hal.Init())
    {
-      display.Init(hal.GetOnOffSwitch(HAL::HAL_ID_MAIN_LIGHT));
       Run();
    }
 }
@@ -35,6 +34,7 @@ void GameSystem::Run()
    while(1)
    {
       currentProgram.Run();
+      display.Run();
       hal.Delay(5);
    }
 }

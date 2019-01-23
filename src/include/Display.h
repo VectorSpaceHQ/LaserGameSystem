@@ -8,18 +8,21 @@
 #ifndef SRC_INCLUDE_DISPLAY_H_
 #define SRC_INCLUDE_DISPLAY_H_
 
-#include "hal.h"
+#include "DisplayImpl.h"
+#include "ScheduledInterval.h"
 
-class Display
+
+class Display: public ScheduledInterval
 {
 private:
-   HAL::OnOffSwitch* mainLight;
+   DisplayImpl&       displayImpl;
 
 public:
-   Display();
+   Display(DisplayImpl& _displayImpl);
    ~Display() {};
 
-   void Init(HAL::OnOffSwitch* _mainLight) {mainLight = _mainLight; }
+   void Update();
+   void Render();
    void Clear();
 
 //   void DrawLine(/* need parameters here */);

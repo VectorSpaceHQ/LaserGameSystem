@@ -6,26 +6,23 @@
  */
 
 
-#include "LaserDisplay.h"
 #include "Display.h"
+#include "Hal.h"
+#include "LaserDisplay.h"
 
 
-LaserDisplay::LaserDisplay()
+LaserDisplay::LaserDisplay(HAL::Hal& _hal):
+   hal(_hal)
 {
 }
 
 
-//void LaserDisplay::Clear()
-//{
-//}
-//
-//
-//void LaserDisplay::DrawCircle()
-//{
-//}
-//
-//
-//void LaserDisplay::DrawRectangle()
-//{
-//}
+void LaserDisplay::Update()
+{
+}
 
+
+void LaserDisplay::Render()
+{
+   hal.GetOnOffSwitch(HAL::HAL_ID_MAIN_LIGHT)->Toggle();
+}

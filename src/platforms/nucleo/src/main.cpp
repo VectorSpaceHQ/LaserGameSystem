@@ -10,11 +10,16 @@
 
 #include "NucleoHal.h"
 #include "GameSystem.h"
+#include "LaserDisplay.h"
+#include "DisplayImpl.h"
 
 int main(void)
 {
-   NucleoHal   nucleoHal;
-   GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal));
+   NucleoHal      nucleoHal;
+   LaserDisplay   laserDisplay(dynamic_cast<HAL::Hal&>(nucleoHal));
+
+   GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
+                   dynamic_cast<DisplayImpl&>(laserDisplay));
 
    sys.Start();
 }

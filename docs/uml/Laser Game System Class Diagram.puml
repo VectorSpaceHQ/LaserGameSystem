@@ -114,7 +114,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       Axis -- AxisId
 
       namespace Drivers {
-         class "<i>Display</i>" as display {
+         class Display {
             + {abstract} Clear(): void
             + {abstract} DrawLine(start: Point, stop: Point): void
             + {abstract} DrawCircle(center: Point, radius: uint16_t): void
@@ -122,14 +122,20 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
             + {abstract} DrawBezier(???): void
          }
 
+         class "<i>DisplayImpl</i>" as DisplayImpl {
+            + {abstract} Update(): void
+            + {abstract} Render(): void
+         }
+         
          class LaserDisplay {
          }
 
          class SdlDisplay {
          }
 
-         display <|-- LaserDisplay
-         display <|-- SdlDisplay
+         Display --> DisplayImpl
+         DisplayImpl <|-- LaserDisplay: implements
+         DisplayImpl <|-- SdlDisplay: implements
 
          class "<i>GamePad</i>" as gamePad {
             + {abstract} GetButton(id: ButtonId): bool
@@ -173,7 +179,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       Drivers.SdlDisplay -- PC.sdlLib
 
       GameSystem *-- "1..*" Drivers.gamePad
-      GameSystem *-- "1" Drivers.display
+      GameSystem *-- "1" Drivers.Display
       GameSystem "1" o-- "*" Program
       Program ..> GameSystem
       GameSystem <|-right- GameSystemLaser
