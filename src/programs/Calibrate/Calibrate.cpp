@@ -21,4 +21,5 @@ Calibrate::Calibrate(Display& _display
 
 void Calibrate::Update()
 {
+   display.Clear();
 }

@@ -9,11 +9,16 @@
 #include "Display.h"
 
 
-Display::Display()
+Display::Display():
+   mainLight()
 {
 }
 
 
 void Display::Clear()
 {
+   if(mainLight != 0)
+   {
+      mainLight->Toggle();
+   }
 }

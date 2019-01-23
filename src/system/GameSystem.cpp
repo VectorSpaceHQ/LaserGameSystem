@@ -24,6 +24,7 @@ void GameSystem::Start()
 {
    if(hal.Init())
    {
+      display.Init(hal.GetOnOffSwitch(HAL::HAL_ID_MAIN_LIGHT));
       Run();
    }
 }
@@ -31,11 +32,9 @@ void GameSystem::Start()
 
 void GameSystem::Run()
 {
-   HAL::OnOffSwitch* mainLight = hal.GetOnOffSwitch(HAL::HAL_ID_MAIN_LIGHT);
-
    while(1)
    {
-      mainLight->Toggle();
-      hal.Delay(500);
+      currentProgram.Run();
+      hal.Delay(5);
    }
 }
