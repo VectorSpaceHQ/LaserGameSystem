@@ -43,6 +43,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.860481579" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1662776473" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -69,6 +70,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp.1191792597" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s.2111829795" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s"/>
@@ -93,6 +95,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1334308398" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1619898611" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -173,6 +176,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platform/nucleo/HAL_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1816154553" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.2076255040" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -198,6 +202,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platform/nucleo/HAL_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp.1955498603" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.cpp"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s.2032305572" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.input.s"/>
@@ -221,6 +226,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platform/nucleo/HAL_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1224497291" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.258493892" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
@@ -278,6 +284,7 @@
 								<option id="gnu.both.asm.option.include.paths.623102345" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.744091934" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -291,6 +298,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.102461389" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -303,6 +311,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1453593324" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
