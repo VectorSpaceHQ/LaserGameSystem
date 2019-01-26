@@ -63,16 +63,14 @@ public:
 
    bool Init()
    {
-      HAL_Init();
       mainBoardLight.Init();
-
       return true;
    }
 
 
    void Delay(int ms)
    {
-      HAL_Delay(ms);
+      OSTimeDlyHMSM(0u, 0u, 0u, ms);
    }
 
    int GetNumRotaryEncoders() { return 0; }
