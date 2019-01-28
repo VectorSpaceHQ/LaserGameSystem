@@ -8,17 +8,17 @@
 #ifndef SRC_INCLUDE_DISPLAY_H_
 #define SRC_INCLUDE_DISPLAY_H_
 
-#include "DisplayImpl.h"
+#include <DisplayIfc.h>
 #include "ScheduledInterval.h"
 
 
 class Display: public ScheduledInterval
 {
 private:
-   DisplayImpl&       displayImpl;
+   DisplayIfc&       displayImpl;
 
 public:
-   Display(DisplayImpl& _displayImpl);
+   Display(DisplayIfc& _displayImpl);
    ~Display() {};
 
    void Update();

@@ -9,7 +9,7 @@
 #include "Display.h"
 
 
-Display::Display(DisplayImpl& _displayImpl):
+Display::Display(DisplayIfc& _displayImpl):
    ScheduledInterval(1),
    displayImpl(_displayImpl)
 {
@@ -19,9 +19,6 @@ Display::Display(DisplayImpl& _displayImpl):
 void Display::Update()
 {
    static int numRuns = 500;
-
-   // Update the display implementation every time we are called
-   displayImpl.Update();
 
    // Render a new display every 100 runs
    if(--numRuns <= 0)

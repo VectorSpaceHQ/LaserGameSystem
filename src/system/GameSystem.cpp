@@ -11,7 +11,7 @@
 #include "Programs.h"
 
 
-GameSystem::GameSystem(HAL::Hal& _hal, DisplayImpl& _displayImpl):
+GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayImpl):
    hal(_hal),
    display(_displayImpl),
    programs(display),

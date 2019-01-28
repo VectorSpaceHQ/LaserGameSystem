@@ -8,11 +8,11 @@
 #ifndef SRC_DRIVERS_LASERDISPLAY_H_
 #define SRC_DRIVERS_LASERDISPLAY_H_
 
-#include "DisplayImpl.h"
+#include <DisplayIfc.h>
 #include "Hal.h"
 
 
-class LaserDisplay: public DisplayImpl
+class LaserDisplay: public DisplayIfc
 {
 private:
    HAL::Hal&   hal;

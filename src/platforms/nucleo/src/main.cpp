@@ -1,12 +1,12 @@
 #include <app_cfg.h>
 #include <cpu_core.h>
+#include <DisplayIfc.h>
 #include <ucos_ii.h>
 #include <stm32f4xx_hal.h>
 
 #include "NucleoHal.h"
 #include "GameSystem.h"
 #include "LaserDisplay.h"
-#include "DisplayImpl.h"
 
 static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
 
@@ -82,7 +82,7 @@ static void AppTaskStart (void *p_arg)
    LaserDisplay   laserDisplay(dynamic_cast<HAL::Hal&>(nucleoHal));
 
    GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
-                   dynamic_cast<DisplayImpl&>(laserDisplay));
+                   dynamic_cast<DisplayIfc&>(laserDisplay));
 
    sys.Start();
 }

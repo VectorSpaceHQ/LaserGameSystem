@@ -122,8 +122,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
             + {abstract} DrawBezier(???): void
          }
 
-         class "<i>DisplayImpl</i>" as DisplayImpl {
-            + {abstract} Update(): void
+         class "<i>DisplayIfc</i>" as DisplayIfc {
             + {abstract} Render(): void
          }
          
@@ -133,9 +132,9 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
          class SdlDisplay {
          }
 
-         Display --> DisplayImpl
-         DisplayImpl <|-- LaserDisplay: implements
-         DisplayImpl <|-- SdlDisplay: implements
+         Display --> DisplayIfc
+         DisplayIfc <|-- LaserDisplay: implements
+         DisplayIfc <|-- SdlDisplay: implements
 
          class "<i>GamePad</i>" as gamePad {
             + {abstract} GetButton(id: ButtonId): bool
