@@ -5,10 +5,9 @@
  *      Author: athiessen
  */
 
-#include <Eigen/Dense>
-
 #include "Calibrate.h"
 #include "Program.h"
+#include "Shape.h"
 
 
 // MaxSize is 4096  -- resolution of the laser
@@ -23,20 +22,17 @@ Calibrate::Calibrate(Display& _display
          //GamePad& _gamePad2
          ):
    Program(_display/*, _gamePad1, _gamePad2*/),
-   square(5, 3),
-   scaledSquare(5, 3),
-   squareColors(5),
-   scale(1)
+   square(5),
+   scale(1),
+   shrinkGrow(1)
 {
-   // Set all vertices to 100%, except the first one
-   squareColors << 0, 1, 1, 1, 1;
-   square <<
-      -1, -1, 0,   // Initial position: Start at top left (but don't draw -- see colors)
-       1, -1, 0,   // Draw to top right
-       1,  1, 0,   // Draw to bottom right
-      -1,  1, 0,   // Draw to bottom left
-      -1, -1, 0;   // Draw to top left to complete the square
-      // Drawing should return to the second row since the first row is the starting point.
+   square.vertices <<
+   //  X   Y  Z  C   // C is for "Color"!
+      -1, -1, 0, 0,  // Initial position: Start at top left (but don't draw -- see colors)
+       1, -1, 0, 1,  // Draw to top right
+       1,  1, 0, 1,  // Draw to bottom right
+      -1,  1, 0, 1,  // Draw to bottom left
+      -1, -1, 0, 1;  // Draw to top left to complete the square
 }
 
 
@@ -45,8 +41,8 @@ Calibrate::Calibrate(Display& _display
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Update()
 {
-   // Start by growing
-   static int shrinkGrow = 1;
+   square.Scale(scale);
+   square.Restore();
 
    // Add (12 *  1) to scale if growing,
    //  or (12 * -1) to scale if shrinking.
@@ -62,9 +58,6 @@ void Calibrate::Update()
       scale = 1;           // Set to 1
       shrinkGrow *= -1;    // Start growing
    }
-
-   // Multiply the matrix of vertices of our square by the scale factor
-   scaledSquare = square * scale;
 
    // TODO: Call the display to draw our scaled square
 }

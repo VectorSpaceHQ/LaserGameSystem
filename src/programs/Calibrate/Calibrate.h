@@ -8,17 +8,16 @@
 #ifndef PROGRAMS_CALIBRATE_CALIBRATE_H_
 #define PROGRAMS_CALIBRATE_CALIBRATE_H_
 
-#include <Eigen/Dense>
 #include "Program.h"
+#include "Shape.h"
 
 
 class Calibrate: public Program
 {
 private:
-   Eigen::MatrixXf   square;
-   Eigen::MatrixXf   scaledSquare;
-   Eigen::VectorXf   squareColors;
-   int               scale;
+   Shape    square;
+   int      scale;
+   int      shrinkGrow;
 
    static const int  StepSize;
    static const int  MaxSize;
