@@ -33,6 +33,8 @@ Calibrate::Calibrate(Canvas& _display
        1,  1, 0, 1,  // Draw to bottom right
       -1,  1, 0, 1,  // Draw to bottom left
       -1, -1, 0, 1;  // Draw to top left to complete the square
+
+   square.Backup();
 }
 
 
