@@ -14,6 +14,7 @@
 
 Shape::Shape():
    vertices(),
+   backupVertices(),
    scale(1),
    position(),
    velocity(),
@@ -24,6 +25,7 @@ Shape::Shape():
 
 Shape::Shape(uint16_t numVertices):
    vertices(numVertices, 4),
+   backupVertices(numVertices, 4),
    scale(1),
    position(),
    velocity(),
@@ -37,6 +39,7 @@ Shape::Shape(const Shape& other)
    if(this != &other)
    {
       vertices = other.vertices;
+      backupVertices = other.backupVertices;
       scale = other.scale;
       position = other.position;
       velocity = other.velocity;
