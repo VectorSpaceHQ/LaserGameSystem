@@ -1,25 +1,25 @@
 /*
- * display.h
+ * Canvas.h
  *
  *  Created on: Jan 17, 2019
  *      Author: athiessen
  */
 
-#ifndef SRC_INCLUDE_DISPLAY_H_
-#define SRC_INCLUDE_DISPLAY_H_
+#ifndef __CANVAS_H__
+#define __CANVAS_H__
 
 #include <DisplayIfc.h>
 #include "ScheduledInterval.h"
 
 
-class Display: public ScheduledInterval
+class Canvas: public ScheduledInterval
 {
 private:
    DisplayIfc&       displayImpl;
 
 public:
-   Display(DisplayIfc& _displayImpl);
-   ~Display() {};
+   Canvas(DisplayIfc& _displayImpl);
+   ~Canvas() {};
 
    void Update();
    void Render();
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif /* SRC_INCLUDE_DISPLAY_H_ */
+#endif /* __CANVAS_H__ */

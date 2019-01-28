@@ -19,7 +19,7 @@ struct Programs
    GiantPong   pongProgram;
 
    // TODO: Implement
-   Programs(Display& _display
+   Programs(Canvas& _display
             //GamePad& _gamePad1,
             //GamePad& _gamePad2
             ):

@@ -10,7 +10,7 @@
 #include "Program.h"
 
 
-GiantPong::GiantPong(Display& _display
+GiantPong::GiantPong(Canvas& _display
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
          ):

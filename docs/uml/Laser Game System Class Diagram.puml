@@ -114,7 +114,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       Axis -- AxisId
 
       namespace Drivers {
-         class Display {
+         class Canvas {
             + {abstract} Clear(): void
             + {abstract} DrawLine(start: Point, stop: Point): void
             + {abstract} DrawCircle(center: Point, radius: uint16_t): void
@@ -132,7 +132,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
          class SdlDisplay {
          }
 
-         Display --> DisplayIfc
+         Canvas --> DisplayIfc
          DisplayIfc <|-- LaserDisplay: implements
          DisplayIfc <|-- SdlDisplay: implements
 
@@ -154,7 +154,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       }
 
       class GameSystem {
-         + GetDisplay(): Display
+         + GetCanvas(): Canvas
          + GetNumGamePads(): uint16_t
          + GetGamePad(id: uint16_t): GamePad
       }
@@ -178,7 +178,7 @@ package "Laser Game System" as laserGameSystem <<Frame>> {
       Drivers.SdlDisplay -- PC.sdlLib
 
       GameSystem *-- "1..*" Drivers.gamePad
-      GameSystem *-- "1" Drivers.Display
+      GameSystem *-- "1" Drivers.Canvas
       GameSystem "1" o-- "*" Program
       Program ..> GameSystem
       GameSystem <|-right- GameSystemLaser

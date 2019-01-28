@@ -23,7 +23,7 @@ private:
    static const int  MaxSize;
 
 public:
-   Calibrate(Display& _display
+   Calibrate(Canvas& _display
             //GamePad& _gamePad1,
             //GamePad& _gamePad2
             );

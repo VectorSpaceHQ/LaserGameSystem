@@ -6,7 +6,7 @@
  */
 
 
-#include "Display.h"
+#include <Canvas.h>
 #include "Hal.h"
 #include "LaserDisplay.h"
 

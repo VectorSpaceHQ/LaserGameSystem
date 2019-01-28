@@ -14,7 +14,7 @@
 class GiantPong: public Program
 {
 public:
-   GiantPong(Display& _display
+   GiantPong(Canvas& _display
             //GamePad& _gamePad1,
             //GamePad& _gamePad2
             );

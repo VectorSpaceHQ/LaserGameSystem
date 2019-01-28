@@ -17,7 +17,7 @@ const int Calibrate::MaxSize = 2047;
 const int Calibrate::StepSize = 12;
 
 
-Calibrate::Calibrate(Display& _display
+Calibrate::Calibrate(Canvas& _display
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
          ):

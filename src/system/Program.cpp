@@ -5,11 +5,11 @@
  *      Author: athiessen
  */
 
+#include <Canvas.h>
 #include "Program.h"
-#include "Display.h"
 #include "GamePad.h"
 
-Program::Program(Display& _display
+Program::Program(Canvas& _display
                  //GamePad& _gamePad1,
                  //GamePad& _gamePad2
                  ):

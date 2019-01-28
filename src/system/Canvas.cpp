@@ -1,22 +1,22 @@
 /*
- * Display.cpp
+ * Canvas.cpp
  *
  *  Created on: Jan 22, 2019
  *      Author: athiessen
  */
 
 
-#include "Display.h"
+#include <Canvas.h>
 
 
-Display::Display(DisplayIfc& _displayImpl):
+Canvas::Canvas(DisplayIfc& _displayImpl):
    ScheduledInterval(1),
    displayImpl(_displayImpl)
 {
 }
 
 
-void Display::Update()
+void Canvas::Update()
 {
    static int numRuns = 500;
 
@@ -29,7 +29,7 @@ void Display::Update()
 }
 
 
-void Display::Render()
+void Canvas::Render()
 {
    // TODO: Perform transformations here
 
@@ -38,6 +38,6 @@ void Display::Render()
 }
 
 
-void Display::Clear()
+void Canvas::Clear()
 {
 }

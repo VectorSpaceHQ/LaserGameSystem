@@ -8,7 +8,7 @@
 #ifndef __program_h__
 #define __program_h__
 
-#include "Display.h"
+#include <Canvas.h>
 #include "GamePad.h"
 #include "ScheduledInterval.h"
 
@@ -17,13 +17,13 @@
 class Program: public ScheduledInterval
 {
 protected:
-   Display&    display;
+   Canvas&    display;
 //   GamePad&    gamePad1;
 //   GamePad&    gamePad2;
 
 public:
    // TODO: Implement the game pads
-   Program(Display& _display
+   Program(Canvas& _display
            //GamePad& _gamePad1,
            //GamePad& _gamePad2
           );
