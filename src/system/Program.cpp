@@ -9,12 +9,13 @@
 #include "Program.h"
 #include "GamePad.h"
 
-Program::Program(Canvas& _display
+
+Program::Program(Canvas& _canvas
                  //GamePad& _gamePad1,
                  //GamePad& _gamePad2
                  ):
    ScheduledInterval(33),    // TODO: This will need to change when we get real time
-   display(_display)
+   canvas(_canvas)
 //   gamePad1(),
 //   gamePad2()
 {

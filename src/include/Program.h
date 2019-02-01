@@ -17,13 +17,13 @@
 class Program: public ScheduledInterval
 {
 protected:
-   Canvas&    display;
+   Canvas&    canvas;
 //   GamePad&    gamePad1;
 //   GamePad&    gamePad2;
 
 public:
    // TODO: Implement the game pads
-   Program(Canvas& _display
+   Program(Canvas& _canvas
            //GamePad& _gamePad1,
            //GamePad& _gamePad2
           );

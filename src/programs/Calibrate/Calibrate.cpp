@@ -17,11 +17,11 @@ const int Calibrate::MaxSize = 2047;
 const int Calibrate::StepSize = 12;
 
 
-Calibrate::Calibrate(Canvas& _display
+Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
          ):
-   Program(_display/*, _gamePad1, _gamePad2*/),
+   Program(_canvas/*, _gamePad1, _gamePad2*/),
    square(5),
    scale(1),
    shrinkGrow(1)
@@ -35,6 +35,10 @@ Calibrate::Calibrate(Canvas& _display
       -1, -1, 0, 1;  // Draw to top left to complete the square
 
    square.Backup();
+
+   // Only add the shape to the canvas once
+   // Since it's a pointer, we can update our vertices all day long, and the canvas will pickup the changes.
+   canvas.AddShape(&square);
 }
 
 
@@ -60,6 +64,4 @@ void Calibrate::Update()
       scale = 1;           // Set to 1
       shrinkGrow *= -1;    // Start growing
    }
-
-   // TODO: Call the display to draw our scaled square
 }

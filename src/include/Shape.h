@@ -12,17 +12,27 @@
 #include <Eigen/Dense>
 
 
-typedef int16_t CoordType;
+// Positions in the coordinate
+enum CoordPositions
+{
+   CoordX      = 0,
+   CoordY      = 1,
+   CoordZ      = 2,
+   CoordColor  = 3,
 
-typedef Eigen::Matrix<CoordType, 1, 4> Coordinate;    // 3D Coordinate + color
-typedef Eigen::Matrix<CoordType, 1, 3> Magnitude;     // 3D Magnitude
+   // Do not add below this line
+   CoordMax
+};
+
+typedef int16_t CoordType;
+typedef Eigen::Array<CoordType, 1, CoordMax>                               Coordinate;    // 3D Coordinate + color
+typedef Eigen::Array<CoordType, 1, 3>                                      Magnitude;     // 3D Magnitude
+typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
 
 
 class Shape
 {
 public:
-   typedef Eigen::Array<CoordType, Eigen::Dynamic, 4>  VertexList_t;
-
    VertexList_t   vertices;
 
 protected:
@@ -43,6 +53,8 @@ public:
    void Move(CoordType diffX, CoordType diffY);
    void Move(CoordType diffX, CoordType diffY, CoordType diffZ);
    void Scale(CoordType _scale);
+   int32_t NumPoints();
+   int32_t MapVertices(Eigen::Ref<VertexList_t> list);
 
    void LogMatrix();
 };

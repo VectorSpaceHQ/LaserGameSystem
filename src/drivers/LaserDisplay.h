@@ -8,8 +8,10 @@
 #ifndef SRC_DRIVERS_LASERDISPLAY_H_
 #define SRC_DRIVERS_LASERDISPLAY_H_
 
-#include <DisplayIfc.h>
+#include "DisplayIfc.h"
+
 #include "Hal.h"
+#include "Shape.h"
 
 
 class LaserDisplay: public DisplayIfc
@@ -23,7 +25,7 @@ public:
 
 public:
    void Update();
-   void Render();
+   void Render(Eigen::Ref<const VertexList_t> vertices);
 
 };
 

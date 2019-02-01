@@ -9,28 +9,37 @@
 #define __CANVAS_H__
 
 #include <DisplayIfc.h>
+#include <list>
 #include "ScheduledInterval.h"
+#include "Shape.h"
 
 
 class Canvas: public ScheduledInterval
 {
 private:
-   DisplayIfc&       displayImpl;
+   typedef std::list<Shape*>  ShapeList_t;
+
+   DisplayIfc&    displayIfc;
+   ShapeList_t    shapes;
+   VertexList_t   allVertices;
 
 public:
    Canvas(DisplayIfc& _displayImpl);
    ~Canvas() {};
 
    void Update();
-   void Render();
    void Clear();
+   void AddShape(Shape* newShape);
 
-//   void DrawLine(/* need parameters here */);
-//   void DrawCircle(/* need parameters here */);
-//   void DrawRectangle(/* need parameters here */);
+private:
+   void Render();
 
-   // Future...
-   //void DrawBezier(/* need parameters here */) = 0;
+   /***
+    * Iterate over all the shapes and sum up the number of vertices
+    */
+   int32_t  TotalVertices();
+
+   void CollectVertices();
 };
 
 

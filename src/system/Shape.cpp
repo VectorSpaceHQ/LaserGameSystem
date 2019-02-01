@@ -24,8 +24,8 @@ Shape::Shape():
 
 
 Shape::Shape(uint16_t numVertices):
-   vertices(numVertices, 4),
-   backupVertices(numVertices, 4),
+   vertices(numVertices, static_cast<int>(CoordMax)),
+   backupVertices(numVertices, static_cast<int>(CoordMax)),
    scale(1),
    position(),
    velocity(),
@@ -62,16 +62,27 @@ void Shape::Restore()
 
 void Shape::Move(CoordType diffX, CoordType diffY)
 {
-   vertices.block(0, 0, vertices.rows(), 1) += diffX;
-   vertices.block(0, 1, vertices.rows(), 1) += diffY;
+   // Update our position
+   position(CoordX) += diffX;
+   position(CoordY) += diffY;
+
+   // Now update all of our vertices
+   vertices.block(0, CoordX, vertices.rows(), 1) += diffX;  // Start at row 0, column X and modify 1 column
+   vertices.block(0, CoordY, vertices.rows(), 1) += diffY;  // Start at row 0, column y and modify 1 column
 }
 
 
 void Shape::Move(CoordType diffX, CoordType diffY, CoordType diffZ)
 {
-   vertices.block(0, 0, vertices.rows(), 1) += diffX;
-   vertices.block(0, 1, vertices.rows(), 1) += diffY;
-   vertices.block(0, 2, vertices.rows(), 1) += diffZ;
+   // Update our position
+   position(CoordX) += diffX;
+   position(CoordY) += diffY;
+   position(CoordZ) += diffZ;
+
+   // Now update all of our vertices
+   vertices.block(0, CoordX, vertices.rows(), 1) += diffX;  // Start at row 0, column x and modify 1 column
+   vertices.block(0, CoordY, vertices.rows(), 1) += diffY;  // Start at row 0, column y and modify 1 column
+   vertices.block(0, CoordZ, vertices.rows(), 1) += diffZ;  // Start at row 0, column z and modify 1 column
 }
 
 
@@ -79,7 +90,21 @@ void Shape::Scale(CoordType _scale)
 {
    // Set our new scale
    scale = _scale;
-   vertices.block(0, 0, vertices.rows(), 3) *= scale;
+   vertices.block(0, CoordX, vertices.rows(), CoordZ + 1) *= scale;
+}
+
+
+int32_t Shape::NumPoints()
+{
+   return vertices.rows();
+}
+
+
+int32_t Shape::MapVertices(Eigen::Ref<VertexList_t> list)
+{
+   list = vertices;
+
+   return vertices.rows();
 }
 
 

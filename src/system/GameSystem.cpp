@@ -11,10 +11,10 @@
 #include "Programs.h"
 
 
-GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayImpl):
+GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayIfc):
    hal(_hal),
-   display(_displayImpl),
-   programs(display),
+   canvas(_displayIfc),
+   programs(canvas),
    currentProgram(programs.calibrateProgram) // Set the default program to calibrate for now
 {
 }
@@ -34,7 +34,7 @@ void GameSystem::Run()
    while(1)
    {
       currentProgram.Run();
-      display.Run();
+      canvas.Run();
       hal.Delay(1);
    }
 }

@@ -19,7 +19,7 @@ class GameSystem
 {
 private:
    HAL::Hal&   hal;
-   Canvas     display;
+   Canvas      canvas;
    Programs    programs;
    Program&    currentProgram;
 
