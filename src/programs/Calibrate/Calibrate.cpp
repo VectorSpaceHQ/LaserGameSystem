@@ -47,7 +47,7 @@ Calibrate::Calibrate(Canvas& _canvas
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Update()
 {
-   square.Scale(scale);
+   // Restore our original shape
    square.Restore();
 
    // Add (12 *  1) to scale if growing,
@@ -64,4 +64,7 @@ void Calibrate::Update()
       scale = 1;           // Set to 1
       shrinkGrow *= -1;    // Start growing
    }
+
+   // Finally, scale the shape
+   square.Scale(scale);
 }
