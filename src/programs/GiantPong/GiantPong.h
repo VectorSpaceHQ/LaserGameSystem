@@ -8,6 +8,7 @@
 #ifndef SRC_PROGRAMS_PONG_GIANTPONG_H_
 #define SRC_PROGRAMS_PONG_GIANTPONG_H_
 
+#include "GameSystemEvents.h"
 #include "Program.h"
 
 
@@ -20,7 +21,11 @@ public:
             );
    ~GiantPong() {};
 
-   void Update();
+   void Init();
+   void Start();
+   void Stop();
+   void Run();
+   void HandleEvent(GameSystemEvent event);
 
 };
 

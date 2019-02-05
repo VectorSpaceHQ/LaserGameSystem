@@ -8,6 +8,7 @@
 #ifndef PROGRAMS_CALIBRATE_CALIBRATE_H_
 #define PROGRAMS_CALIBRATE_CALIBRATE_H_
 
+#include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
 
@@ -29,7 +30,11 @@ public:
             );
    ~Calibrate() {};
 
-   void Update();
+   void Init();
+   void Start();
+   void Run();
+   void Draw();
+   void HandleEvent(GameSystemEvent event);
 };
 
 

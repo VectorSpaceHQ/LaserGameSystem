@@ -7,6 +7,7 @@
 
 
 #include "GameSystem.h"
+#include "GameSystemEvents.h"
 #include "hal.h"
 #include "Programs.h"
 
@@ -24,6 +25,7 @@ void GameSystem::Start()
 {
    if(hal.Init())
    {
+      StartCurrentProgram();
       Run();
    }
 }
@@ -33,8 +35,24 @@ void GameSystem::Run()
 {
    while(1)
    {
-      currentProgram.Run();
+      currentProgram.HandleEvent(EVENT_PROGRAM_RUN);
+      currentProgram.HandleEvent(EVENT_PROGRAM_DRAW);
       canvas.Run();
-      hal.Delay(1);
+      hal.Delay(33);
    }
 }
+
+
+void GameSystem::StartCurrentProgram()
+{
+   currentProgram.HandleEvent(EVENT_PROGRAM_INIT);
+   currentProgram.HandleEvent(EVENT_PROGRAM_START);
+}
+
+
+void GameSystem::StopCurrentProgram()
+{
+   currentProgram.HandleEvent(EVENT_PROGRAM_STOP);
+}
+
+

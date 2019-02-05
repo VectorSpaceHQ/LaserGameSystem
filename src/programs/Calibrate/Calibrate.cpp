@@ -6,6 +6,7 @@
  */
 
 #include "Calibrate.h"
+#include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
 
@@ -26,6 +27,11 @@ Calibrate::Calibrate(Canvas& _canvas
    scale(1),
    shrinkGrow(1)
 {
+}
+
+
+void Calibrate::Init()
+{
    square.vertices <<
    //  X   Y  Z  C   // C is for "Color"!
       -1, -1, 0, 0,  // Initial position: Start at top left (but don't draw -- see colors)
@@ -35,21 +41,22 @@ Calibrate::Calibrate(Canvas& _canvas
       -1, -1, 0, 1;  // Draw to top left to complete the square
 
    square.Backup();
+}
 
-   // Only add the shape to the canvas once
-   // Since it's a pointer, we can update our vertices all day long, and the canvas will pickup the changes.
+
+void Calibrate::Start()
+{
+   // Only add the shape to the canvas once at startup
+   // Since the canvas maintains a pointer, we can update our vertices all day long,
+   // and the canvas will pickup the changes.
    canvas.AddShape(&square);
 }
 
 
-// This method is called every time the program is actually scheduled (every 33 iterations)
 // Currently is draws an expanding/shrinking square.
 // When the square reaches the limits of the display, it starts to shrink.
-void Calibrate::Update()
+void Calibrate::Run()
 {
-   // Restore our original shape
-   square.Restore();
-
    // Add (12 *  1) to scale if growing,
    //  or (12 * -1) to scale if shrinking.
    scale += StepSize * shrinkGrow;
@@ -64,7 +71,40 @@ void Calibrate::Update()
       scale = 1;           // Set to 1
       shrinkGrow *= -1;    // Start growing
    }
+}
 
-   // Finally, scale the shape
+
+void Calibrate::Draw()
+{
+   // Restore our original shape
+   square.Restore();
+
+   // Then scale the shape
    square.Scale(scale);
+}
+
+
+void Calibrate::HandleEvent(GameSystemEvent event)
+{
+   switch(event)
+   {
+      case EVENT_PROGRAM_INIT:
+         Init();
+         break;
+
+      case EVENT_PROGRAM_START:
+         Start();
+         break;
+
+      case EVENT_PROGRAM_RUN:
+         Run();
+         break;
+
+      case EVENT_PROGRAM_DRAW:
+         Draw();
+         break;
+
+      default:
+         break;
+   }
 }

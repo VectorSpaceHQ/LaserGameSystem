@@ -22,14 +22,7 @@ Canvas::Canvas(DisplayIfc& _displayImpl):
 
 void Canvas::Update()
 {
-   static int numRuns = 500;
-
-   // Render a new display every 100 runs
-   if(--numRuns <= 0)
-   {
-      Render();
-      numRuns = 500;
-   }
+   Render();
 }
 
 

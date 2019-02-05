@@ -8,13 +8,14 @@
 #ifndef __program_h__
 #define __program_h__
 
-#include <Canvas.h>
+#include "Canvas.h"
 #include "GamePad.h"
-#include "ScheduledInterval.h"
+#include "GameSystemEvents.h"
+
 
 // TODO: For now, use ScheduledInterval.
 //       When we get a clock, we will want to use TimedInterval... until we have something better.
-class Program: public ScheduledInterval
+class Program
 {
 protected:
    Canvas&    canvas;
@@ -27,13 +28,12 @@ public:
            //GamePad& _gamePad1,
            //GamePad& _gamePad2
           );
-   ~Program() {};
 
-   void Init();
-   void Start();
-   virtual void Update() = 0;
-   //void HandleEvent();
-   void Stop();
+   virtual void HandleEvent(GameSystemEvent event) = 0;
+
+protected:
+   virtual ~Program() {};
+
 };
 
 

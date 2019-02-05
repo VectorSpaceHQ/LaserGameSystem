@@ -14,29 +14,9 @@ Program::Program(Canvas& _canvas
                  //GamePad& _gamePad1,
                  //GamePad& _gamePad2
                  ):
-   ScheduledInterval(33),    // TODO: This will need to change when we get real time
    canvas(_canvas)
 //   gamePad1(),
 //   gamePad2()
 {
 }
 
-
-void Program::Init()
-{
-}
-
-
-void Program::Start()
-{
-}
-
-
-void Program::Update()
-{
-}
-
-
-void Program::Stop()
-{
-}

@@ -28,6 +28,9 @@ public:
 
    void Start();
    void Run();
+
+   void StartCurrentProgram();
+   void StopCurrentProgram();
 };
 
 
