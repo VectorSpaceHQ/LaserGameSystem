@@ -12,6 +12,7 @@ static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
 
 static void AppTaskStart (void *p_arg);
 static void SystemClkCfg (void);
+static void SetupTimerInterrupt();
 
 int main (void)
 {
@@ -72,6 +73,8 @@ uint32_t HAL_GetTick(void)
    return os_tick_ctr;
 }
 
+static LaserDisplay *pLaserDisplay = nullptr;
+
 static void AppTaskStart (void *p_arg)
 {
    (void)p_arg;
@@ -81,10 +84,55 @@ static void AppTaskStart (void *p_arg)
    NucleoHal      nucleoHal;
    LaserDisplay   laserDisplay(dynamic_cast<HAL::Hal&>(nucleoHal));
 
+   pLaserDisplay = &laserDisplay;
+
+   SetupTimerInterrupt();
+
    GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
                    dynamic_cast<DisplayIfc&>(laserDisplay));
 
    sys.Start();
+}
+
+TIM_HandleTypeDef timerHandle;
+
+void TIM2_IRQHandler(void)
+{
+   HAL_TIM_IRQHandler(&timerHandle);
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+   if (pLaserDisplay)
+   {
+      pLaserDisplay->Update();
+   }
+}
+
+static void SetupTimerInterrupt()
+{
+    __HAL_RCC_TIM2_CLK_ENABLE();
+
+    HAL_NVIC_SetPriority(TIM2_IRQn, TICK_INT_PRIORITY, 0);
+    HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+    // Set Timer 2 to a frequency of 1 MHz
+    uint32_t timerFreq = 1000000;
+
+    // Use a interrupt frequency
+    uint32_t interruptFreq = 2000;
+
+    // Timer 2 Peripherial clock
+    uint32_t peripherialClock = SystemCoreClock / 2;
+
+    timerHandle.Instance = TIM2;
+    timerHandle.Init.Prescaler = (peripherialClock / timerFreq) - 1;
+    timerHandle.Init.Period =  (timerFreq / interruptFreq) - 1;
+    timerHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+    timerHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+
+    HAL_TIM_Base_Init(&timerHandle);
+    HAL_TIM_Base_Start_IT(&timerHandle);
 }
 
 static void SystemClkCfg (void)
