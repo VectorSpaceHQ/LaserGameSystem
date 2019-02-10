@@ -37,7 +37,7 @@ void GameSystem::Run()
    {
       currentProgram.HandleEvent(EVENT_PROGRAM_RUN);
       currentProgram.HandleEvent(EVENT_PROGRAM_DRAW);
-      canvas.Run();
+      canvas.Render();
       hal.Delay(33);
    }
 }

@@ -8,13 +8,13 @@
 #ifndef __CANVAS_H__
 #define __CANVAS_H__
 
-#include <DisplayIfc.h>
 #include <list>
-#include "ScheduledInterval.h"
+
+#include "DisplayIfc.h"
 #include "Shape.h"
 
 
-class Canvas: public ScheduledInterval
+class Canvas
 {
 private:
    typedef std::list<Shape*>  ShapeList_t;
@@ -27,13 +27,11 @@ public:
    Canvas(DisplayIfc& _displayImpl);
    ~Canvas() {};
 
-   void Update();
    void Clear();
    void AddShape(Shape* newShape);
-
-private:
    void Render();
 
+private:
    /***
     * Iterate over all the shapes and sum up the number of vertices
     */

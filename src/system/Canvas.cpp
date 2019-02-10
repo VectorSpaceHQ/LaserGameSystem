@@ -12,17 +12,10 @@
 
 
 Canvas::Canvas(DisplayIfc& _displayImpl):
-   ScheduledInterval(1),
    displayIfc(_displayImpl),
    shapes(),
    allVertices(0, static_cast<int>(CoordMax))
 {
-}
-
-
-void Canvas::Update()
-{
-   Render();
 }
 
 
