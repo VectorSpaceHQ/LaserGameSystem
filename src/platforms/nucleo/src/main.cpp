@@ -132,7 +132,7 @@ static void SetupTimerInterrupt()
     timerHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 
     HAL_TIM_Base_Init(&timerHandle);
-    HAL_TIM_Base_Start_IT(&timerHandle);
+    //HAL_TIM_Base_Start_IT(&timerHandle);
 }
 
 static void SystemClkCfg (void)
