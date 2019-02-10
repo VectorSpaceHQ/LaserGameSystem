@@ -101,10 +101,10 @@ static void SystemClkCfg (void)
    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-   RCC_OscInitStruct.PLL.PLLM = 25u;
-   RCC_OscInitStruct.PLL.PLLN = 336u;
-   RCC_OscInitStruct.PLL.PLLP = 2u;
-   RCC_OscInitStruct.PLL.PLLQ = 7u;
+   RCC_OscInitStruct.PLL.PLLM = 8;
+   RCC_OscInitStruct.PLL.PLLN = 336;
+   RCC_OscInitStruct.PLL.PLLP = 4;
+   RCC_OscInitStruct.PLL.PLLQ = 7;
    HAL_RCC_OscConfig(&RCC_OscInitStruct);
 
    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
