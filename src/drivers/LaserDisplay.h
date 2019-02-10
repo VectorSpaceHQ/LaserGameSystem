@@ -18,9 +18,8 @@ class LaserDisplay: public DisplayIfc
 {
 private:
    HAL::Hal&   hal;
-   VertexList_t verts[2];
-   int activeVerts;
-   int backgroundVerts;
+   VertexList_t activeVerts;
+   VertexList_t backgroundVerts;
    bool newVerts;
    int vertIndex;
 

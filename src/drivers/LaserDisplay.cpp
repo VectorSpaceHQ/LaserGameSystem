@@ -21,13 +21,11 @@
 
 LaserDisplay::LaserDisplay(HAL::Hal& _hal):
    hal(_hal),
-   activeVerts(0),
-   backgroundVerts(1),
+   activeVerts(0, static_cast<int>(CoordMax)),
+   backgroundVerts(0, static_cast<int>(CoordMax)),
    newVerts(false),
    vertIndex(0)
 {
-   verts[0](0, static_cast<int>(CoordMax));
-   verts[1](0, static_cast<int>(CoordMax));
    spi_setup();
 }
 
@@ -35,22 +33,21 @@ void LaserDisplay::Update()
 {
    uint8_t dacCmd[2];
 
-   if (vertIndex >= verts[activeVerts].rows())
+   if (vertIndex >= activeVerts.rows())
    {
       if (newVerts)
       {
-         activeVerts ^= 1;
-         backgroundVerts ^= 1;
+         activeVerts = backgroundVerts;
          newVerts = false;
       }
 
       vertIndex = 0;
    }
 
-   if (verts[activeVerts].rows() > 0)
+   if (activeVerts.rows() > 0)
    {
-      int16_t x = verts[activeVerts](vertIndex, CoordX) + 2047;
-      int16_t y = verts[activeVerts](vertIndex, CoordY) + 2047;
+      int16_t x = activeVerts(vertIndex, CoordX) + 2047;
+      int16_t y = activeVerts(vertIndex, CoordY) + 2047;
 
       dacCmd[0] = DAC_A | DAC_NGA | DAC_NSHDN | (0x0F & (x >> 8));
       dacCmd[1] = 0xFF & x;
@@ -67,6 +64,6 @@ void LaserDisplay::Update()
 
 void LaserDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
 {
-   verts[backgroundVerts] = vertices;
+   backgroundVerts = vertices;
    newVerts = true;
 }
