@@ -17,7 +17,7 @@ void spi_setup(void)
     spi.Init.CLKPhase            = SPI_PHASE_1EDGE;
     spi.Init.CLKPolarity         = SPI_POLARITY_LOW;
     spi.Init.NSS                 = SPI_NSS_SOFT;
-    spi.Init.BaudRatePrescaler   = SPI_BAUDRATEPRESCALER_32;
+    spi.Init.BaudRatePrescaler   = SPI_BAUDRATEPRESCALER_16;
     spi.Init.FirstBit            = SPI_FIRSTBIT_MSB;
 
     HAL_SPI_Init(&spi);

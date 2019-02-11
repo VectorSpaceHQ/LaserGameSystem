@@ -49,11 +49,9 @@ public:
 class NucleoHal: public HAL::Hal
 {
 private:
-   BoardLED    mainBoardLight;
 
 public:
-   NucleoHal():
-      mainBoardLight(LED2)
+   NucleoHal()
    {
    }
 
@@ -63,7 +61,6 @@ public:
 
    bool Init()
    {
-      mainBoardLight.Init();
       return true;
    }
 
@@ -85,7 +82,6 @@ public:
       switch(id)
       {
          case HAL::HAL_ID_MAIN_LIGHT:
-            onOffSwitch = &mainBoardLight;
             break;
 
          default:
