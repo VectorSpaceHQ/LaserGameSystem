@@ -96,6 +96,10 @@ static void AppTaskStart (void *p_arg)
 
 TIM_HandleTypeDef timerHandle;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void TIM2_IRQHandler(void)
 {
    HAL_TIM_IRQHandler(&timerHandle);
@@ -108,6 +112,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       pLaserDisplay->Update();
    }
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 static void SetupTimerInterrupt()
 {
@@ -132,7 +140,7 @@ static void SetupTimerInterrupt()
     timerHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 
     HAL_TIM_Base_Init(&timerHandle);
-    //HAL_TIM_Base_Start_IT(&timerHandle);
+    HAL_TIM_Base_Start_IT(&timerHandle);
 }
 
 static void SystemClkCfg (void)
