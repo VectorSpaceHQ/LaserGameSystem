@@ -94,6 +94,14 @@ void Shape::Scale(CoordType _scale)
 }
 
 
+void Shape::Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale)
+{
+   vertices.block(0, CoordX, vertices.rows(), 1) *= _xScale;
+   vertices.block(0, CoordY, vertices.rows(), 1) *= _yScale;
+   vertices.block(0, CoordZ, vertices.rows(), 1) *= _zScale;
+}
+
+
 int32_t Shape::NumPoints()
 {
    return vertices.rows();

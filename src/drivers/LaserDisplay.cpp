@@ -37,6 +37,7 @@ void LaserDisplay::Update()
    {
       if (newVerts)
       {
+         activeVerts.resize(backgroundVerts.rows(), CoordMax);
          activeVerts = backgroundVerts;
          newVerts = false;
       }
@@ -64,6 +65,7 @@ void LaserDisplay::Update()
 
 void LaserDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
 {
+   backgroundVerts.resize(vertices.rows(), CoordMax);
    backgroundVerts = vertices;
    newVerts = true;
 }

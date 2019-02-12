@@ -53,6 +53,7 @@ public:
    void Move(CoordType diffX, CoordType diffY);
    void Move(CoordType diffX, CoordType diffY, CoordType diffZ);
    void Scale(CoordType _scale);
+   void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
    int32_t NumPoints();
    int32_t MapVertices(Eigen::Ref<VertexList_t> list);
 

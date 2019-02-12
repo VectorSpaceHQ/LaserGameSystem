@@ -16,7 +16,8 @@
 class Calibrate: public Program
 {
 private:
-   Shape    square;
+//   Shape    square;
+   Shape    star;
    int      scale;
    int      shrinkGrow;
 

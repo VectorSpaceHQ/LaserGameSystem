@@ -15,7 +15,7 @@
 //   divided by 2 for positive and negative axes (grow from 0 in the center)
 //   subtract one to ensure we don't go one past the edge
 const int Calibrate::MaxSize = 2047;
-const int Calibrate::StepSize = 12;
+const int Calibrate::StepSize = 24;
 
 
 Calibrate::Calibrate(Canvas& _canvas
@@ -23,7 +23,8 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
-   square(5),
+//   square(5),
+   star(6),
    scale(1),
    shrinkGrow(1)
 {
@@ -32,15 +33,27 @@ Calibrate::Calibrate(Canvas& _canvas
 
 void Calibrate::Init()
 {
-   square.vertices <<
    //  X   Y  Z  C   // C is for "Color"!
-      -1, -1, 0, 0,  // Initial position: Start at top left (but don't draw -- see colors)
-       1, -1, 0, 1,  // Draw to top right
-       1,  1, 0, 1,  // Draw to bottom right
-      -1,  1, 0, 1,  // Draw to bottom left
-      -1, -1, 0, 1;  // Draw to top left to complete the square
+//   square.vertices <<
+//      -1, -1, 0, 0,  // Initial position: Start at top left (but don't draw -- see colors)
+//       1, -1, 0, 1,  // Draw to top right
+//       1,  1, 0, 1,  // Draw to bottom right
+//      -1,  1, 0, 1,  // Draw to bottom left
+//      -1, -1, 0, 1;  // Draw to top left to complete the square
 
-   square.Backup();
+   star.vertices <<
+      -1, -1, 0, 0,
+       0,  1, 0, 1,
+       1, -1, 0, 1,
+      -1,  0, 0, 1,
+       1,  0, 0, 1,
+      -1, -1, 0, 1;
+
+   // Invert the star on Y axis
+   star.Scale(1, -1, 1);
+
+//   square.Backup();
+   star.Backup();
 }
 
 
@@ -49,7 +62,8 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
-   canvas.AddShape(&square);
+//   canvas.AddShape(&square);
+   canvas.AddShape(&star);
 }
 
 
@@ -77,10 +91,12 @@ void Calibrate::Run()
 void Calibrate::Draw()
 {
    // Restore our original shape
-   square.Restore();
+//   square.Restore();
+   star.Restore();
 
    // Then scale the shape
-   square.Scale(scale);
+//   square.Scale(scale);
+   star.Scale(scale);
 }
 
 
