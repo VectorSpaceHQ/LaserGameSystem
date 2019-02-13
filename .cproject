@@ -24,7 +24,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.678580524" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler">
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.optimization.level.1421880379" name="Optimization Level" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false"/>
 								<option id="gnu.c.compiler.option.debugging.level.1222388914" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.567195550" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.567195550" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F401RETx"/>
@@ -33,7 +33,7 @@
 									<listOptionValue builtIn="false" value="STM32F401xE"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 								</option>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.1680378187" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.c.compiler.option.include.paths.1680378187" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc/Legacy&quot;"/>
@@ -56,7 +56,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.569518232" name="MCU G++ Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler">
 								<option id="fr.ac6.managedbuild.gnu.cpp.compiler.option.optimization.level.1400708133" name="Optimization Level" superClass="fr.ac6.managedbuild.gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1168839201" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.685782835" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.685782835" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F401RETx"/>
@@ -65,7 +65,7 @@
 									<listOptionValue builtIn="false" value="STM32F401xE"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 								</option>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1677196953" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.include.paths.1677196953" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc/Legacy&quot;"/>
@@ -95,7 +95,7 @@
 							</tool>
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1845794775" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1452973041" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler">
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.1080439913" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.1080439913" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/platforms/nucleo/HAL_Driver/Inc/Legacy&quot;"/>
@@ -142,7 +142,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_wakeup_template.c|platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c|platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_tim_template.c|platforms/pc/|Micrium/Software/uC-CPU/ARM-Cortex-M4/CCS/|Micrium/Software/uC-CPU/ARM-Cortex-M4/IAR/|Micrium/Software/uC-CPU/ARM-Cortex-M4/RealView/|Micrium/Software/uC-CPU/BSP/|Micrium/Software/uC-CPU/Cfg/|Micrium/Software/uC-LIB/Cfg/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/CCS/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/IAR/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/RealView/|Micrium/Software/uCOS-II/Cfg/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/ARM/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/CCS/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/IAR/|Micrium/Software/uCOS-II/Source/os_core.c|Micrium/Software/uCOS-II/Source/os_flag.c|Micrium/Software/uCOS-II/Source/os_mbox.c|Micrium/Software/uCOS-II/Source/os_mem.c|Micrium/Software/uCOS-II/Source/os_mutex.c|Micrium/Software/uCOS-II/Source/os_q.c|Micrium/Software/uCOS-II/Source/os_sem.c|Micrium/Software/uCOS-II/Source/os_task.c|Micrium/Software/uCOS-II/Source/os_time.c|Micrium/Software/uCOS-II/Source/os_tmr.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+						<entry excluding="platforms/pc_svg|platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_wakeup_template.c|platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c|platforms/nucleo/HAL_Driver/Src/stm32f4xx_hal_timebase_tim_template.c|platforms/pc/|Micrium/Software/uC-CPU/ARM-Cortex-M4/CCS/|Micrium/Software/uC-CPU/ARM-Cortex-M4/IAR/|Micrium/Software/uC-CPU/ARM-Cortex-M4/RealView/|Micrium/Software/uC-CPU/BSP/|Micrium/Software/uC-CPU/Cfg/|Micrium/Software/uC-LIB/Cfg/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/CCS/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/IAR/|Micrium/Software/uC-LIB/Ports/ARM-Cortex-M4/RealView/|Micrium/Software/uCOS-II/Cfg/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/ARM/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/CCS/|Micrium/Software/uCOS-II/Ports/ARM-Cortex-M/ARMv7-M/IAR/|Micrium/Software/uCOS-II/Source/os_core.c|Micrium/Software/uCOS-II/Source/os_flag.c|Micrium/Software/uCOS-II/Source/os_mbox.c|Micrium/Software/uCOS-II/Source/os_mem.c|Micrium/Software/uCOS-II/Source/os_mutex.c|Micrium/Software/uCOS-II/Source/os_q.c|Micrium/Software/uCOS-II/Source/os_sem.c|Micrium/Software/uCOS-II/Source/os_task.c|Micrium/Software/uCOS-II/Source/os_time.c|Micrium/Software/uCOS-II/Source/os_tmr.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -173,7 +173,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1321928249" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler">
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.optimization.level.1241007742" name="Optimization Level" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="fr.ac6.managedbuild.gnu.c.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.1774354252" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.881382713" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.881382713" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F401RETx"/>
@@ -181,7 +181,7 @@
 									<listOptionValue builtIn="false" value="STM32F401xx"/>
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
 								</option>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.2026238867" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.c.compiler.option.include.paths.2026238867" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/StdPeriph_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
@@ -199,7 +199,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.1300710739" name="MCU G++ Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler">
 								<option id="fr.ac6.managedbuild.gnu.cpp.compiler.option.optimization.level.1067429216" name="Optimization Level" superClass="fr.ac6.managedbuild.gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="fr.ac6.managedbuild.gnu.cpp.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.523831975" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.1474564930" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1474564930" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32"/>
 									<listOptionValue builtIn="false" value="STM32F4"/>
 									<listOptionValue builtIn="false" value="STM32F401RETx"/>
@@ -207,7 +207,7 @@
 									<listOptionValue builtIn="false" value="STM32F401xx"/>
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
 								</option>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.16322471" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.include.paths.16322471" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/StdPeriph_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
@@ -231,7 +231,7 @@
 							</tool>
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1797613398" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release.854321188" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.exe.release">
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.2064260136" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.2064260136" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/StdPeriph_Driver/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/device&quot;"/>
@@ -296,7 +296,7 @@
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1804626791" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
 							<builder buildPath="${workspace_loc:/LaserGameSystem}/MinGWDebug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.812582635" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1676864448" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.623102345" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.623102345" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/srclibs&quot;"/>
@@ -307,7 +307,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.576302050" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.1179313757" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option defaultValue="gnu.cpp.compiler.debugging.level.max" id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.2061357914" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1780655190" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.include.paths.1780655190" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
@@ -320,7 +320,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.1045566572" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.mingw.exe.debug.option.optimization.level.80314678" name="Optimization Level" superClass="gnu.c.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option defaultValue="gnu.c.debugging.level.max" id="gnu.c.compiler.mingw.exe.debug.option.debugging.level.1565556986" name="Debug Level" superClass="gnu.c.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.612394628" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+								<option id="gnu.c.compiler.option.include.paths.612394628" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
@@ -332,11 +332,11 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.403215992" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
 							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}  -mwindows" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.874326588" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.link.option.paths.947481122" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
+								<option id="gnu.cpp.link.option.paths.947481122" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/lib}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.other.1156008059" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other" useByScannerDiscovery="false"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.link.option.libs.1792289665" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" useByScannerDiscovery="false" valueType="libs">
+								<option id="gnu.cpp.link.option.libs.1792289665" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="mingw32"/>
 									<listOptionValue builtIn="false" value="SDL2"/>
 								</option>
@@ -348,7 +348,86 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/platforms/nucleo/|src/platforms/pc/SDL2-2.0.9/docs/|src/platforms/pc/SDL2-2.0.9/i686-w64-mingw32/|src/platforms/pc/SDL2-2.0.9/test/|src/platforms/pc/SDL2-2.0.9/BUGS.txt|src/platforms/pc/SDL2-2.0.9/COPYING.txt|src/platforms/pc/SDL2-2.0.9/CREDITS.txt|src/platforms/pc/SDL2-2.0.9/INSTALL.txt|src/platforms/pc/SDL2-2.0.9/Makefile|src/platforms/pc/SDL2-2.0.9/README-SDL.txt|src/platforms/pc/SDL2-2.0.9/README.txt|src/platforms/pc/SDL2-2.0.9/WhatsNew.txt" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="MockHal.h|pc_svg|src/Micrium|src/platforms/pc_svg|src/platforms/nucleo/|src/platforms/pc/SDL2-2.0.9/docs/|src/platforms/pc/SDL2-2.0.9/i686-w64-mingw32/|src/platforms/pc/SDL2-2.0.9/test/|src/platforms/pc/SDL2-2.0.9/BUGS.txt|src/platforms/pc/SDL2-2.0.9/COPYING.txt|src/platforms/pc/SDL2-2.0.9/CREDITS.txt|src/platforms/pc/SDL2-2.0.9/INSTALL.txt|src/platforms/pc/SDL2-2.0.9/Makefile|src/platforms/pc/SDL2-2.0.9/README-SDL.txt|src/platforms/pc/SDL2-2.0.9/README.txt|src/platforms/pc/SDL2-2.0.9/WhatsNew.txt" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907" moduleId="org.eclipse.cdt.core.settings" name="PC SVG">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.MachO64" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907" name="PC SVG" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907." name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.macosx.base.156077822" name="MacOSX GCC" superClass="cdt.managedbuild.toolchain.gnu.macosx.base">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.MachO64" id="cdt.managedbuild.target.gnu.platform.macosx.base.523137831" name="Debug Platform" osList="macosx" superClass="cdt.managedbuild.target.gnu.platform.macosx.base"/>
+							<builder buildPath="${workspace_loc:/LaserGameSystem}/PC SVG" id="cdt.managedbuild.target.gnu.builder.macosx.base.1350823775" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.base"/>
+							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.base.1961921391" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.base"/>
+							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.base.1869479460" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.base">
+								<option id="macosx.cpp.link.option.libs.1778147666" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs"/>
+								<option id="macosx.cpp.link.option.paths.796600351" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths"/>
+								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1577706019" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.macosx.base.936586124" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.base">
+								<option id="gnu.both.asm.option.include.paths.1609003022" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${ProjDirPath}/src/libs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1780355692" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1904082114" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.1169004411" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base">
+								<option id="gnu.cpp.compiler.option.include.paths.277433304" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${ProjDirPath}/src/libs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.optimization.level.1146731893" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.debugging.level.131635255" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.423751639" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.63635398" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
+								<option id="gnu.c.compiler.option.include.paths.393972874" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/platforms/pc/SDL2-2.0.9/x86_64-w64-mingw32/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/programs&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/drivers&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${ProjDirPath}/src/libs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/libs&quot;"/>
+								</option>
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1402698459" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.level.1738429996" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.870544205" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<fileInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907.602104235" name="spi.c" rcbsApplicability="disable" resourcePath="src/drivers/spi.c" toolsToInvoke="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.63635398.1122565121">
+						<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.63635398.1122565121" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.63635398">
+							<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.142429017" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+						</tool>
+					</fileInfo>
+					<sourceEntries>
+						<entry excluding="src/drivers/spi.c|MockHal.h|pc_svg|src/drivers/LaserDisplay.cpp|src/Micrium|src/platforms/pc|src/platforms/nucleo|src/platforms/pc/SDL2-2.0.9/docs/|src/platforms/pc/SDL2-2.0.9/i686-w64-mingw32/|src/platforms/pc/SDL2-2.0.9/test/|src/platforms/pc/SDL2-2.0.9/BUGS.txt|src/platforms/pc/SDL2-2.0.9/COPYING.txt|src/platforms/pc/SDL2-2.0.9/CREDITS.txt|src/platforms/pc/SDL2-2.0.9/INSTALL.txt|src/platforms/pc/SDL2-2.0.9/Makefile|src/platforms/pc/SDL2-2.0.9/README-SDL.txt|src/platforms/pc/SDL2-2.0.9/README.txt|src/platforms/pc/SDL2-2.0.9/WhatsNew.txt" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -361,6 +440,9 @@
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="PC SVG">
+			<resource resourceType="PROJECT" workspacePath="/LaserGameSystem"/>
+		</configuration>
 		<configuration configurationName="MinGWDebug">
 			<resource resourceType="PROJECT" workspacePath="/LaserGameSystem"/>
 		</configuration>
@@ -384,11 +466,17 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378;cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.1045566572;cdt.managedbuild.tool.gnu.c.compiler.input.1453593324">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907;cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907.;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.1169004411;cdt.managedbuild.tool.gnu.cpp.compiler.input.423751639">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="fr.ac6.managedbuild.config.gnu.cross.exe.release.2018653756;fr.ac6.managedbuild.config.gnu.cross.exe.release.2018653756.;fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1321928249;fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1816154553">
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="fr.ac6.managedbuild.config.gnu.cross.exe.debug.773013591;fr.ac6.managedbuild.config.gnu.cross.exe.debug.773013591.;fr.ac6.managedbuild.tool.gnu.cross.c.compiler.678580524;fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.860481579">
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907;cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.9938907.;cdt.managedbuild.tool.gnu.c.compiler.macosx.base.63635398;cdt.managedbuild.tool.gnu.c.compiler.input.870544205">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.883293378;cdt.managedbuild.config.gnu.mingw.exe.debug.883293378.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.576302050;cdt.managedbuild.tool.gnu.cpp.compiler.input.102461389">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>

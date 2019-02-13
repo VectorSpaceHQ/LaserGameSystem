@@ -10,7 +10,7 @@
 
 #include <Canvas.h>
 #include <DisplayIfc.h>
-#include "Hal.h"
+#include <hal.h>
 #include "Program.h"
 #include "Programs.h"
 
