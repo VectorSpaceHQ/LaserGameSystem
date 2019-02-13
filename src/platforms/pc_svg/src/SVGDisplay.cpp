@@ -62,9 +62,8 @@ void SVGDisplay::PrintFrames(char const * fileName)
       }
 
       svgFile << "   <set attributeName=\"d\""
-               << " repeatCount=\"indefinite\""
                << " begin=\"" << prevTime << "ms\""
-               << " dur=\"" << "33" << "ms\""
+               << " end=\"" << nextTime << "ms\""
                << " fill=\"remove\""
                << " to=\"";
 
