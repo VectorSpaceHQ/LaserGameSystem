@@ -64,6 +64,7 @@ public:
 
    void Delay(int ms);
 
+   uint32_t GetTime();
    int GetNumRotaryEncoders() { return 0; }
    int GetNumPushButtons() { return 0; }
    int GetNumPushServos() { return 0; }

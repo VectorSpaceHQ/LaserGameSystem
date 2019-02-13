@@ -12,5 +12,6 @@ SVGDisplay::SVGDisplay(HAL::Hal& _hal):
 
 void SVGDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
 {
+   uint32_t time = hal.GetTime();
 
 }

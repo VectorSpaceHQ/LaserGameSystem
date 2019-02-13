@@ -20,5 +20,5 @@ int main(void)
    GameSystem  sys(dynamic_cast<HAL::Hal&>(mockHal),
                    dynamic_cast<DisplayIfc&>(svgDisplay));
 
-   sys.Start();
+   sys.Start(0);
 }

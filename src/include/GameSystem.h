@@ -22,11 +22,12 @@ private:
    Canvas      canvas;
    Programs    programs;
    Program&    currentProgram;
+   uint32_t    runTime;
 
 public:
    GameSystem(HAL::Hal& _hal, DisplayIfc& _displayImpl);
 
-   void Start();
+   void Start(uint32_t _runTime);
    void Run();
 
    void StartCurrentProgram();

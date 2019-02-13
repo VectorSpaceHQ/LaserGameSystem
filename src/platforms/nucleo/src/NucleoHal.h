@@ -70,6 +70,11 @@ public:
       OSTimeDlyHMSM(0u, 0u, 0u, ms);
    }
 
+   uint32_t GetTime()
+   {
+      return OSTimeGet();
+   }
+
    int GetNumRotaryEncoders() { return 0; }
    int GetNumPushButtons() { return 0; }
    int GetNumPushServos() { return 0; }

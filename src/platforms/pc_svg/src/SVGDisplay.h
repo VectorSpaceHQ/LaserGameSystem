@@ -1,6 +1,7 @@
 
 #include <hal.h>
 #include <DisplayIfc.h>
+#include "Shape.h"
 
 
 class SVGDisplay: public DisplayIfc

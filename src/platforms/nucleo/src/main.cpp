@@ -91,7 +91,7 @@ static void AppTaskStart (void *p_arg)
    GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
                    dynamic_cast<DisplayIfc&>(laserDisplay));
 
-   sys.Start();
+   sys.Start(0);
 }
 
 TIM_HandleTypeDef timerHandle;

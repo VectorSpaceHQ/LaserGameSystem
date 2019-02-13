@@ -28,6 +28,12 @@ void MockHal::Delay(int ms)
 }
 
 
+uint32_t MockHal::GetTime()
+{
+   return time;
+}
+
+
 HAL::OnOffSwitch* MockHal::GetOnOffSwitch(HAL::HalId id)
 {
    return &onOffSwitch;

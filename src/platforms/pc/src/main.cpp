@@ -19,5 +19,5 @@ int main(void)
    GameSystem  sys(dynamic_cast<HAL::Hal&>(sdlHal),
                    dynamic_cast<DisplayImpl&>(laserDisplay));
 
-   sys.Start();
+   sys.Start(0);
 }

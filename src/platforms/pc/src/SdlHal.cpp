@@ -28,6 +28,11 @@ void SdlHal::Delay(int ms)
    SDL_Delay(ms);
 }
 
+uint32_t SdlHal::GetTime()
+{
+   return SDL_GetTicks();
+}
+
 HAL::OnOffSwitch* SdlHal::GetOnOffSwitch(HAL::HalId id)
 {
    HAL::OnOffSwitch* onOffSwitch = nullptr;

@@ -16,13 +16,16 @@ GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayIfc):
    hal(_hal),
    canvas(_displayIfc),
    programs(canvas),
-   currentProgram(programs.calibrateProgram) // Set the default program to calibrate for now
+   currentProgram(programs.calibrateProgram), // Set the default program to calibrate for now
+   runTime(0)
 {
 }
 
 
-void GameSystem::Start()
+void GameSystem::Start(uint32_t  _runTime)
 {
+   runTime = _runTime;
+
    if(hal.Init())
    {
       StartCurrentProgram();
@@ -33,12 +36,24 @@ void GameSystem::Start()
 
 void GameSystem::Run()
 {
-   while(1)
+   int32_t  timeLeft = runTime - hal.GetTime();
+
+   if(runTime == 0)
+   {
+      timeLeft = 1;
+   }
+
+   while(timeLeft > 0)
    {
       currentProgram.HandleEvent(EVENT_PROGRAM_RUN);
       currentProgram.HandleEvent(EVENT_PROGRAM_DRAW);
       canvas.Render();
       hal.Delay(33);
+
+      if(runTime != 0)
+      {
+         timeLeft = runTime - hal.GetTime();
+      }
    }
 }
 

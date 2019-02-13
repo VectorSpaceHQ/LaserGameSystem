@@ -100,6 +100,7 @@ namespace HAL
       virtual ~Hal() {};
       virtual bool Init() = 0;
       virtual void Delay(int ms) = 0;
+      virtual uint32_t GetTime() = 0;
       virtual int GetNumRotaryEncoders() = 0;
       virtual int GetNumPushButtons() = 0;
       virtual int GetNumPushServos() = 0;
