@@ -42,7 +42,6 @@ void SVGDisplay::PrintFrames(char const * fileName)
    FrameList_t::iterator   it;
    int                     frameCntr = 0;
    uint32_t                prevTime = 0;
-//   uint32_t                currTime = hal.GetTime();
    std::ofstream           svgFile;
 
    svgFile.open(fileName);
@@ -60,12 +59,27 @@ void SVGDisplay::PrintFrames(char const * fileName)
       {
          nextTime = (*next)->startTime;
       }
+      else
+      {
+         nextTime = hal.GetTime();
+      }
 
-      svgFile << "   <set attributeName=\"d\""
-               << " begin=\"" << prevTime << "ms\""
-               << " end=\"" << nextTime << "ms\""
-               << " fill=\"remove\""
-               << " to=\"";
+      svgFile << "   <set"
+              << " id=\"frame" << frameCntr << "\"";
+
+      if(frameCntr == 0)
+      {
+         svgFile << " begin=\"0ms;frame" << (numFrames - 1) << ".end\"";
+      }
+      else
+      {
+         svgFile << " begin=\"frame" << frameCntr - 1 << ".end\"";
+      }
+
+      svgFile << " dur=\"" << nextTime - prevTime << "ms\""
+              << " attributeName=\"d\""
+              << " fill=\"remove\""
+              << " to=\"";
 
       for(int pointCtr = 0; pointCtr < (*it)->points.rows(); pointCtr++)
       {
@@ -90,7 +104,6 @@ void SVGDisplay::PrintFrames(char const * fileName)
    }
 
    svgFile << "   </path>" << std::endl;
-//   svgFile << "   <animate repeatCount=\"indefinite\" begin=\"0\" dur=\"" << currTime << "ms\" />" << std::endl;
    svgFile << "</g>" << std::endl;
    svgFile << "</svg>" << std::endl;
    svgFile.close();
