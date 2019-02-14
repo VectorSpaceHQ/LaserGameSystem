@@ -26,13 +26,7 @@ SVGDisplay::~SVGDisplay()
 
 void SVGDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
 {
-   Frame*   newFrame = new Frame(hal.GetTime(), vertices);
-
-   // Adjust the values to be 0-based
-   newFrame->points.block(0, CoordX, newFrame->points.rows(), 1) += 2047;
-   newFrame->points.block(0, CoordY, newFrame->points.rows(), 1) += 2047;
-
-   frames.push_back(newFrame);
+   frames.push_back(new Frame(hal.GetTime(), vertices));
    numFrames++;
 }
 
@@ -45,7 +39,7 @@ void SVGDisplay::PrintFrames(char const * fileName)
    std::ofstream           svgFile;
 
    svgFile.open(fileName);
-   svgFile << "<svg viewBox=\"0 0 4096 4096\" xmlns=\"http://www.w3.org/2000/svg\">" << std::endl;
+   svgFile << "<svg viewBox=\"-2048 -2048 4096 4096\" xmlns=\"http://www.w3.org/2000/svg\">" << std::endl;
    svgFile << "<g>" << std::endl;
    svgFile << "   <path id=\"frame\" fill=\"none\" stroke=\"navy\" d=\"\">" << std::endl;
 
