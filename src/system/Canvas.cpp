@@ -47,8 +47,8 @@ void Canvas::AddObject(CanvasObject* newObject)
 
 int32_t Canvas::TotalVertices()
 {
-   ObjectList_t::iterator  it;
-   int32_t                 vertexCnt = 0;
+   CanvasObjectList_t::iterator  it;
+   int32_t                       vertexCnt = 0;
 
    for(it = objects.begin(); it != objects.end(); ++it )
    {
@@ -64,8 +64,8 @@ int32_t Canvas::TotalVertices()
  */
 void Canvas::CollectVertices()
 {
-   ObjectList_t::iterator  it;
-   int32_t                 vertexCntr = 0;
+   CanvasObjectList_t::iterator  it;
+   int32_t                       vertexCntr = 0;
 
    allVertices.resize(TotalVertices(), CoordMax);
 

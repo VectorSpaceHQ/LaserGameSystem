@@ -9,6 +9,7 @@
 #define INCLUDE_CANVASOBJECT_H_
 
 #include <Eigen/Dense>
+#include <list>
 
 // Positions in the coordinate
 enum CoordPositions
@@ -28,6 +29,7 @@ typedef Eigen::Array<CoordType, 1, 3>                                      Magni
 typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
 typedef Eigen::Ref<VertexList_t> VertexListRef;
 
+
 class CanvasObject
 {
 public:
@@ -39,6 +41,8 @@ protected:
    virtual ~CanvasObject() {}
 };
 
+
+typedef std::list<CanvasObject*>  CanvasObjectList_t;
 
 
 #endif /* INCLUDE_CANVASOBJECT_H_ */

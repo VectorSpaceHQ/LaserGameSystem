@@ -10,13 +10,14 @@
 #include "Program.h"
 #include "Shape.h"
 #include "CommonShapes.h"
+#include "Sprite.h"
 
 
 // MaxSize is 4096  -- resolution of the laser
 //   divided by 2 for positive and negative axes (grow from 0 in the center)
 //   subtract one to ensure we don't go one past the edge
-const int Calibrate::MaxSize = 2047;
-const int Calibrate::StepSize = 24;
+const int Calibrate::MaxSize = 1024;
+const int Calibrate::StepSize = 48;
 
 
 Calibrate::Calibrate(Canvas& _canvas
@@ -24,20 +25,27 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
-   square(2),
-//   polygon(5, 1),
-//   polygon(32, 1),   // approximate a circle
-   polygon(16, 2, 1),
+   triangle(3, 2),
+   square(4),
+   circle(32, 2),
+   star(5, 2, 1),
+   mySprite(&triangle),
    scale(1),
-   shrinkGrow(1)
+   shrinkGrow(1),
+   currShape(0)
 {
+   mySprite.AddShape(&square);
+   mySprite.AddShape(&circle);
+   mySprite.AddShape(&star);
 }
 
 
 void Calibrate::Init()
 {
-   polygon.Scale(1, -1, 1);
-   polygon.Backup();
+   triangle.Scale(1, -1, 1);
+   triangle.Backup();
+   star.Scale(1, -1, 1);
+   star.Backup();
 }
 
 
@@ -46,8 +54,7 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
-   canvas.AddObject(&square);
-   canvas.AddObject(&polygon);
+   canvas.AddObject(&mySprite);
 }
 
 
@@ -68,6 +75,15 @@ void Calibrate::Run()
    {
       scale = 1;           // Set to 1
       shrinkGrow *= -1;    // Start growing
+
+      currShape++;
+
+      if(currShape >= mySprite.NumShapes())
+      {
+         currShape = 0;
+      }
+
+      mySprite.SelectShape(currShape);
    }
 }
 
@@ -75,12 +91,10 @@ void Calibrate::Run()
 void Calibrate::Draw()
 {
    // Restore our original shape
-   square.Restore();
-   polygon.Restore();
+   mySprite.Restore();
 
    // Then scale the shape
-   square.Scale(scale);
-   polygon.Scale(scale / 2);
+   mySprite.Scale(scale);
 }
 
 

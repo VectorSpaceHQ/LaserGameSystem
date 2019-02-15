@@ -21,8 +21,6 @@ protected:
    VertexList_t   backupVertices;
    uint16_t       scale;
    Coordinate     position;         // Where it currently is in normal world space
-   Magnitude      velocity;         // The direction/scale of the X/Y vector
-   Magnitude      acceleration;     // The current acceleration (future?)
 
 public:
    Shape();

@@ -12,12 +12,10 @@
 
 
 Shape::Shape():
-   vertices(),
+   vertices(0, static_cast<int>(CoordMax)),
    backupVertices(),
    scale(1),
-   position(),
-   velocity(),
-   acceleration()
+   position()
 {
 }
 
@@ -26,9 +24,7 @@ Shape::Shape(uint16_t numVertices):
    vertices(numVertices, static_cast<int>(CoordMax)),
    backupVertices(numVertices, static_cast<int>(CoordMax)),
    scale(1),
-   position(),
-   velocity(),
-   acceleration()
+   position()
 {
 }
 
@@ -41,8 +37,6 @@ Shape::Shape(const Shape& other)
       backupVertices = other.backupVertices;
       scale = other.scale;
       position = other.position;
-      velocity = other.velocity;
-      acceleration = other.acceleration;
    }
 }
 

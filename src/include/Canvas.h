@@ -17,11 +17,9 @@
 class Canvas
 {
 private:
-   typedef std::list<CanvasObject*>  ObjectList_t;
-
-   DisplayIfc&    displayIfc;
-   ObjectList_t   objects;
-   VertexList_t   allVertices;
+   DisplayIfc&          displayIfc;
+   CanvasObjectList_t   objects;
+   VertexList_t         allVertices;
 
 public:
    Canvas(DisplayIfc& _displayImpl);
