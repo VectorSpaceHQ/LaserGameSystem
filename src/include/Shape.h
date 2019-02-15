@@ -9,28 +9,10 @@
 #define __shape_h__
 
 #include <stdint.h>
-#include <Eigen/Dense>
+#include "CanvasObject.h"
 
 
-// Positions in the coordinate
-enum CoordPositions
-{
-   CoordX      = 0,
-   CoordY      = 1,
-   CoordZ      = 2,
-   CoordColor  = 3,
-
-   // Do not add below this line
-   CoordMax
-};
-
-typedef float CoordType;
-typedef Eigen::Array<CoordType, 1, CoordMax>                               Coordinate;    // 3D Coordinate + color
-typedef Eigen::Array<CoordType, 1, 3>                                      Magnitude;     // 3D Magnitude
-typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
-
-
-class Shape
+class Shape: public CanvasObject
 {
 public:
    VertexList_t   vertices;
@@ -55,7 +37,7 @@ public:
    void Scale(CoordType _scale);
    void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
    int32_t NumPoints();
-   int32_t MapVertices(Eigen::Ref<VertexList_t> list);
+   int32_t MapVertices(VertexListRef list);
 
    void LogMatrix();
 };

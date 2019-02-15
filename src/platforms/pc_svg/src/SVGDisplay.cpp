@@ -1,11 +1,11 @@
 
 #include <DisplayIfc.h>
-#include <Eigen/Dense>
 #include <hal.h>
 #include <list>
 #include <iostream>
 #include <fstream>
 
+#include "CanvasObject.h"
 #include "SVGDisplay.h"
 
 
@@ -24,7 +24,7 @@ SVGDisplay::~SVGDisplay()
 }
 
 
-void SVGDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
+void SVGDisplay::Render(VertexListRef vertices)
 {
    frames.push_back(new Frame(hal.GetTime(), vertices));
    numFrames++;

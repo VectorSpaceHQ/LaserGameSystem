@@ -7,9 +7,9 @@
 
 #include <Eigen/Dense>
 #include "Canvas.h"
+#include "CanvasObject.h"
 #include "Hal.h"
 #include "LaserDisplay.h"
-#include "Shape.h"
 #include "stm32f4xx.h"
 #include "spi.h"
 
@@ -63,7 +63,7 @@ void LaserDisplay::Update()
 }
 
 
-void LaserDisplay::Render(Eigen::Ref<const VertexList_t> vertices)
+void LaserDisplay::Render(VertexListRef vertices)
 {
    backgroundVerts.resize(vertices.rows(), CoordMax);
    backgroundVerts = vertices;

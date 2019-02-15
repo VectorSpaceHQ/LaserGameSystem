@@ -7,7 +7,6 @@
 
 
 #include <Eigen/Dense>
-//#include <iostream>
 
 #include "Shape.h"
 
@@ -108,7 +107,7 @@ int32_t Shape::NumPoints()
 }
 
 
-int32_t Shape::MapVertices(Eigen::Ref<VertexList_t> list)
+int32_t Shape::MapVertices(VertexListRef list)
 {
    list = vertices;
 

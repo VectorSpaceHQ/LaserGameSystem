@@ -46,8 +46,8 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
-   canvas.AddShape(&square);
-   canvas.AddShape(&polygon);
+   canvas.AddObject(&square);
+   canvas.AddObject(&polygon);
 }
 
 

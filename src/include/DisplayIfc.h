@@ -8,15 +8,12 @@
 #ifndef INCLUDE_DISPLAYIFC_H_
 #define INCLUDE_DISPLAYIFC_H_
 
-#include <Eigen/Dense>
-#include "Shape.h"
-
+#include "CanvasObject.h"
 
 class DisplayIfc
 {
 public:
-   //virtual void Render(Coordinate* _vertices, int32_t _numVertices) = 0;
-   virtual void Render(Eigen::Ref<const VertexList_t> vertices) = 0;
+   virtual void Render(VertexListRef vertices) = 0;
 
 protected:
    virtual ~DisplayIfc() {}

@@ -11,7 +11,7 @@
 #include "DisplayIfc.h"
 
 #include "Hal.h"
-#include "Shape.h"
+#include "CanvasObject.h"
 
 
 class LaserDisplay: public DisplayIfc
@@ -29,7 +29,7 @@ public:
 
 public:
    void Update();
-   void Render(Eigen::Ref<const VertexList_t> vertices);
+   void Render(VertexListRef vertices);
 
 };
 

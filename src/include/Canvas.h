@@ -10,17 +10,17 @@
 
 #include <list>
 
+#include "CanvasObject.h"
 #include "DisplayIfc.h"
-#include "Shape.h"
 
 
 class Canvas
 {
 private:
-   typedef std::list<Shape*>  ShapeList_t;
+   typedef std::list<CanvasObject*>  ObjectList_t;
 
    DisplayIfc&    displayIfc;
-   ShapeList_t    shapes;
+   ObjectList_t   objects;
    VertexList_t   allVertices;
 
 public:
@@ -28,7 +28,7 @@ public:
    ~Canvas() {};
 
    void Clear();
-   void AddShape(Shape* newShape);
+   void AddObject(CanvasObject* newObject);
    void Render();
 
 private:

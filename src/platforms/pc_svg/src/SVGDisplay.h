@@ -1,9 +1,8 @@
 
 #include <hal.h>
 #include <DisplayIfc.h>
-#include <Eigen/Dense>
 #include <list>
-#include "Shape.h"
+#include "CanvasObject.h"
 
 
 struct Frame
@@ -31,6 +30,6 @@ private:
 public:
    SVGDisplay(HAL::Hal& _hal);
    ~SVGDisplay();
-   void Render(Eigen::Ref<const VertexList_t> vertices);
+   void Render(VertexListRef vertices);
    void PrintFrames(char const * fileName);
 };
