@@ -24,6 +24,9 @@ private:
    Program&    currentProgram;
    uint32_t    runTime;
 
+   static const uint32_t   GameWidth;
+   static const uint32_t   GameHeight;
+
 public:
    GameSystem(HAL::Hal& _hal, DisplayIfc& _displayImpl);
 

@@ -12,17 +12,26 @@
 
 #include "CanvasObject.h"
 #include "DisplayIfc.h"
+#include "CanvasObject.h"
 
 
 class Canvas
 {
+public:
+   uint32_t             width;
+   uint32_t             height;
+   CoordType            top;
+   CoordType            right;
+   CoordType            bottom;
+   CoordType            left;
+
 private:
    DisplayIfc&          displayIfc;
    CanvasObjectList_t   objects;
    VertexList_t         allVertices;
 
 public:
-   Canvas(DisplayIfc& _displayImpl);
+   Canvas(uint32_t _width, uint32_t _height, DisplayIfc& _displayImpl);
    ~Canvas() {};
 
    void Clear();

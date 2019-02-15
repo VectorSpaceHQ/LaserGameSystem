@@ -11,10 +11,13 @@
 #include "hal.h"
 #include "Programs.h"
 
+const uint32_t GameSystem::GameWidth = 4096;
+const uint32_t GameSystem::GameHeight = 4096;
+
 
 GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayIfc):
    hal(_hal),
-   canvas(_displayIfc),
+   canvas(GameWidth, GameHeight, _displayIfc),
    programs(canvas),
    currentProgram(programs.calibrateProgram), // Set the default program to calibrate for now
    runTime(0)
