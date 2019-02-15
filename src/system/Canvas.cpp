@@ -15,9 +15,9 @@
 Canvas::Canvas(uint32_t _width, uint32_t _height, DisplayIfc& _displayImpl):
    width(_width),
    height(_height),
-   top(height / 2),
+   top(-(height / 2)),
    right(width / 2),
-   bottom(-(height / 2)),
+   bottom(height / 2),
    left(-(width / 2)),
    displayIfc(_displayImpl),
    objects(),

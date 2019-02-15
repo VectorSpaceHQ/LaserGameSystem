@@ -25,14 +25,15 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
+   border(canvas.width, canvas.height),
    triangle(3, 2),
    square(4),
    circle(32, 2),
    star(5, 2, 1),
    mySprite(&triangle),
-   scale(1),
-   shrinkGrow(1),
-   currShape(0)
+   currShape(0),
+   xVel(0),
+   yVel(0)
 {
    mySprite.AddShape(&square);
    mySprite.AddShape(&circle);
@@ -46,6 +47,8 @@ void Calibrate::Init()
    triangle.Backup();
    star.Scale(1, -1, 1);
    star.Backup();
+
+   mySprite.Scale(80);
 }
 
 
@@ -54,7 +57,13 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
+   canvas.AddObject(&border);
    canvas.AddObject(&mySprite);
+
+   xVel = -StepSize / 2;
+   yVel = -StepSize;
+
+   mySprite.SetVelocity(xVel, yVel, 0);
 }
 
 
@@ -62,20 +71,36 @@ void Calibrate::Start()
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Run()
 {
-   // Add (12 *  1) to scale if growing,
-   //  or (12 * -1) to scale if shrinking.
-   scale += StepSize * shrinkGrow;
+   bool collision = false;
+   mySprite.Move();
 
-   if(scale >= MaxSize)    // If scale is bigger than our max size, then
+   if(mySprite.CheckTop(canvas.top))
    {
-      scale = MaxSize;     // Set to max size
-      shrinkGrow *= -1;    // Start shrinking
+      collision = true;
+      yVel = StepSize;
+      mySprite.SetVelocity(xVel, yVel, 0);
    }
-   else if(scale <= 1)     // If scale is smaller than 1
+   else if(mySprite.CheckBottom(canvas.bottom))
    {
-      scale = 1;           // Set to 1
-      shrinkGrow *= -1;    // Start growing
+      collision = true;
+      yVel = -StepSize;
+      mySprite.SetVelocity(xVel, yVel, 0);
+   }
+   else if(mySprite.CheckLeft(canvas.left))
+   {
+      collision = true;
+      xVel = StepSize / 2;
+      mySprite.SetVelocity(xVel, yVel, 0);
+   }
+   else if(mySprite.CheckRight(canvas.right))
+   {
+      collision = true;
+      xVel = -StepSize / 2;
+      mySprite.SetVelocity(xVel, yVel, 0);
+   }
 
+   if(collision)
+   {
       currShape++;
 
       if(currShape >= mySprite.NumShapes())
@@ -90,11 +115,6 @@ void Calibrate::Run()
 
 void Calibrate::Draw()
 {
-   // Restore our original shape
-   mySprite.Restore();
-
-   // Then scale the shape
-   mySprite.Scale(scale);
 }
 
 

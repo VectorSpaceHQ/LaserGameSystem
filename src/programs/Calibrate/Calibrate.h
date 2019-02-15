@@ -18,14 +18,15 @@
 class Calibrate: public Program
 {
 private:
+   Rectangle   border;
    Polygon     triangle;
    Square      square;
    Polygon     circle;
    Star        star;
    Sprite      mySprite;
-   int         scale;
-   int         shrinkGrow;
    uint32_t    currShape;
+   int         xVel;
+   int         yVel;
 
    static const int  StepSize;
    static const int  MaxSize;

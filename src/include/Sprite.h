@@ -30,16 +30,27 @@ public:
    Sprite(Shape* shape);     // Sprites must have at least one shape
    ~Sprite();
 
+   // Shape list operations
    void AddShape(Shape* shape);
    void SelectShape(uint32_t index);
    uint32_t NumShapes();
 
+   // Shape operations
    void Backup();
    void Restore();
+   void Move();
    void Move(CoordType diffX, CoordType diffY);
    void Scale(CoordType _scale);
    void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
 
+   // Motion & Collision detection operations
+   void SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel);
+   bool CheckTop(CoordType top);
+   bool CheckBottom(CoordType bottom);
+   bool CheckLeft(CoordType top);
+   bool CheckRight(CoordType bottom);
+
+   // Display operations
    int32_t NumPoints();
    int32_t MapVertices(VertexListRef list);
 };

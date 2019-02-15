@@ -12,7 +12,10 @@
 
 Sprite::Sprite(Shape* shape):
    shapeList(),
-   currentShape()
+   currentShape(),
+   position(0),
+   velocity(1),
+   acceleration(0)
 {
    AddShape(shape);
    currentShape = shapeList[0];
@@ -67,6 +70,12 @@ void Sprite::Restore()
 }
 
 
+void Sprite::Move()
+{
+   Move(velocity(CoordX), velocity(CoordY));
+}
+
+
 void Sprite::Move(CoordType diffX, CoordType diffY)
 {
    ShapeList_t::iterator  it;
@@ -97,6 +106,46 @@ void Sprite::Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale)
    {
       (*it)->Scale(_xScale, _yScale, _zScale);
    }
+}
+
+
+void Sprite::SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel)
+{
+   velocity(CoordX) = xVel;
+   velocity(CoordY) = yVel;
+   velocity(CoordZ) = zVel;
+}
+
+
+bool Sprite::CheckTop(CoordType top)
+{
+   CoordType   minY = currentShape->vertices.col(CoordY).minCoeff();
+
+   return (minY <= top);
+}
+
+
+bool Sprite::CheckBottom(CoordType bottom)
+{
+   CoordType   maxY = currentShape->vertices.col(CoordY).maxCoeff();
+
+   return (maxY >= bottom);
+}
+
+
+bool Sprite::CheckLeft(CoordType left)
+{
+   CoordType   minX = currentShape->vertices.col(CoordX).minCoeff();
+
+   return (minX <= left);
+}
+
+
+bool Sprite::CheckRight(CoordType right)
+{
+   CoordType   maxX = currentShape->vertices.col(CoordX).maxCoeff();
+
+   return (maxX >= right);
 }
 
 
