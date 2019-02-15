@@ -9,6 +9,7 @@
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
+#include "CommonShapes.h"
 
 
 // MaxSize is 4096  -- resolution of the laser
@@ -23,8 +24,10 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
-//   square(5),
-   star(6),
+   square(2),
+//   polygon(5, 1),
+//   polygon(32, 1),   // approximate a circle
+   polygon(16, 2, 1),
    scale(1),
    shrinkGrow(1)
 {
@@ -33,27 +36,8 @@ Calibrate::Calibrate(Canvas& _canvas
 
 void Calibrate::Init()
 {
-   //  X   Y  Z  C   // C is for "Color"!
-//   square.vertices <<
-//      -1, -1, 0, 0,  // Initial position: Start at top left (but don't draw -- see colors)
-//       1, -1, 0, 1,  // Draw to top right
-//       1,  1, 0, 1,  // Draw to bottom right
-//      -1,  1, 0, 1,  // Draw to bottom left
-//      -1, -1, 0, 1;  // Draw to top left to complete the square
-
-   star.vertices <<
-      -1, -1, 0, 0,
-       0,  1, 0, 1,
-       1, -1, 0, 1,
-      -1,  0, 0, 1,
-       1,  0, 0, 1,
-      -1, -1, 0, 1;
-
-   // Invert the star on Y axis
-   star.Scale(1, -1, 1);
-
-//   square.Backup();
-   star.Backup();
+   polygon.Scale(1, -1, 1);
+   polygon.Backup();
 }
 
 
@@ -62,8 +46,8 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
-//   canvas.AddShape(&square);
-   canvas.AddShape(&star);
+   canvas.AddShape(&square);
+   canvas.AddShape(&polygon);
 }
 
 
@@ -91,12 +75,12 @@ void Calibrate::Run()
 void Calibrate::Draw()
 {
    // Restore our original shape
-//   square.Restore();
-   star.Restore();
+   square.Restore();
+   polygon.Restore();
 
    // Then scale the shape
-//   square.Scale(scale);
-   star.Scale(scale);
+   square.Scale(scale);
+   polygon.Scale(scale / 2);
 }
 
 

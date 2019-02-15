@@ -11,15 +11,16 @@
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
+#include "CommonShapes.h"
 
 
 class Calibrate: public Program
 {
 private:
-//   Shape    square;
-   Shape    star;
-   int      scale;
-   int      shrinkGrow;
+   Square      square;
+   Star        polygon;
+   int         scale;
+   int         shrinkGrow;
 
    static const int  StepSize;
    static const int  MaxSize;

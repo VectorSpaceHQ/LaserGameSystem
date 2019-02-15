@@ -24,7 +24,7 @@ enum CoordPositions
    CoordMax
 };
 
-typedef int16_t CoordType;
+typedef float CoordType;
 typedef Eigen::Array<CoordType, 1, CoordMax>                               Coordinate;    // 3D Coordinate + color
 typedef Eigen::Array<CoordType, 1, 3>                                      Magnitude;     // 3D Magnitude
 typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
