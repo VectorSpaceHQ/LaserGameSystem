@@ -16,15 +16,15 @@
 struct Programs
 {
    Calibrate   calibrateProgram;
-   GiantPong   pongProgram;
+//   GiantPong   pongProgram;
 
    // TODO: Implement
    Programs(Canvas& _display
             //GamePad& _gamePad1,
             //GamePad& _gamePad2
             ):
-      calibrateProgram(_display),
-      pongProgram(_display)
+      calibrateProgram(_display)
+//      pongProgram(_display)
    {
    }
 };
