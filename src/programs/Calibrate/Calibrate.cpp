@@ -18,7 +18,7 @@
 //   divided by 2 for positive and negative axes (grow from 0 in the center)
 //   subtract one to ensure we don't go one past the edge
 const int Calibrate::MaxSize = 1024;
-const int Calibrate::StepSize = 48;
+const int Calibrate::StepSize = 100;
 
 
 Calibrate::Calibrate(Canvas& _canvas
@@ -37,14 +37,14 @@ Calibrate::Calibrate(Canvas& _canvas
    yVel(0)
 {
    mySprite.AddShape(&square);
-   mySprite.AddShape(&circle);
    mySprite.AddShape(&star);
+   mySprite.AddShape(&circle);
 }
 
 
 void Calibrate::Init()
 {
-   mySprite.Scale(150);
+   mySprite.Scale(125);
 }
 
 
@@ -56,8 +56,8 @@ void Calibrate::Start()
    canvas.AddObject(&border);
    canvas.AddObject(&mySprite);
 
-   xVel = -StepSize / 2;
-   yVel = StepSize;
+   xVel = -StepSize / (rand() %4 + 2);
+   yVel = StepSize / (rand() %4 + 2);
 
    mySprite.SetVelocity(xVel, yVel, 0);
 }
@@ -73,25 +73,25 @@ void Calibrate::Run()
    if(mySprite.CheckTop(canvas.top))
    {
       collision = true;
-      yVel = -StepSize;
+      yVel = -StepSize / (rand() % 4 + 2);
       mySprite.SetVelocity(xVel, yVel, 0);
    }
    else if(mySprite.CheckBottom(canvas.bottom))
    {
       collision = true;
-      yVel = StepSize;
+      yVel = StepSize / (rand() % 4 + 2);
       mySprite.SetVelocity(xVel, yVel, 0);
    }
    else if(mySprite.CheckLeft(canvas.left))
    {
       collision = true;
-      xVel = StepSize / 2;
+      xVel = StepSize / (rand() % 4 + 2);
       mySprite.SetVelocity(xVel, yVel, 0);
    }
    else if(mySprite.CheckRight(canvas.right))
    {
       collision = true;
-      xVel = -StepSize / 2;
+      xVel = -StepSize / (rand() % 4 + 2);
       mySprite.SetVelocity(xVel, yVel, 0);
    }
 
