@@ -17,6 +17,11 @@
 
 class Canvas
 {
+private:
+   CanvasObjectList_t   canvasObjects;
+   VertexList_t         allVertices;
+   DisplayIfc&          displayIfc;
+
 public:
    uint32_t             width;
    uint32_t             height;
@@ -24,11 +29,6 @@ public:
    int32_t              right;
    int32_t              bottom;
    int32_t              left;
-
-private:
-   DisplayIfc&          displayIfc;
-   CanvasObjectList_t   objects;
-   VertexList_t         allVertices;
 
 public:
    Canvas(uint32_t _width, uint32_t _height, DisplayIfc& _displayImpl);

@@ -26,7 +26,12 @@ SVGDisplay::~SVGDisplay()
 
 void SVGDisplay::Render(VertexListRef vertices)
 {
-   frames.push_back(new Frame(hal.GetTime(), vertices));
+   Frame* newFrame = new Frame(hal.GetTime(), vertices);
+
+   // Convert from Cartesian -- Invert Y axis
+   newFrame->points.block(0, CoordY, newFrame->points.rows(), 1) *= -1;
+
+   frames.push_back(newFrame);
    numFrames++;
 }
 

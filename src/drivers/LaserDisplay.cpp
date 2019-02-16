@@ -67,5 +67,9 @@ void LaserDisplay::Render(VertexListRef vertices)
 {
    backgroundVerts.resize(vertices.rows(), CoordMax);
    backgroundVerts = vertices;
+
+   // Convert from Cartesian -- Invert Y axis
+   backgroundVerts.block(0, CoordY, backgroundVerts.rows(), 1) *= -1;
+
    newVerts = true;
 }

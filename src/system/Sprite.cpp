@@ -119,17 +119,17 @@ void Sprite::SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel)
 
 bool Sprite::CheckTop(CoordType top)
 {
-   CoordType   minY = currentShape->vertices.col(CoordY).minCoeff();
+   CoordType   maxY = currentShape->vertices.col(CoordY).maxCoeff();
 
-   return (minY <= top);
+   return (maxY >= top);
 }
 
 
 bool Sprite::CheckBottom(CoordType bottom)
 {
-   CoordType   maxY = currentShape->vertices.col(CoordY).maxCoeff();
+   CoordType   minY = currentShape->vertices.col(CoordY).minCoeff();
 
-   return (maxY >= bottom);
+   return (minY <= bottom);
 }
 
 

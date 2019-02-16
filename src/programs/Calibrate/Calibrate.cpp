@@ -6,10 +6,11 @@
  */
 
 #include "Calibrate.h"
+#include "CanvasObject.h"
+#include "CommonShapes.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
-#include "CommonShapes.h"
 #include "Sprite.h"
 
 
@@ -25,10 +26,10 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
-   border(canvas.width, canvas.height),
-   triangle(3, 2),
+   border(canvas.width - 2, canvas.height -2),
+   triangle(3, 3),
    square(4),
-   circle(32, 2),
+   circle(16, 2),
    star(5, 2, 1),
    mySprite(&triangle),
    currShape(0),
@@ -43,12 +44,7 @@ Calibrate::Calibrate(Canvas& _canvas
 
 void Calibrate::Init()
 {
-   triangle.Scale(1, -1, 1);
-   triangle.Backup();
-   star.Scale(1, -1, 1);
-   star.Backup();
-
-   mySprite.Scale(80);
+   mySprite.Scale(150);
 }
 
 
@@ -61,7 +57,7 @@ void Calibrate::Start()
    canvas.AddObject(&mySprite);
 
    xVel = -StepSize / 2;
-   yVel = -StepSize;
+   yVel = StepSize;
 
    mySprite.SetVelocity(xVel, yVel, 0);
 }
@@ -77,13 +73,13 @@ void Calibrate::Run()
    if(mySprite.CheckTop(canvas.top))
    {
       collision = true;
-      yVel = StepSize;
+      yVel = -StepSize;
       mySprite.SetVelocity(xVel, yVel, 0);
    }
    else if(mySprite.CheckBottom(canvas.bottom))
    {
       collision = true;
-      yVel = -StepSize;
+      yVel = StepSize;
       mySprite.SetVelocity(xVel, yVel, 0);
    }
    else if(mySprite.CheckLeft(canvas.left))

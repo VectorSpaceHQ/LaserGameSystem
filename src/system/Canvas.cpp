@@ -13,15 +13,15 @@
 
 
 Canvas::Canvas(uint32_t _width, uint32_t _height, DisplayIfc& _displayImpl):
+   canvasObjects(),
+   allVertices(0, static_cast<int>(CoordMax)),
+   displayIfc(_displayImpl),
    width(_width),
    height(_height),
-   top(-(height / 2)),
+   top(height / 2),
    right(width / 2),
-   bottom(height / 2),
-   left(-(width / 2)),
-   displayIfc(_displayImpl),
-   objects(),
-   allVertices(0, static_cast<int>(CoordMax))
+   bottom(-(height / 2)),
+   left(-(width / 2))
 {
 }
 
@@ -41,13 +41,13 @@ void Canvas::Clear()
 {
    // Another module is responsible for the allocation of memory for the shapes
    // thus, we just need to clear our list of pointers.
-   objects.clear();
+   canvasObjects.clear();
 }
 
 
 void Canvas::AddObject(CanvasObject* newObject)
 {
-   objects.push_back(newObject);
+   canvasObjects.push_back(newObject);
 }
 
 
@@ -56,7 +56,7 @@ int32_t Canvas::TotalVertices()
    CanvasObjectList_t::iterator  it;
    int32_t                       vertexCnt = 0;
 
-   for(it = objects.begin(); it != objects.end(); ++it )
+   for(it = canvasObjects.begin(); it != canvasObjects.end(); ++it )
    {
       vertexCnt += (*it)->NumPoints();
    }
@@ -75,7 +75,7 @@ void Canvas::CollectVertices()
 
    allVertices.resize(TotalVertices(), CoordMax);
 
-   for(it = objects.begin(); it != objects.end(); ++it )
+   for(it = canvasObjects.begin(); it != canvasObjects.end(); ++it )
    {
       int32_t  objectVertices = (*it)->NumPoints();
 
