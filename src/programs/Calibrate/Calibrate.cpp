@@ -26,25 +26,24 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad2
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
-   border(canvas.width - 2, canvas.height -2),
+//   border(canvas.width - 2, canvas.height -2),
    triangle(3, 3),
-   square(4),
-   circle(16, 2),
+//   square(4),
+//   circle(16, 2),
    star(5, 2, 1),
-   mySprite(&triangle),
-   currShape(0),
-   xVel(0),
-   yVel(0)
+   sprite1(&triangle),
+   sprite2(&star),
+   currShape(0)
 {
-   mySprite.AddShape(&square);
-   mySprite.AddShape(&star);
-   mySprite.AddShape(&circle);
+//   sprite2.AddShape(&star);
+//   sprite1.AddShape(&circle);
 }
 
 
 void Calibrate::Init()
 {
-   mySprite.Scale(125);
+   sprite1.Scale(125);
+   sprite2.Scale(125);
 }
 
 
@@ -53,13 +52,20 @@ void Calibrate::Start()
    // Only add the shape to the canvas once at startup
    // Since the canvas maintains a pointer, we can update our vertices all day long,
    // and the canvas will pickup the changes.
-   canvas.AddObject(&border);
-   canvas.AddObject(&mySprite);
+//   canvas.AddObject(&border);
+   canvas.AddObject(&sprite1);
+   canvas.AddObject(&sprite2);
+
+   int         xVel;
+   int         yVel;
 
    xVel = -StepSize / (rand() %4 + 2);
    yVel = StepSize / (rand() %4 + 2);
+   sprite1.SetVelocity(xVel, yVel, 0);
 
-   mySprite.SetVelocity(xVel, yVel, 0);
+   xVel = -StepSize / (rand() %4 + 2);
+   yVel = StepSize / (rand() %4 + 2);
+   sprite2.SetVelocity(xVel, yVel, 0);
 }
 
 
@@ -67,44 +73,53 @@ void Calibrate::Start()
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Run()
 {
-   bool collision = false;
-   mySprite.Move();
+   sprite1.Move();
+   sprite2.Move();
 
-   if(mySprite.CheckTop(canvas.top))
+   CheckSprite(sprite1);
+   CheckSprite(sprite2);
+}
+
+
+void Calibrate::CheckSprite(Sprite& sprite)
+{
+   bool collision = false;
+
+   if(sprite.CheckTop(canvas.top))
    {
       collision = true;
-      yVel = -StepSize / (rand() % 4 + 2);
-      mySprite.SetVelocity(xVel, yVel, 0);
+      int yVel = -StepSize / (rand() % 4 + 2);
+      sprite.SetVelocity(sprite.velocity(CoordX), yVel, 0);
    }
-   else if(mySprite.CheckBottom(canvas.bottom))
+   else if(sprite.CheckBottom(canvas.bottom))
    {
       collision = true;
-      yVel = StepSize / (rand() % 4 + 2);
-      mySprite.SetVelocity(xVel, yVel, 0);
+      int yVel = StepSize / (rand() % 4 + 2);
+      sprite.SetVelocity(sprite.velocity(CoordX), yVel, 0);
    }
-   else if(mySprite.CheckLeft(canvas.left))
+   else if(sprite.CheckLeft(canvas.left))
    {
       collision = true;
-      xVel = StepSize / (rand() % 4 + 2);
-      mySprite.SetVelocity(xVel, yVel, 0);
+      int xVel = StepSize / (rand() % 4 + 2);
+      sprite.SetVelocity(xVel, sprite.velocity(CoordY), 0);
    }
-   else if(mySprite.CheckRight(canvas.right))
+   else if(sprite.CheckRight(canvas.right))
    {
       collision = true;
-      xVel = -StepSize / (rand() % 4 + 2);
-      mySprite.SetVelocity(xVel, yVel, 0);
+      int xVel = -StepSize / (rand() % 4 + 2);
+      sprite.SetVelocity(xVel, sprite.velocity(CoordY), 0);
    }
 
    if(collision)
    {
       currShape++;
 
-      if(currShape >= mySprite.NumShapes())
+      if(currShape >= sprite.NumShapes())
       {
          currShape = 0;
       }
 
-      mySprite.SelectShape(currShape);
+      sprite.SelectShape(currShape);
    }
 }
 
