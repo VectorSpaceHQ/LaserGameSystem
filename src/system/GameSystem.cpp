@@ -11,8 +11,8 @@
 #include "hal.h"
 #include "Programs.h"
 
-const uint32_t GameSystem::GameWidth = 4096;
-const uint32_t GameSystem::GameHeight = 4096;
+const uint32_t GameSystem::GameWidth = 4094;
+const uint32_t GameSystem::GameHeight = 4094;
 
 
 GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayIfc):
