@@ -35,6 +35,9 @@ void Canvas::Render()
 
    // After transformations, then render the updates on the implementation
    displayIfc.Render(allVertices);
+
+   // After rendering, we no longer need our set of vertices
+   allVertices.resize(0, CoordMax);
 }
 
 

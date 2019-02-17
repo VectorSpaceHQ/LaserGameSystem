@@ -39,6 +39,7 @@ void LaserDisplay::Update()
       {
          activeVerts.resize(backgroundVerts.rows(), CoordMax);
          activeVerts = backgroundVerts;
+         backgroundVerts.resize(0, CoordMax);
          newVerts = false;
       }
 
