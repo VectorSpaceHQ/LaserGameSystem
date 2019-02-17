@@ -11,6 +11,7 @@
 #include <Canvas.h>
 #include <DisplayIfc.h>
 #include <hal.h>
+#include <stdint.h>
 #include "Program.h"
 #include "Programs.h"
 

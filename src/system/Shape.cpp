@@ -13,18 +13,18 @@
 
 Shape::Shape():
    vertices(0, static_cast<int>(CoordMax)),
-   backupVertices(),
-   scale(1),
-   position()
+//   backupVertices(),
+   position(),
+   scale(1)
 {
 }
 
 
 Shape::Shape(uint16_t numVertices):
    vertices(numVertices, static_cast<int>(CoordMax)),
-   backupVertices(numVertices, static_cast<int>(CoordMax)),
-   scale(1),
-   position()
+//   backupVertices(numVertices, static_cast<int>(CoordMax)),
+   position(),
+   scale(1)
 {
 }
 
@@ -34,7 +34,7 @@ Shape::Shape(const Shape& other)
    if(this != &other)
    {
       vertices = other.vertices;
-      backupVertices = other.backupVertices;
+//      backupVertices = other.backupVertices;
       scale = other.scale;
       position = other.position;
    }
@@ -43,13 +43,13 @@ Shape::Shape(const Shape& other)
 
 void Shape::Backup()
 {
-   backupVertices = vertices;
+//   backupVertices = vertices;
 }
 
 
 void Shape::Restore()
 {
-   vertices = backupVertices;
+//   vertices = backupVertices;
 }
 
 

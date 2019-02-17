@@ -9,6 +9,7 @@
 #define __CANVAS_H__
 
 #include <list>
+#include <stdint.h>
 
 #include "CanvasObject.h"
 #include "DisplayIfc.h"
@@ -18,6 +19,8 @@
 class Canvas
 {
 private:
+   typedef std::list<CanvasObject*>  CanvasObjectList_t;
+
    CanvasObjectList_t   canvasObjects;
    VertexList_t         allVertices;
    DisplayIfc&          displayIfc;

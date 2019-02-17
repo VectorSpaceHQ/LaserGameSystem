@@ -6,6 +6,7 @@
  */
 
 #include <Eigen/Dense>
+#include <list>
 
 #include "Canvas.h"
 #include "CanvasObject.h"

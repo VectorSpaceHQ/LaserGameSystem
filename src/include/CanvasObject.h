@@ -9,7 +9,7 @@
 #define INCLUDE_CANVASOBJECT_H_
 
 #include <Eigen/Dense>
-#include <list>
+#include <stdint.h>
 
 // Positions in the coordinate
 enum CoordPositions
@@ -40,9 +40,6 @@ protected:
    CanvasObject() {}
    virtual ~CanvasObject() {}
 };
-
-
-typedef std::list<CanvasObject*>  CanvasObjectList_t;
 
 
 #endif /* INCLUDE_CANVASOBJECT_H_ */

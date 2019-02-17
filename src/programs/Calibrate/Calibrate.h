@@ -18,13 +18,8 @@
 class Calibrate: public Program
 {
 private:
-//   Rectangle   border;
-   Polygon     triangle;
-//   Square      square;
-//   Polygon     circle;
-   Star        star;
-   Sprite      sprite1;
-   Sprite      sprite2;
+   Shape*      shapePtrs[4];
+   Sprite*     spritePtrs[3];
    uint32_t    currShape;
 
    static const int  StepSize;
@@ -39,10 +34,11 @@ public:
 
    void Init();
    void Start();
+   void Stop();
    void Run();
    void Draw();
    void HandleEvent(GameSystemEvent event);
-   void CheckSprite(Sprite& sprite);
+   void CheckSprite(Sprite* sprite);
 };
 
 

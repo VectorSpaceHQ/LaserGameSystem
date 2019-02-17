@@ -8,6 +8,7 @@
 #include "GameSystem.h"
 #include "LaserDisplay.h"
 
+TIM_HandleTypeDef timerHandle;
 static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
 
 static void AppTaskStart (void *p_arg);
@@ -19,6 +20,10 @@ int main (void)
 #if (OS_TASK_NAME_EN > 0u)
    CPU_INT08U os_err;
 #endif
+
+   // Declare our stack on the heap
+//   OS_STK*  App_TaskStartStk = new OS_STK[APP_CFG_TASK_START_STK_SIZE];
+//   memset(&App_TaskStartStk[0], 0, sizeof(OS_STK) * APP_CFG_TASK_START_STK_SIZE);
 
    HAL_Init();
    CPU_IntDis();
@@ -94,7 +99,6 @@ static void AppTaskStart (void *p_arg)
    sys.Start(0);
 }
 
-TIM_HandleTypeDef timerHandle;
 
 #ifdef __cplusplus
 extern "C" {

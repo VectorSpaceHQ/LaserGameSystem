@@ -5,9 +5,21 @@
  *      Author: athiessen
  */
 
+#include <Eigen/Dense>
+#include <vector>
 #include "CanvasObject.h"
 #include "Shape.h"
 #include "Sprite.h"
+
+
+Sprite::Sprite():
+   shapeList(),
+   currentShape(),
+   position(0),
+   velocity(1),
+   acceleration(0)
+{
+}
 
 
 Sprite::Sprite(Shape* shape):
@@ -18,7 +30,6 @@ Sprite::Sprite(Shape* shape):
    acceleration(0)
 {
    AddShape(shape);
-   currentShape = shapeList[0];
 }
 
 
@@ -30,6 +41,12 @@ Sprite::~Sprite()
 void Sprite::AddShape(Shape* shape)
 {
    shapeList.push_back(shape);
+
+   // Initialize the current shape if this is the first shape added to the list
+   if(shapeList.size() == 1)
+   {
+      currentShape = shapeList[0];
+   }
 }
 
 
@@ -45,6 +62,14 @@ void Sprite::SelectShape(uint32_t index)
 uint32_t Sprite::NumShapes()
 {
    return shapeList.size();
+}
+
+
+void Sprite::ClearShapes()
+{
+   // Another module is responsible for the allocation of memory for the shapes
+   // thus, we just need to clear our list of pointers.
+   shapeList.clear();
 }
 
 

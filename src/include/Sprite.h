@@ -8,6 +8,8 @@
 #ifndef INCLUDE_SPRITE_H_
 #define INCLUDE_SPRITE_H_
 
+#include <Eigen/Dense>
+#include <stdint.h>
 #include <vector>
 #include "CanvasObject.h"
 #include "Shape.h"
@@ -27,13 +29,15 @@ public:
    Magnitude      acceleration;     // The current acceleration (future?)
 
 public:
-   Sprite(Shape* shape);     // Sprites must have at least one shape
+   Sprite();
+   Sprite(Shape* shape);
    ~Sprite();
 
    // Shape list operations
    void AddShape(Shape* shape);
    void SelectShape(uint32_t index);
    uint32_t NumShapes();
+   void ClearShapes();
 
    // Shape operations
    void Backup();
@@ -51,8 +55,12 @@ public:
    bool CheckRight(CoordType bottom);
 
    // Display operations
-   int32_t NumPoints();
-   int32_t MapVertices(VertexListRef list);
+   virtual int32_t NumPoints();
+   virtual int32_t MapVertices(VertexListRef list);
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 };
 
 
