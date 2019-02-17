@@ -39,17 +39,17 @@ void Calibrate::Init()
    shapePtrs[1] = new Polygon(3, 4);   // Triangle
    shapePtrs[2] = new Star(5, 2, 1);
    shapePtrs[3] = new Polygon(16, 2);  // Circle
-//   shapePtrs[4] = new Star(10, 2, 1);
+   shapePtrs[4] = new Square(4);
 
    spritePtrs[0] = new Sprite(shapePtrs[1]);
    spritePtrs[1] = new Sprite(shapePtrs[2]);
    spritePtrs[2] = new Sprite(shapePtrs[3]);
-//   spritePtrs[3] = new Sprite(shapePtrs[4]);
+   spritePtrs[3] = new Sprite(shapePtrs[4]);
 
    spritePtrs[0]->Scale(125);
    spritePtrs[1]->Scale(125);
    spritePtrs[2]->Scale(125);
-//   spritePtrs[3]->Scale(125);
+   spritePtrs[3]->Scale(125);
 }
 
 
@@ -62,7 +62,7 @@ void Calibrate::Start()
    canvas.AddObject(spritePtrs[0]);
    canvas.AddObject(spritePtrs[1]);
    canvas.AddObject(spritePtrs[2]);
-//   canvas.AddObject(spritePtrs[3]);
+   canvas.AddObject(spritePtrs[3]);
 
    int         xVel;
    int         yVel;
@@ -79,9 +79,9 @@ void Calibrate::Start()
    yVel = -StepSize / (rand() %4 + 2);
    spritePtrs[2]->SetVelocity(xVel, yVel, 0);
 
-//   xVel = StepSize / (rand() %4 + 2);
-//   yVel = -StepSize / (rand() %4 + 2);
-//   spritePtrs[3]->SetVelocity(xVel, yVel, 0);
+   xVel = StepSize / (rand() %4 + 2);
+   yVel = -StepSize / (rand() %4 + 2);
+   spritePtrs[3]->SetVelocity(xVel, yVel, 0);
 }
 
 

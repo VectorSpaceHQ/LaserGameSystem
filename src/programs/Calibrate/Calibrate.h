@@ -18,8 +18,8 @@
 class Calibrate: public Program
 {
 private:
-   Shape*      shapePtrs[4];
-   Sprite*     spritePtrs[3];
+   Shape*      shapePtrs[5];
+   Sprite*     spritePtrs[4];
    uint32_t    currShape;
 
    static const int  StepSize;

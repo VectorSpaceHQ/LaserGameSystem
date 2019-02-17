@@ -41,6 +41,13 @@ Shape::Shape(const Shape& other)
 }
 
 
+Shape::~Shape()
+{
+   vertices.resize(0, CoordMax);
+//   backupVertices.resize(0, CoordMax);
+}
+
+
 void Shape::Backup()
 {
 //   backupVertices = vertices;

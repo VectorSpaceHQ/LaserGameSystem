@@ -27,6 +27,7 @@ public:
    Shape();
    Shape(uint16_t numVertices);
    Shape(const Shape& other);
+   ~Shape();
 
    // Methods to operate on the vertices
    void Backup();
