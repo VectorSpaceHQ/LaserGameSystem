@@ -37,7 +37,7 @@ void Calibrate::Init()
 {
    shapePtrs[0] = new Rectangle(canvas.width, canvas.height);
    shapePtrs[1] = new Polygon(3, 4);   // Triangle
-   shapePtrs[2] = new Star(5, 2, 1);
+   shapePtrs[2] = new Star(5, 4, 2);
    shapePtrs[3] = new Polygon(16, 2);  // Circle
    shapePtrs[4] = new Square(4);
 
@@ -46,10 +46,10 @@ void Calibrate::Init()
    spritePtrs[2] = new Sprite(shapePtrs[3]);
    spritePtrs[3] = new Sprite(shapePtrs[4]);
 
-   spritePtrs[0]->Scale(125);
-   spritePtrs[1]->Scale(125);
-   spritePtrs[2]->Scale(125);
-   spritePtrs[3]->Scale(125);
+   spritePtrs[0]->Scale(60);
+   spritePtrs[1]->Scale(60);
+   spritePtrs[2]->Scale(60);
+   spritePtrs[3]->Scale(60);
 }
 
 
