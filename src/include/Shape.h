@@ -19,7 +19,7 @@ public:
    VertexList_t   vertices;
 
 protected:
-//   VertexList_t   backupVertices;
+   VertexList_t   backupVertices;
    Coordinate     position;         // Where it currently is in normal world space
    uint16_t       scale;
 
@@ -32,6 +32,7 @@ public:
    // Methods to operate on the vertices
    void Backup();
    void Restore();
+   void ClearBackup();
    void Move(CoordType diffX, CoordType diffY);
    void Move(CoordType diffX, CoordType diffY, CoordType diffZ);
    void Scale(CoordType _scale);
