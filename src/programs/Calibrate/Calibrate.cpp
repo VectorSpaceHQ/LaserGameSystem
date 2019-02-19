@@ -64,23 +64,23 @@ void Calibrate::Draw()
 }
 
 
-void Calibrate::HandleEvent(GameSystemEvent event)
+void Calibrate::HandleEvent(GameSystem::Events event)
 {
    switch(event)
    {
-      case EVENT_PROGRAM_INIT:
+      case GameSystem::EVENT_PROGRAM_INIT:
          Init();
          break;
 
-      case EVENT_PROGRAM_START:
+      case GameSystem::EVENT_PROGRAM_START:
          Start();
          break;
 
-      case EVENT_PROGRAM_RUN:
+      case GameSystem::EVENT_PROGRAM_RUN:
          Run();
          break;
 
-      case EVENT_PROGRAM_DRAW:
+      case GameSystem::EVENT_PROGRAM_DRAW:
          Draw();
          break;
 

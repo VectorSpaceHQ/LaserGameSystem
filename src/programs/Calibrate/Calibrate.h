@@ -34,7 +34,7 @@ public:
    void Stop();
    void Run();
    void Draw();
-   void HandleEvent(GameSystemEvent event);
+   void HandleEvent(GameSystem::Events event);
 };
 
 

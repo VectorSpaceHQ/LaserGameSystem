@@ -11,6 +11,7 @@
 #include "Program.h"
 
 
+
 GiantPong::GiantPong(Canvas& _display
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
@@ -26,15 +27,15 @@ void GiantPong::Run()
 }
 
 
-void GiantPong::HandleEvent(GameSystemEvent event)
+void GiantPong::HandleEvent(GameSystem::Events event)
 {
    switch(event)
    {
-      case EVENT_PROGRAM_RUN:
+      case GameSystem::EVENT_PROGRAM_RUN:
          // Run engine here
          break;
 
-      case EVENT_PROGRAM_DRAW:
+      case GameSystem::EVENT_PROGRAM_DRAW:
          // Update canvas here
          break;
 

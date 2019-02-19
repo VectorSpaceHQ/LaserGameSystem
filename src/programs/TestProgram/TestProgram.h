@@ -9,7 +9,6 @@
 #define PROGRAMS_TESTPROGRAM_TESTPROGRAM_H_
 
 
-#include "CommonShapes.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
@@ -38,7 +37,7 @@ public:
    void Stop();
    void Run();
    void Draw();
-   void HandleEvent(GameSystemEvent event);
+   void HandleEvent(GameSystem::Events event);
    void CheckSprite(Sprite* sprite);
 };
 

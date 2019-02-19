@@ -25,7 +25,7 @@ public:
    void Start();
    void Stop();
    void Run();
-   void HandleEvent(GameSystemEvent event);
+   void HandleEvent(GameSystem::Events event);
 
 };
 

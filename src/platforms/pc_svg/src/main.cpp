@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
    char const* svgFile = argv[1];
 
 
-   GameSystem  sys(dynamic_cast<HAL::Hal&>(mockHal),
-                   dynamic_cast<DisplayIfc&>(svgDisplay));
+   GameSystem::System  sys(dynamic_cast<HAL::Hal&>(mockHal),
+                           dynamic_cast<DisplayIfc&>(svgDisplay));
 
    // Run for a limited time
    sys.Start(runTime);

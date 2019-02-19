@@ -29,7 +29,7 @@ public:
            //GamePad& _gamePad2
           );
 
-   virtual void HandleEvent(GameSystemEvent event) = 0;
+   virtual void HandleEvent(GameSystem::Events event) = 0;
 
 protected:
    virtual ~Program() {};
