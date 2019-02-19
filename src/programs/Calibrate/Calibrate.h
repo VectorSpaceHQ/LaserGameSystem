@@ -18,12 +18,6 @@
 class Calibrate: public Program
 {
 private:
-   Shape*      shapePtrs[5];
-   Sprite*     spritePtrs[4];
-   uint32_t    currShape;
-
-   static const int  StepSize;
-   static const int  MaxSize;
 
 public:
    Calibrate(Canvas& _display
@@ -38,7 +32,6 @@ public:
    void Run();
    void Draw();
    void HandleEvent(GameSystemEvent event);
-   void CheckSprite(Sprite* sprite);
 };
 
 

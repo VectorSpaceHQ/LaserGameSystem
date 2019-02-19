@@ -11,20 +11,23 @@
 #include "Program.h"
 #include "Calibrate/Calibrate.h"
 #include "GiantPong/GiantPong.h"
+#include "TestProgram/TestProgram.h"
 
 
 struct Programs
 {
    Calibrate   calibrateProgram;
-//   GiantPong   pongProgram;
+   TestProgram testProgram;
+   GiantPong   pongProgram;
 
    // TODO: Implement
    Programs(Canvas& _display
             //GamePad& _gamePad1,
             //GamePad& _gamePad2
             ):
-      calibrateProgram(_display)
-//      pongProgram(_display)
+      calibrateProgram(_display),
+      testProgram(_display),
+      pongProgram(_display)
    {
    }
 };

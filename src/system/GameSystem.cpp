@@ -19,7 +19,7 @@ GameSystem::GameSystem(HAL::Hal& _hal, DisplayIfc& _displayIfc):
    hal(_hal),
    canvas(GameWidth, GameHeight, _displayIfc),
    programs(canvas),
-   currentProgram(programs.calibrateProgram), // Set the default program to calibrate for now
+   currentProgram(programs.testProgram),
    runTime(0)
 {
 }
