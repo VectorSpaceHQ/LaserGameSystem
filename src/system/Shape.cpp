@@ -104,6 +104,15 @@ void Shape::MoveToPosition()
 }
 
 
+void Shape::SetPosition(CoordType x, CoordType y, CoordType z)
+{
+   position(CoordX) = x;
+   position(CoordY) = y;
+   position(CoordZ) = z;
+
+   MoveToPosition();
+}
+
 void Shape::Scale(CoordType _scale)
 {
    // Set our new scale

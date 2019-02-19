@@ -36,6 +36,7 @@ public:
    void Move(CoordType diffX, CoordType diffY);
    void Move(CoordType diffX, CoordType diffY, CoordType diffZ);
    void MoveToPosition();
+   void SetPosition(CoordType x, CoordType y, CoordType z);
    void Scale(CoordType _scale);
    void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
 

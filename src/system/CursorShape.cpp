@@ -38,13 +38,8 @@ void CursorShape::DrawShape(Direction shape, bool doScale)
    {
       default:
       case Center:
-         vertices.resize(9, CoordMax);
+         vertices.resize(4, CoordMax);
          vertices <<
-                  -1,  1, 0, 0,
-                   1,  1, 0, 1,
-                   1, -1, 0, 1,
-                  -1, -1, 0, 1,
-                  -1,  1, 0, 1,
                   -1,  0, 0, 0,
                    1,  0, 0, 1,
                    0,  1, 0, 0,

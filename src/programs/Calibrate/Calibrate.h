@@ -20,8 +20,7 @@ class Calibrate: public Program
 {
 private:
    CursorShape*            cursor;
-   uint8_t                 currentDir;
-   uint16_t                cntr;
+   Shape*                  border;
 
 public:
    Calibrate(Canvas& _display

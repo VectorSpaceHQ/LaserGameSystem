@@ -20,8 +20,7 @@ Calibrate::Calibrate(Canvas& _canvas
          ):
    Program(_canvas/*, _gamePad1, _gamePad2*/),
    cursor(),
-   currentDir(),
-   cntr(0)
+   border()
 {
 }
 
@@ -29,13 +28,17 @@ Calibrate::Calibrate(Canvas& _canvas
 void Calibrate::Init()
 {
    cursor = new CursorShape();
-   cursor->Scale(400);
+   border = new Rectangle(canvas.width, canvas.height);
 }
 
 
 void Calibrate::Start()
 {
+   cursor->SetPosition(0, 0, 0);
+   cursor->Scale(150);
+   cursor->SetDirection(CursorShape::Center);
    canvas.AddObject(cursor);
+   canvas.AddObject(border);
 }
 
 
@@ -50,18 +53,9 @@ void Calibrate::Stop()
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Run()
 {
-   if(cntr++ >= 30)
-   {
-      currentDir++;
-
-      if(currentDir > CursorShape::UpLeft)
-      {
-         currentDir = 0;
-      }
-
-      cursor->SetDirection(static_cast<CursorShape::Direction>(currentDir));
-      cntr = 0;
-   }
+   // TODO:
+   //   1) Read left gamepad joystick adjust cursor, along with shape
+   //   2) Read right gamepad joystick adjust selected corner
 }
 
 
