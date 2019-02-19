@@ -8,12 +8,59 @@
 #ifndef SRC_PROGRAMS_PONG_GIANTPONG_H_
 #define SRC_PROGRAMS_PONG_GIANTPONG_H_
 
+#include "Canvas.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
+#include "Shape.h"
+#include "Sprite.h"
+
+
+struct PongPaddle
+{
+   Shape*   shape;
+   Sprite*  sprite;
+
+   PongPaddle(uint16_t width, uint16_t height, int16_t xPos);
+   ~PongPaddle();
+};
+
+
+struct Ball
+{
+   Shape*   shape;
+   Sprite*  sprite;
+
+   Ball(uint16_t width);
+   ~Ball();
+};
 
 
 class GiantPong: public Program
 {
+private:
+   enum PongState
+   {
+      StateSetupSplash  = 0,
+      StateSplash,
+      StateStopSplash,
+
+      StateSetupGamePlay,
+      StateGameReady,
+      StateGamePlay,
+      StateGameOver,
+      StateStopGame
+   };
+
+   static const float PaddleScalePercent;
+   static const float BallScalePercent;
+   static const float BallStepSize;
+
+   PongState   state;
+   Shape*      border;
+   PongPaddle* leftPaddle;
+   PongPaddle* rightPaddle;
+   Ball*       ball;
+
 public:
    GiantPong(Canvas& _display
             //GamePad& _gamePad1,
@@ -21,10 +68,13 @@ public:
             );
    ~GiantPong() {};
 
-   void Init();
-   void Start();
+   void InitGamePlay();
+   void StartGameReady();
+   void StartGamePlay();
+   void PlayGame();
    void Stop();
    void Run();
+   void Draw();
    void HandleEvent(GameSystem::Events event);
 
 };

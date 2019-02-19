@@ -44,8 +44,9 @@ void Calibrate::Start()
 
 void Calibrate::Stop()
 {
+   canvas.Clear();
    delete(cursor);
-   free(cursor);
+   delete(border);
 }
 
 

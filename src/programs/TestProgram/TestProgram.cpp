@@ -92,12 +92,12 @@ void TestProgram::Stop()
    for(uint32_t cntr = 0; cntr < sizeof(spritePtrs) / sizeof(Sprite*); cntr++)
    {
       spritePtrs[cntr]->ClearShapes();
-      free(spritePtrs[cntr]);
+      delete(spritePtrs[cntr]);
    }
 
    for(uint32_t cntr = 0; cntr < sizeof(shapePtrs) / sizeof(Shape*); cntr++)
    {
-      free(shapePtrs[cntr]);
+      delete(shapePtrs[cntr]);
    }
 }
 
