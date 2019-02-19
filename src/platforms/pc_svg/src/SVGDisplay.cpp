@@ -96,7 +96,7 @@ void SVGDisplay::PrintFrames(char const * fileName)
          }
       }
 
-      svgFile << " z\" />" << std::endl;
+      svgFile << " \" />" << std::endl;
 
       prevTime = nextTime;
       frameCntr++;

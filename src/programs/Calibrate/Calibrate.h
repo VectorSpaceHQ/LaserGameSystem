@@ -9,6 +9,7 @@
 #define PROGRAMS_CALIBRATE_CALIBRATE_H_
 
 #include "CommonShapes.h"
+#include "CursorShape.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
@@ -18,6 +19,9 @@
 class Calibrate: public Program
 {
 private:
+   CursorShape*            cursor;
+   uint8_t                 currentDir;
+   uint16_t                cntr;
 
 public:
    Calibrate(Canvas& _display

@@ -18,23 +18,31 @@ Calibrate::Calibrate(Canvas& _canvas
          //GamePad& _gamePad1,
          //GamePad& _gamePad2
          ):
-   Program(_canvas/*, _gamePad1, _gamePad2*/)
+   Program(_canvas/*, _gamePad1, _gamePad2*/),
+   cursor(),
+   currentDir(),
+   cntr(0)
 {
 }
 
 
 void Calibrate::Init()
 {
+   cursor = new CursorShape();
+   cursor->Scale(400);
 }
 
 
 void Calibrate::Start()
 {
+   canvas.AddObject(cursor);
 }
 
 
 void Calibrate::Stop()
 {
+   delete(cursor);
+   free(cursor);
 }
 
 
@@ -42,6 +50,18 @@ void Calibrate::Stop()
 // When the square reaches the limits of the display, it starts to shrink.
 void Calibrate::Run()
 {
+   if(cntr++ >= 30)
+   {
+      currentDir++;
+
+      if(currentDir > CursorShape::UpLeft)
+      {
+         currentDir = 0;
+      }
+
+      cursor->SetDirection(static_cast<CursorShape::Direction>(currentDir));
+      cntr = 0;
+   }
 }
 
 

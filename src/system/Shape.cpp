@@ -96,6 +96,14 @@ void Shape::Move(CoordType diffX, CoordType diffY, CoordType diffZ)
 }
 
 
+void Shape::MoveToPosition()
+{
+   vertices.block(0, CoordX, vertices.rows(), 1) += position(CoordX);
+   vertices.block(0, CoordY, vertices.rows(), 1) += position(CoordY);
+   vertices.block(0, CoordZ, vertices.rows(), 1) += position(CoordZ);
+}
+
+
 void Shape::Scale(CoordType _scale)
 {
    // Set our new scale
