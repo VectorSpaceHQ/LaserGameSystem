@@ -26,8 +26,6 @@ public:
           (width / 2),  (height / 2), 0, 1,
          -(width / 2),  (height / 2), 0, 1,
          -(width / 2), -(height / 2), 0, 1;
-
-      Backup();
    }
 
    ~Rectangle() {}
@@ -46,8 +44,6 @@ public:
           (width / 2),  (width / 2), 0, 1,
          -(width / 2),  (width / 2), 0, 1,
          -(width / 2), -(width / 2), 0, 1;
-
-      Backup();
    }
 
    ~Square() {}
@@ -80,8 +76,6 @@ public:
 
       // The starting point is the move point
       vertices(0, CoordColor) = 0;
-
-      Backup();
    }
 
    ~Polygon() {}
@@ -123,8 +117,6 @@ public:
 
       // The starting point is the move point
       vertices(0, CoordColor) = 0;
-
-      Backup();
    }
 
    ~Star() {}

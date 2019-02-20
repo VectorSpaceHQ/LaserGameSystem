@@ -93,8 +93,8 @@ static void AppTaskStart (void *p_arg)
 
    SetupTimerInterrupt();
 
-   GameSystem  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
-                   dynamic_cast<DisplayIfc&>(laserDisplay));
+   GameSystem::System  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
+                           dynamic_cast<DisplayIfc&>(laserDisplay));
 
    sys.Start(0);
 }

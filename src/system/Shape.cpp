@@ -13,7 +13,7 @@
 
 Shape::Shape():
    vertices(0, static_cast<int>(CoordMax)),
-//   backupVertices(),
+   backupVertices(0, static_cast<int>(CoordMax)),
    position(),
    scale(1)
 {
@@ -22,21 +22,23 @@ Shape::Shape():
 
 Shape::Shape(uint16_t numVertices):
    vertices(numVertices, static_cast<int>(CoordMax)),
-//   backupVertices(numVertices, static_cast<int>(CoordMax)),
+   backupVertices(0, static_cast<int>(CoordMax)),     // Only reserve memory for backup when *actually* requested to backup
    position(),
    scale(1)
 {
 }
 
 
-Shape::Shape(const Shape& other)
+Shape::Shape(const Shape& other):
+   vertices(other.vertices.rows(), static_cast<int>(CoordMax)),
+   backupVertices(other.backupVertices.rows(), static_cast<int>(CoordMax)),
+   position(other.position),
+   scale(other.scale)
 {
    if(this != &other)
    {
       vertices = other.vertices;
-//      backupVertices = other.backupVertices;
-      scale = other.scale;
-      position = other.position;
+      backupVertices = other.backupVertices;
    }
 }
 
@@ -44,19 +46,27 @@ Shape::Shape(const Shape& other)
 Shape::~Shape()
 {
    vertices.resize(0, CoordMax);
-//   backupVertices.resize(0, CoordMax);
+   ClearBackup();
 }
 
 
 void Shape::Backup()
 {
-//   backupVertices = vertices;
+   backupVertices.resize(vertices.rows(), CoordMax);
+   backupVertices = vertices;
 }
 
 
 void Shape::Restore()
 {
-//   vertices = backupVertices;
+   vertices.resize(backupVertices.rows(), CoordMax);
+   vertices = backupVertices;
+}
+
+
+void Shape::ClearBackup()
+{
+   backupVertices.resize(0, CoordMax);
 }
 
 
@@ -85,6 +95,23 @@ void Shape::Move(CoordType diffX, CoordType diffY, CoordType diffZ)
    vertices.block(0, CoordZ, vertices.rows(), 1) += diffZ;  // Start at row 0, column z and modify 1 column
 }
 
+
+void Shape::MoveToPosition()
+{
+   vertices.block(0, CoordX, vertices.rows(), 1) += position(CoordX);
+   vertices.block(0, CoordY, vertices.rows(), 1) += position(CoordY);
+   vertices.block(0, CoordZ, vertices.rows(), 1) += position(CoordZ);
+}
+
+
+void Shape::SetPosition(CoordType x, CoordType y, CoordType z)
+{
+   position(CoordX) = x;
+   position(CoordY) = y;
+   position(CoordZ) = z;
+
+   MoveToPosition();
+}
 
 void Shape::Scale(CoordType _scale)
 {

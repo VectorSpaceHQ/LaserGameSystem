@@ -8,20 +8,30 @@
 #ifndef SRC_DRIVERS_LASERDISPLAY_H_
 #define SRC_DRIVERS_LASERDISPLAY_H_
 
+#include <stdint.h>
 #include "DisplayIfc.h"
-
 #include "Hal.h"
 #include "CanvasObject.h"
+
+
+struct LaserPoint
+{
+   uint16_t x;    // X Coordinate
+   uint16_t y;    // Y Coordinate
+   uint16_t c;    // Color
+};
 
 
 class LaserDisplay: public DisplayIfc
 {
 private:
    HAL::Hal&   hal;
-   VertexList_t activeVerts;
-   VertexList_t backgroundVerts;
+   LaserPoint* activeVerts;
+   LaserPoint* backgroundVerts;
    bool newVerts;
    int vertIndex;
+   uint16_t    numActivePts;
+   uint16_t    numBackgroundPts;
 
 public:
    LaserDisplay(HAL::Hal& _hal);

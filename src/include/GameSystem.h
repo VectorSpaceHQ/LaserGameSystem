@@ -16,27 +16,31 @@
 #include "Programs.h"
 
 
-class GameSystem
+namespace GameSystem
 {
-private:
-   HAL::Hal&   hal;
-   Canvas      canvas;
-   Programs    programs;
-   Program&    currentProgram;
-   uint32_t    runTime;
+   class System
+   {
+   private:
+      HAL::Hal&   hal;
+      Canvas      canvas;
+      Programs    programs;
+      Program&    currentProgram;
+      uint32_t    runTime;
 
-   static const uint32_t   GameWidth;
-   static const uint32_t   GameHeight;
+      static const uint32_t   GameWidth;
+      static const uint32_t   GameHeight;
 
-public:
-   GameSystem(HAL::Hal& _hal, DisplayIfc& _displayImpl);
+   public:
+      System(HAL::Hal& _hal, DisplayIfc& _displayImpl);
 
-   void Start(uint32_t _runTime);
-   void Run();
+      void Start(uint32_t _runTime);
+      void Run();
 
-   void StartCurrentProgram();
-   void StopCurrentProgram();
+      void StartCurrentProgram();
+      void StopCurrentProgram();
 };
+
+}
 
 
 #endif /* INCLUDE_GAMESYSTEM_H_ */

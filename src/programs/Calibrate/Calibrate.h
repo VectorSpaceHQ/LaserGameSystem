@@ -9,6 +9,7 @@
 #define PROGRAMS_CALIBRATE_CALIBRATE_H_
 
 #include "CommonShapes.h"
+#include "CursorShape.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
@@ -18,12 +19,8 @@
 class Calibrate: public Program
 {
 private:
-   Shape*      shapePtrs[5];
-   Sprite*     spritePtrs[4];
-   uint32_t    currShape;
-
-   static const int  StepSize;
-   static const int  MaxSize;
+   CursorShape*            cursor;
+   Shape*                  border;
 
 public:
    Calibrate(Canvas& _display
@@ -37,8 +34,7 @@ public:
    void Stop();
    void Run();
    void Draw();
-   void HandleEvent(GameSystemEvent event);
-   void CheckSprite(Sprite* sprite);
+   void HandleEvent(GameSystem::Events event);
 };
 
 

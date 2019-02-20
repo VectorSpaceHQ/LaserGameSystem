@@ -6,6 +6,8 @@
  */
 
 #include <Eigen/Dense>
+#include <memory.h>
+#include <stdlib.h>
 #include "Canvas.h"
 #include "CanvasObject.h"
 #include "Hal.h"
@@ -21,10 +23,12 @@
 
 LaserDisplay::LaserDisplay(HAL::Hal& _hal):
    hal(_hal),
-   activeVerts(0, static_cast<int>(CoordMax)),
-   backgroundVerts(0, static_cast<int>(CoordMax)),
+   activeVerts(),
+   backgroundVerts(),
    newVerts(false),
-   vertIndex(0)
+   vertIndex(0),
+   numActivePts(0),
+   numBackgroundPts(0)
 {
    spi_setup();
 }
@@ -33,23 +37,38 @@ void LaserDisplay::Update()
 {
    uint8_t dacCmd[2];
 
-   if (vertIndex >= activeVerts.rows())
+   if (vertIndex >= numActivePts)
    {
       if (newVerts)
       {
-         activeVerts.resize(backgroundVerts.rows(), CoordMax);
+         if(activeVerts)
+         {
+            // Free the previously-allocated set of points
+            free(activeVerts);
+         }
+
          activeVerts = backgroundVerts;
-         backgroundVerts.resize(0, CoordMax);
+
+         if(activeVerts)
+         {
+            numActivePts = numBackgroundPts;
+            numBackgroundPts = 0;
+         }
+         else
+         {
+            numActivePts = 0;
+         }
+
          newVerts = false;
       }
 
       vertIndex = 0;
    }
 
-   if (activeVerts.rows() > 0)
+   if (activeVerts && (numActivePts > 0))
    {
-      int16_t x = activeVerts(vertIndex, CoordX) + 2047;
-      int16_t y = activeVerts(vertIndex, CoordY) + 2047;
+      uint16_t x = activeVerts[vertIndex].x;
+      uint16_t y = activeVerts[vertIndex].y;
 
       dacCmd[0] = DAC_A | DAC_NGA | DAC_NSHDN | (0x0F & (x >> 8));
       dacCmd[1] = 0xFF & x;
@@ -66,11 +85,29 @@ void LaserDisplay::Update()
 
 void LaserDisplay::Render(VertexListRef vertices)
 {
-   backgroundVerts.resize(vertices.rows(), CoordMax);
-   backgroundVerts = vertices;
+   numBackgroundPts = vertices.rows();
 
    // Convert from Cartesian -- Invert Y axis
-   backgroundVerts.block(0, CoordY, backgroundVerts.rows(), 1) *= -1;
+   vertices.block(0, CoordY, numBackgroundPts, 1) *= -1;
+   vertices.block(0, CoordX, numBackgroundPts, 1) += 2047;
+   vertices.block(0, CoordY, numBackgroundPts, 1) += 2047;
 
-   newVerts = true;
+   backgroundVerts = new LaserPoint[numBackgroundPts];
+
+   if(backgroundVerts)
+   {
+      for(uint16_t cntr = 0; cntr < numBackgroundPts; cntr++)
+      {
+         backgroundVerts[cntr].x = static_cast<uint16_t>(vertices(cntr, CoordX));
+         backgroundVerts[cntr].y = static_cast<uint16_t>(vertices(cntr, CoordY));
+         backgroundVerts[cntr].c = static_cast<uint16_t>(vertices(cntr, CoordColor));
+      }
+
+      newVerts = true;
+   }
+   else
+   {
+      numBackgroundPts = 0;
+      newVerts = false;
+   }
 }
