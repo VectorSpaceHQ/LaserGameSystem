@@ -10,6 +10,7 @@
 
 #include "Canvas.h"
 #include "GameSystemEvents.h"
+#include "NumeralShape.h"
 #include "Program.h"
 #include "Shape.h"
 #include "Sprite.h"
@@ -55,11 +56,13 @@ private:
    static const float BallScalePercent;
    static const float BallStepSize;
 
-   PongState   state;
-   Shape*      border;
-   PongPaddle* leftPaddle;
-   PongPaddle* rightPaddle;
-   Ball*       ball;
+   PongState      state;
+   Shape*         border;
+   PongPaddle*    leftPaddle;
+   PongPaddle*    rightPaddle;
+   Ball*          ball;
+   NumeralShape*  leftScore;
+   NumeralShape*  rightScore;
 
 public:
    GiantPong(Canvas& _display

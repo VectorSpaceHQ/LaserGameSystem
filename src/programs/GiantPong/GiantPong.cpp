@@ -10,6 +10,7 @@
 #include "CommonShapes.h"
 #include "GameSystemEvents.h"
 #include "GiantPong.h"
+#include "NumeralShape.h"
 #include "Program.h"
 
 
@@ -56,14 +57,26 @@ GiantPong::GiantPong(Canvas& _display
    border(),
    leftPaddle(),
    rightPaddle(),
-   ball()
+   ball(),
+   leftScore(),
+   rightScore()
 {
 }
 
+#include <iostream>
 
 void GiantPong::InitGamePlay()
 {
-   border = new Rectangle(canvas.width, canvas.height);
+   border = new Shape(7);
+   border->vertices <<
+            canvas.left, canvas.top, 0, 0,
+            canvas.right, canvas.top, 0, 1,
+            canvas.right, canvas.bottom, 0, 1,
+            canvas.left, canvas.bottom, 0, 1,
+            canvas.left, canvas.top, 0, 1,
+            0, canvas.top, 0, 0,
+            0, canvas.bottom, 0, 1;
+
    leftPaddle = new PongPaddle(40,
                                (canvas.height * PaddleScalePercent),
                                canvas.left + (canvas.width / 9));
@@ -73,6 +86,14 @@ void GiantPong::InitGamePlay()
                                 canvas.right - (canvas.width / 9));
 
    ball = new Ball(canvas.width * BallScalePercent);
+   leftScore = new NumeralShape();
+   rightScore = new NumeralShape();
+   leftScore->Scale(200);
+   rightScore->Scale(200);
+
+   int32_t pos = (canvas.width / 4);
+   leftScore->Move(0 - pos, canvas.top - 350, 0);
+   rightScore->Move(pos, canvas.top - 350, 0);
 }
 
 
@@ -82,6 +103,8 @@ void GiantPong::StartGameReady()
    canvas.AddObject(border);
    canvas.AddObject(leftPaddle->sprite);
    canvas.AddObject(rightPaddle->sprite);
+   canvas.AddObject(leftScore);
+   canvas.AddObject(rightScore);
 }
 
 
@@ -96,7 +119,25 @@ void GiantPong::StartGamePlay()
 
 void GiantPong::PlayGame()
 {
+   static int frameCntr = 0;
+   static int numeralCntr = 0;
+
    ball->sprite->Move();
+
+   if(frameCntr++ >= 30)
+   {
+      numeralCntr++;
+
+      if(numeralCntr > 9)
+      {
+         numeralCntr = 0;
+      }
+
+      leftScore->SetValue(numeralCntr);
+      rightScore->SetValue(9 - numeralCntr);
+      frameCntr = 0;
+   }
+
 
    if(ball->sprite->CheckTop(canvas.top))
    {
@@ -132,6 +173,8 @@ void GiantPong::Stop()
    delete(leftPaddle);
    delete(rightPaddle);
    delete(ball);
+   delete(leftScore);
+   delete(rightScore);
 }
 
 
