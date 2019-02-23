@@ -14,14 +14,16 @@
 namespace GameSystem
 {
    const uint32_t System::GameWidth = 4094;
-   const uint32_t System::GameHeight = 4094;
+   const uint32_t System::GameHeight = 4094;    // For 1:1 ratio
+//   const uint32_t System::GameHeight = 3072;    // For 4:3 ratio
+//   const uint32_t System::GameHeight = 2302;    // For 16:9 ratio
 
 
    System::System(HAL::Hal& _hal, DisplayIfc& _displayIfc):
             hal(_hal),
             canvas(GameWidth, GameHeight, _displayIfc),
             programs(canvas),
-            currentProgram(programs.calibrateProgram),
+            currentProgram(programs.pongProgram),
             runTime(0)
    {
    }

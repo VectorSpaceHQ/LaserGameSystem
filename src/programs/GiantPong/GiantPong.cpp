@@ -14,7 +14,7 @@
 #include "Program.h"
 
 
-const float GiantPong::PaddleScalePercent = 0.08;
+const float GiantPong::PaddleScalePercent = 0.10;
 const float GiantPong::BallScalePercent = 0.01;
 const float GiantPong::BallStepSize = 80;
 
@@ -88,12 +88,13 @@ void GiantPong::InitGamePlay()
    ball = new Ball(canvas.width * BallScalePercent);
    leftScore = new NumeralShape();
    rightScore = new NumeralShape();
-   leftScore->Scale(200);
-   rightScore->Scale(200);
+   leftScore->Scale(150);
+   rightScore->Scale(150);
 
+   rightScore->SetValue(9);
    int32_t pos = (canvas.width / 4);
-   leftScore->Move(0 - pos, canvas.top - 350, 0);
-   rightScore->Move(pos, canvas.top - 350, 0);
+   leftScore->Move(0 - pos, canvas.top - 300, 0);
+   rightScore->Move(pos, canvas.top - 300, 0);
 }
 
 
@@ -101,8 +102,8 @@ void GiantPong::StartGameReady()
 {
    canvas.Clear();
    canvas.AddObject(border);
-   canvas.AddObject(leftPaddle->sprite);
    canvas.AddObject(rightPaddle->sprite);
+   canvas.AddObject(leftPaddle->sprite);
    canvas.AddObject(leftScore);
    canvas.AddObject(rightScore);
 }
@@ -139,29 +140,29 @@ void GiantPong::PlayGame()
    }
 
 
-   if(ball->sprite->CheckTop(canvas.top))
+   if(ball->sprite->CheckTop(canvas.top) < 1)
    {
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
-      ball->sprite->Move(0, -BallStepSize);
+      ball->sprite->Move(0, ball->sprite->CheckTop(canvas.top));
    }
-   else if(ball->sprite->CheckBottom(canvas.bottom))
+   else if(ball->sprite->CheckBottom(canvas.bottom) < 1)
    {
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
-      ball->sprite->Move(0, BallStepSize);
+      ball->sprite->Move(0, -ball->sprite->CheckBottom(canvas.bottom));
    }
-   else if(ball->sprite->CheckLeft(canvas.left))
+   else if(ball->sprite->CheckLeft(canvas.left) < 1)
    {
       int xVel = -ball->sprite->velocity(CoordX);
       ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-      ball->sprite->Move(BallStepSize, 0);
+      ball->sprite->Move(-ball->sprite->CheckLeft(canvas.left), 0);
    }
-   else if(ball->sprite->CheckRight(canvas.right))
+   else if(ball->sprite->CheckRight(canvas.right) < 1)
    {
       int xVel = -ball->sprite->velocity(CoordX);
       ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-      ball->sprite->Move(-BallStepSize, 0);
+      ball->sprite->Move(ball->sprite->CheckRight(canvas.right), 0);
    }
 }
 
@@ -197,7 +198,7 @@ void GiantPong::Run()
          break;
 
       case StateGameReady:
-         if(cntr++ >= 1.5 * 30)
+         if(cntr++ >= 0.5 * 30)
          {
             cntr = 0;
             StartGamePlay();

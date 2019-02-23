@@ -142,35 +142,35 @@ void Sprite::SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel)
 }
 
 
-bool Sprite::CheckTop(CoordType top)
+int16_t Sprite::CheckTop(CoordType top)
 {
    CoordType   maxY = currentShape->vertices.col(CoordY).maxCoeff();
 
-   return (maxY >= top);
+   return (top - maxY);
 }
 
 
-bool Sprite::CheckBottom(CoordType bottom)
+int16_t Sprite::CheckBottom(CoordType bottom)
 {
    CoordType   minY = currentShape->vertices.col(CoordY).minCoeff();
 
-   return (minY <= bottom);
+   return (minY - bottom);
 }
 
 
-bool Sprite::CheckLeft(CoordType left)
+int16_t Sprite::CheckLeft(CoordType left)
 {
    CoordType   minX = currentShape->vertices.col(CoordX).minCoeff();
 
-   return (minX <= left);
+   return (minX - left);
 }
 
 
-bool Sprite::CheckRight(CoordType right)
+int16_t Sprite::CheckRight(CoordType right)
 {
    CoordType   maxX = currentShape->vertices.col(CoordX).maxCoeff();
 
-   return (maxX >= right);
+   return (right - maxX);
 }
 
 
