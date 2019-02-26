@@ -56,8 +56,8 @@ ENTRY(Reset_Handler)
 _estack = 0x20018000;    /* end of RAM */
 
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0xA800;      /* required amount of heap  */
-_Min_Stack_Size = 0x100; /* required amount of stack */
+_Min_Heap_Size = 32K;      /* required amount of heap  */
+_Min_Stack_Size = 1K; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
@@ -170,6 +170,9 @@ SECTIONS
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
     . = . + _Min_Heap_Size;
+    . = ALIGN(8);
+    PROVIDE ( heap_limit = . );
+    PROVIDE ( _heap_limit = . );
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM

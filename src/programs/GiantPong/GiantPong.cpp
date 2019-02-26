@@ -63,8 +63,6 @@ GiantPong::GiantPong(Canvas& _display
 {
 }
 
-#include <iostream>
-
 void GiantPong::InitGamePlay()
 {
    border = new Shape(7);

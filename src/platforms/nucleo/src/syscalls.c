@@ -114,6 +114,8 @@ int _write(int file, char *ptr, int len)
 caddr_t _sbrk(int incr)
 {
 	extern char end asm("end");
+	extern char heap_limit asm("heap_limit");
+
 	static char *heap_end;
 	char *prev_heap_end;
 
@@ -121,7 +123,7 @@ caddr_t _sbrk(int incr)
 		heap_end = &end;
 
 	prev_heap_end = heap_end;
-	if (heap_end + incr > stack_ptr)
+	if (heap_end + incr > &heap_limit)
 	{
 //		write(1, "Heap and stack collision\n", 25);
 //		abort();
