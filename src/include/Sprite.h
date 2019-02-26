@@ -49,10 +49,17 @@ public:
 
    // Motion & Collision detection operations
    void SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel);
-   bool CheckTop(CoordType top);
-   bool CheckBottom(CoordType bottom);
-   bool CheckLeft(CoordType top);
-   bool CheckRight(CoordType bottom);
+
+   /***
+    * Collision detection:
+    *   return: > 0 - Distance between the points - The two points have not collided
+    *           = 0 - Edges are touching - There is no gap between the two
+    *           < 0 - Overlap distance - The two points are overlapping
+    */
+   int16_t CheckTop(CoordType top);
+   int16_t CheckBottom(CoordType bottom);
+   int16_t CheckLeft(CoordType top);
+   int16_t CheckRight(CoordType bottom);
 
    // Display operations
    virtual int32_t NumPoints();

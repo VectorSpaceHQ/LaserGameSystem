@@ -17,6 +17,7 @@ Shape::Shape():
    position(),
    scale(1)
 {
+   position << 0, 0, 0, 0;
 }
 
 
@@ -26,6 +27,7 @@ Shape::Shape(uint16_t numVertices):
    position(),
    scale(1)
 {
+   position << 0, 0, 0, 0;
 }
 
 
