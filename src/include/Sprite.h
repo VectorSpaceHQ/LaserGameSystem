@@ -54,6 +54,15 @@ public:
    void SetLimits(CoordinateRef lower, CoordinateRef upper);
 
    /***
+    * Extreme Coordinates - Fill a coordinate with the vertex values of the specified coordinate
+    * @param coord - output values of the extreme coordinate
+    */
+   void Left(CoordinateRef coord);
+   void Right(CoordinateRef coord);
+   void Top(CoordinateRef coord);
+   void Bottom(CoordinateRef coord);
+
+   /***
     * Collision detection:
     *   return: > 0 - Distance between the points - The two points have not collided
     *           = 0 - Edges are touching - There is no gap between the two
@@ -63,6 +72,8 @@ public:
    int16_t CheckBottom(CoordType bottom);
    int16_t CheckLeft(CoordType top);
    int16_t CheckRight(CoordType bottom);
+   int16_t CheckLeft(Sprite& other);
+   int16_t CheckRight(Sprite& other);
 
    // Display operations
    virtual int32_t NumPoints();

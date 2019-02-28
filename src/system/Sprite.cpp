@@ -161,6 +161,42 @@ void Sprite::SetLimits(CoordinateRef lower, CoordinateRef upper)
 }
 
 
+void Sprite::Left(CoordinateRef coord)
+{
+   Coordinate::Index rowIndex;
+
+   currentShape->vertices.col(CoordX).minCoeff(&rowIndex);
+   coord = currentShape->vertices.row(rowIndex);
+}
+
+
+void Sprite::Right(CoordinateRef coord)
+{
+   Coordinate::Index rowIndex;
+
+   currentShape->vertices.col(CoordX).maxCoeff(&rowIndex);
+   coord = currentShape->vertices.row(rowIndex);
+}
+
+
+void Sprite::Top(CoordinateRef coord)
+{
+   Coordinate::Index rowIndex;
+
+   currentShape->vertices.col(CoordY).maxCoeff(&rowIndex);
+   coord = currentShape->vertices.row(rowIndex);
+}
+
+
+void Sprite::Bottom(CoordinateRef coord)
+{
+   Coordinate::Index rowIndex;
+
+   currentShape->vertices.col(CoordY).minCoeff(&rowIndex);
+   coord = currentShape->vertices.row(rowIndex);
+}
+
+
 int16_t Sprite::CheckTop(CoordType top)
 {
    CoordType   maxY = currentShape->vertices.col(CoordY).maxCoeff();
@@ -190,6 +226,52 @@ int16_t Sprite::CheckRight(CoordType right)
    CoordType   maxX = currentShape->vertices.col(CoordX).maxCoeff();
 
    return (right - maxX);
+}
+
+
+int16_t Sprite::CheckLeft(Sprite& other)
+{
+   Coordinate myTop;
+   Coordinate myBottom;
+   Coordinate myLeft;
+   Coordinate otherRight;
+   int16_t    overlap = 1;
+
+   Top(myTop);             // Get my top-most coordinate
+   Bottom(myBottom);       // Get my bottom-most coordinate
+   Left(myLeft);           // Get my left-most coordinate
+   other.Right(otherRight);  // Get the right-most coordinate of the other sprite
+
+   // Is the other left-most coordinate within our top/bottom?
+   if( (otherRight(CoordY) <= myTop(CoordY)) && (otherRight(CoordY) >= myBottom(CoordY)) )
+   {
+      overlap = (myLeft(CoordX) - otherRight(CoordX));
+   }
+
+   return overlap;
+}
+
+
+int16_t Sprite::CheckRight(Sprite& other)
+{
+   Coordinate myTop;
+   Coordinate myBottom;
+   Coordinate myRight;
+   Coordinate otherLeft;
+   int16_t    overlap = 1;
+
+   Top(myTop);             // Get my top-most coordinate
+   Bottom(myBottom);       // Get my bottom-most coordinate
+   Right(myRight);         // Get my right-most coordinate
+   other.Left(otherLeft);  // Get the left-most coordinate of the other sprite
+
+   // Is the other left-most coordinate within our top/bottom?
+   if( (otherLeft(CoordY) <= myTop(CoordY)) && (otherLeft(CoordY) >= myBottom(CoordY)) )
+   {
+      overlap = (otherLeft(CoordX) - myRight(CoordX));
+   }
+
+   return overlap;
 }
 
 

@@ -6,6 +6,8 @@
  */
 
 #include <stdint.h>
+#include <stdlib.h>
+
 #include "Canvas.h"
 #include "CommonShapes.h"
 #include "GameSystemEvents.h"
@@ -88,7 +90,6 @@ void GiantPong::InitGamePlay()
    leftScore->Scale(150);
    rightScore->Scale(150);
 
-   rightScore->SetValue(9);
    int32_t pos = (canvas.width / 4);
    leftScore->Move(0 - pos, canvas.top - 300, 0);
    rightScore->Move(pos, canvas.top - 300, 0);
@@ -123,37 +124,101 @@ void GiantPong::StartGameReady()
 
 void GiantPong::StartGamePlay()
 {
-   canvas.AddObject(ball->sprite);
-   int yVel = BallStepSize;
-   int xVel = BallStepSize / 2;
-   ball->sprite->SetVelocity(xVel, yVel, 0);
+   int      ballYVel;
+   int      ballXVel;
+   int32_t  pos = (canvas.width / 4);
 
-   leftPaddle->sprite->SetVelocity(BallStepSize, BallStepSize, 0);
-   rightPaddle->sprite->SetVelocity(-BallStepSize, -BallStepSize, 0);
+   if(rand() % 1)
+   {
+      ball->sprite->Move(0, pos);
+   }
+   else
+   {
+      ball->sprite->Move(0, -pos);
+   }
+
+   if(rand() %1)
+   {
+      ballYVel = BallStepSize;
+   }
+   else
+   {
+      ballYVel = -BallStepSize;
+   }
+
+   ballXVel = BallStepSize / (rand() % 2 + 1);
+   ball->sprite->SetVelocity(ballXVel, ballYVel, 0);
+   canvas.AddObject(ball->sprite);
 }
 
 
 void GiantPong::PlayGame()
 {
-   static int frameCntr = 0;
-   static int numeralCntr = 0;
+   int16_t     overlap;
 
+   // Match the paddles to the ball
+   leftPaddle->sprite->velocity = ball->sprite->velocity;
+   rightPaddle->sprite->velocity = ball->sprite->velocity;
+
+   // Move the sprites
    ball->sprite->Move();
    leftPaddle->sprite->Move();
    rightPaddle->sprite->Move();
 
-   if(frameCntr++ >= 30)
+   // If the ball is moving left...
+   if(ball->sprite->velocity(CoordX) < 1)
    {
-      numeralCntr++;
-
-      if(numeralCntr > 9)
+      // And the ball is not already past the paddle
+      if(ball->sprite->position(CoordX) > leftPaddle->sprite->position(CoordX))
       {
-         numeralCntr = 0;
-      }
+         // Check if the left paddle and ball have collided
+         overlap = leftPaddle->sprite->CheckRight(*ball->sprite);
 
-      leftScore->SetValue(numeralCntr);
-      rightScore->SetValue(9 - numeralCntr);
-      frameCntr = 0;
+         if(overlap < 1)
+         {
+            int xVel = -ball->sprite->velocity(CoordX);
+            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+            ball->sprite->Move(-overlap, 0);  // Prevent from showing the overlap
+         }
+      }
+      else
+      {
+         // Check to see if the ball has hit the left side
+         overlap = ball->sprite->CheckLeft(canvas.left);
+
+         if(overlap < 1)
+         {
+            int xVel = -ball->sprite->velocity(CoordX);
+            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+         }
+      }
+   }
+   else  // The ball is moving right
+   {
+      // And the ball is not already past the right paddle
+      if(ball->sprite->position(CoordX) < rightPaddle->sprite->position(CoordX))
+      {
+         // Check if the right paddle and ball have collided
+         overlap = rightPaddle->sprite->CheckLeft(*ball->sprite);
+
+         if(rightPaddle->sprite->CheckLeft(*ball->sprite) < 1)
+         {
+            int xVel = -ball->sprite->velocity(CoordX);
+            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+            ball->sprite->Move(overlap, 0);  // Prevent from showing the overlap
+         }
+      }
+      else
+      {
+         // Check to see if the ball has hit the left side
+         overlap = ball->sprite->CheckRight(canvas.right);
+
+         if(overlap < 1)
+         {
+            int xVel = -ball->sprite->velocity(CoordX);
+            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+         }
+      }
    }
 
    if(ball->sprite->CheckTop(canvas.top) < 1)
@@ -165,34 +230,6 @@ void GiantPong::PlayGame()
    {
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
-   }
-   else if(ball->sprite->CheckLeft(canvas.left) < 1)
-   {
-      int xVel = -ball->sprite->velocity(CoordX);
-      ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-   }
-   else if(ball->sprite->CheckRight(canvas.right) < 1)
-   {
-      int xVel = -ball->sprite->velocity(CoordX);
-      ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-   }
-
-   if(leftPaddle->sprite->CheckTop(canvas.top) < 1)
-   {
-      leftPaddle->sprite->SetVelocity(0, -BallStepSize, 0);
-   }
-   else if(leftPaddle->sprite->CheckBottom(canvas.bottom) < 1)
-   {
-      leftPaddle->sprite->SetVelocity(0, BallStepSize, 0);
-   }
-
-   if(rightPaddle->sprite->CheckTop(canvas.top) < 1)
-   {
-      rightPaddle->sprite->SetVelocity(0, -BallStepSize, 0);
-   }
-   else if(rightPaddle->sprite->CheckBottom(canvas.bottom) < 1)
-   {
-      rightPaddle->sprite->SetVelocity(0, BallStepSize, 0);
    }
 }
 
