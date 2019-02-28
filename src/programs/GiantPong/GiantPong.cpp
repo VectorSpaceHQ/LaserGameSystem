@@ -63,8 +63,6 @@ GiantPong::GiantPong(Canvas& _display
 {
 }
 
-#include <iostream>
-
 void GiantPong::InitGamePlay()
 {
    uint16_t paddleHeight = canvas.height * PaddleScalePercent;

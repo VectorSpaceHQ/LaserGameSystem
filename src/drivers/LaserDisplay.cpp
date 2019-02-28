@@ -70,6 +70,15 @@ void LaserDisplay::Update()
       uint16_t x = activeVerts[vertIndex].x;
       uint16_t y = activeVerts[vertIndex].y;
 
+      if (activeVerts[vertIndex].c)
+      {
+         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+      }
+      else
+      {
+         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+      }
+
       dacCmd[0] = DAC_A | DAC_NGA | DAC_NSHDN | (0x0F & (x >> 8));
       dacCmd[1] = 0xFF & x;
       spi_transfer(dacCmd, NULL, 2);

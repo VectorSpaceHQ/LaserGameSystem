@@ -61,6 +61,17 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
     gpioInit.Alternate  = GPIO_AF5_SPI1;
     gpioInit.Pull       = GPIO_PULLUP;
     HAL_GPIO_Init(GPIOA, &gpioInit);
+
+    // Enable GPIO Port C clock
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+
+    // Configure Laser Toggle Pin
+    gpioInit.Pin        = GPIO_PIN_0;
+    gpioInit.Mode       = GPIO_MODE_OUTPUT_PP;
+    gpioInit.Pull       = GPIO_PULLDOWN;
+    gpioInit.Speed      = GPIO_SPEED_FAST;
+    HAL_GPIO_Init(GPIOC, &gpioInit);
+
 }
 
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)

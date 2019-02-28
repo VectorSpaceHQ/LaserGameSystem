@@ -14,8 +14,8 @@
 namespace GameSystem
 {
    const uint32_t System::GameWidth = 4094;
-   const uint32_t System::GameHeight = 4094;    // For 1:1 ratio
-//   const uint32_t System::GameHeight = 3072;    // For 4:3 ratio
+   //const uint32_t System::GameHeight = 4094;    // For 1:1 ratio
+   const uint32_t System::GameHeight = 3072;    // For 4:3 ratio
 //   const uint32_t System::GameHeight = 2302;    // For 16:9 ratio
 
 
