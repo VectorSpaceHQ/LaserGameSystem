@@ -14,20 +14,18 @@
 Shape::Shape():
    vertices(0, static_cast<int>(CoordMax)),
    backupVertices(0, static_cast<int>(CoordMax)),
-   position(),
+   position(0, 0, 0, 0),
    scale(1)
 {
-   position << 0, 0, 0, 0;
 }
 
 
 Shape::Shape(uint16_t numVertices):
    vertices(numVertices, static_cast<int>(CoordMax)),
    backupVertices(0, static_cast<int>(CoordMax)),     // Only reserve memory for backup when *actually* requested to backup
-   position(),
+   position(0, 0, 0, 0),
    scale(1)
 {
-   position << 0, 0, 0, 0;
 }
 
 
@@ -108,9 +106,7 @@ void Shape::MoveToPosition()
 
 void Shape::SetPosition(CoordType x, CoordType y, CoordType z)
 {
-   position(CoordX) = x;
-   position(CoordY) = y;
-   position(CoordZ) = z;
+   position << x, y, z, 0;
 
    MoveToPosition();
 }

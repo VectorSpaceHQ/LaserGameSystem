@@ -113,9 +113,7 @@ void Sprite::Move(CoordType _diffX, CoordType _diffY)
    diff << _diffX, _diffY, 0, 0;
 
    CheckLimit(diff);
-   position(CoordX) += diff(CoordX);
-   position(CoordY) += diff(CoordY);
-   position(CoordZ) += diff(CoordZ);
+   position += diff;
 
    for(it = shapeList.begin(); it != shapeList.end(); ++it )
    {
@@ -148,9 +146,7 @@ void Sprite::Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale)
 
 void Sprite::SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel)
 {
-   velocity(CoordX) = xVel;
-   velocity(CoordY) = yVel;
-   velocity(CoordZ) = zVel;
+   velocity << xVel, yVel, zVel;
 }
 
 
