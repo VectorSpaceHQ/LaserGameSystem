@@ -28,6 +28,7 @@ typedef Eigen::Array<CoordType, 1, CoordMax>                               Coord
 typedef Eigen::Array<CoordType, 1, 3>                                      Magnitude;     // 3D Magnitude
 typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
 typedef Eigen::Ref<VertexList_t> VertexListRef;
+typedef Eigen::Ref<Coordinate> CoordinateRef;
 
 
 class CanvasObject

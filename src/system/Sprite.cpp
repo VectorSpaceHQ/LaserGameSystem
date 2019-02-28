@@ -15,9 +15,11 @@
 Sprite::Sprite():
    shapeList(),
    currentShape(),
-   position(0),
-   velocity(1),
-   acceleration(0)
+   position(0, 0, 0, 0),
+   velocity(0, 0, 0),
+   acceleration(0, 0, 0),
+   lowerLimit(0, 0, 0, 0),
+   upperLimit(0, 0, 0, 0)
 {
 }
 
@@ -25,9 +27,11 @@ Sprite::Sprite():
 Sprite::Sprite(Shape* shape):
    shapeList(),
    currentShape(),
-   position(0),
-   velocity(1),
-   acceleration(0)
+   position(0, 0, 0, 0),
+   velocity(0, 0, 0),
+   acceleration(0, 0, 0),
+   lowerLimit(0, 0, 0, 0),
+   upperLimit(0, 0, 0, 0)
 {
    AddShape(shape);
 }
@@ -101,13 +105,21 @@ void Sprite::Move()
 }
 
 
-void Sprite::Move(CoordType diffX, CoordType diffY)
+void Sprite::Move(CoordType _diffX, CoordType _diffY)
 {
-   ShapeList_t::iterator  it;
+   Coordinate              diff;
+   ShapeList_t::iterator   it;
+
+   diff << _diffX, _diffY, 0, 0;
+
+   CheckLimit(diff);
+   position(CoordX) += diff(CoordX);
+   position(CoordY) += diff(CoordY);
+   position(CoordZ) += diff(CoordZ);
 
    for(it = shapeList.begin(); it != shapeList.end(); ++it )
    {
-      (*it)->Move(diffX, diffY);
+      (*it)->Move(diff(CoordX), diff(CoordY), diff(CoordZ));
    }
 }
 
@@ -139,6 +151,17 @@ void Sprite::SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel)
    velocity(CoordX) = xVel;
    velocity(CoordY) = yVel;
    velocity(CoordZ) = zVel;
+}
+
+
+void Sprite::SetLimits(CoordinateRef lower, CoordinateRef upper)
+{
+   lowerLimit = lower;
+   upperLimit = upper;
+
+   // Use the "color" bit to indicate the limit has been set
+   lowerLimit(CoordColor) = 1;
+   upperLimit(CoordColor) = 1;
 }
 
 
@@ -183,4 +206,45 @@ int32_t Sprite::NumPoints()
 int32_t Sprite::MapVertices(VertexListRef list)
 {
    return currentShape->MapVertices(list);
+}
+
+
+void Sprite::CheckLimit(CoordinateRef diff)
+{
+   // If the CoordColor is set, then the limit is valid
+   if(lowerLimit(CoordColor) > 0)
+   {
+      if((position(CoordX) + diff(CoordX)) > lowerLimit(CoordX))
+      {
+         diff(CoordX) = lowerLimit(CoordX) - position(CoordX);
+      }
+
+      if((position(CoordY) + diff(CoordY)) > lowerLimit(CoordY))
+      {
+         diff(CoordY) = lowerLimit(CoordY) - position(CoordY);
+      }
+
+      if((position(CoordZ) + diff(CoordZ)) > lowerLimit(CoordZ))
+      {
+         diff(CoordZ) = lowerLimit(CoordZ) - position(CoordZ);
+      }
+   }
+
+   if(upperLimit(CoordColor) > 0)
+   {
+      if((position(CoordX) + diff(CoordX)) < upperLimit(CoordX))
+      {
+         diff(CoordX) = upperLimit(CoordX) - position(CoordX);
+      }
+
+      if((position(CoordY) + diff(CoordY)) < upperLimit(CoordY))
+      {
+         diff(CoordY) = upperLimit(CoordY) - position(CoordY);
+      }
+
+      if((position(CoordZ) + diff(CoordZ)) < upperLimit(CoordZ))
+      {
+         diff(CoordZ) = upperLimit(CoordZ) - position(CoordZ);
+      }
+   }
 }

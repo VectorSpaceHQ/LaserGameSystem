@@ -27,6 +27,8 @@ public:
    Coordinate     position;         // Where it currently is in normal world space
    Magnitude      velocity;         // The direction/scale of the X/Y vector
    Magnitude      acceleration;     // The current acceleration (future?)
+   Coordinate     lowerLimit;
+   Coordinate     upperLimit;
 
 public:
    Sprite();
@@ -43,12 +45,13 @@ public:
    void Backup();
    void Restore();
    void Move();
-   void Move(CoordType diffX, CoordType diffY);
+   void Move(CoordType _diffX, CoordType _diffY);
    void Scale(CoordType _scale);
    void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
 
    // Motion & Collision detection operations
    void SetVelocity(CoordType xVel, CoordType yVel, CoordType zVel);
+   void SetLimits(CoordinateRef lower, CoordinateRef upper);
 
    /***
     * Collision detection:
@@ -64,6 +67,9 @@ public:
    // Display operations
    virtual int32_t NumPoints();
    virtual int32_t MapVertices(VertexListRef list);
+
+private:
+   void CheckLimit(CoordinateRef diff);
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

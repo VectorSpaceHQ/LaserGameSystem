@@ -67,6 +67,10 @@ GiantPong::GiantPong(Canvas& _display
 
 void GiantPong::InitGamePlay()
 {
+   uint16_t paddleHeight = canvas.height * PaddleScalePercent;
+   int16_t  paddleXPos = canvas.width / 9;
+   uint16_t ballRadius = canvas.width * BallScalePercent;
+
    border = new Shape(7);
    border->vertices <<
             canvas.left, canvas.top, 0, 0,
@@ -77,15 +81,10 @@ void GiantPong::InitGamePlay()
             0, canvas.top, 0, 0,
             0, canvas.bottom, 0, 1;
 
-   leftPaddle = new PongPaddle(40,
-                               (canvas.height * PaddleScalePercent),
-                               canvas.left + (canvas.width / 9));
+   leftPaddle = new PongPaddle(40, paddleHeight, canvas.left + paddleXPos);
+   rightPaddle = new PongPaddle(40, paddleHeight, canvas.right - paddleXPos);
 
-   rightPaddle = new PongPaddle(40,
-                                (canvas.height * PaddleScalePercent),
-                                canvas.right - (canvas.width / 9));
-
-   ball = new Ball(canvas.width * BallScalePercent);
+   ball = new Ball(ballRadius);
    leftScore = new NumeralShape();
    rightScore = new NumeralShape();
    leftScore->Scale(150);
@@ -95,6 +94,21 @@ void GiantPong::InitGamePlay()
    int32_t pos = (canvas.width / 4);
    leftScore->Move(0 - pos, canvas.top - 300, 0);
    rightScore->Move(pos, canvas.top - 300, 0);
+
+   // Set the limits of the ball
+   Coordinate lowerLimit((canvas.right - ballRadius), (canvas.top - ballRadius), 0, 0);
+   Coordinate upperLimit((canvas.left + ballRadius), (canvas.bottom + ballRadius), 0, 0);
+   ball->sprite->SetLimits(lowerLimit, upperLimit);
+
+   // Set the limits of our left paddle
+   lowerLimit << (canvas.left + paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
+   upperLimit << (canvas.left + paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   leftPaddle->sprite->SetLimits(lowerLimit, upperLimit);
+
+   // Set the limits of our left paddle
+   lowerLimit << (canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
+   upperLimit << (canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   rightPaddle->sprite->SetLimits(lowerLimit, upperLimit);
 }
 
 
@@ -115,6 +129,9 @@ void GiantPong::StartGamePlay()
    int yVel = BallStepSize;
    int xVel = BallStepSize / 2;
    ball->sprite->SetVelocity(xVel, yVel, 0);
+
+   leftPaddle->sprite->SetVelocity(BallStepSize, BallStepSize, 0);
+   rightPaddle->sprite->SetVelocity(-BallStepSize, -BallStepSize, 0);
 }
 
 
@@ -124,6 +141,8 @@ void GiantPong::PlayGame()
    static int numeralCntr = 0;
 
    ball->sprite->Move();
+   leftPaddle->sprite->Move();
+   rightPaddle->sprite->Move();
 
    if(frameCntr++ >= 30)
    {
@@ -139,30 +158,43 @@ void GiantPong::PlayGame()
       frameCntr = 0;
    }
 
-
    if(ball->sprite->CheckTop(canvas.top) < 1)
    {
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
-      ball->sprite->Move(0, ball->sprite->CheckTop(canvas.top));
    }
    else if(ball->sprite->CheckBottom(canvas.bottom) < 1)
    {
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
-      ball->sprite->Move(0, -ball->sprite->CheckBottom(canvas.bottom));
    }
    else if(ball->sprite->CheckLeft(canvas.left) < 1)
    {
       int xVel = -ball->sprite->velocity(CoordX);
       ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-      ball->sprite->Move(-ball->sprite->CheckLeft(canvas.left), 0);
    }
    else if(ball->sprite->CheckRight(canvas.right) < 1)
    {
       int xVel = -ball->sprite->velocity(CoordX);
       ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-      ball->sprite->Move(ball->sprite->CheckRight(canvas.right), 0);
+   }
+
+   if(leftPaddle->sprite->CheckTop(canvas.top) < 1)
+   {
+      leftPaddle->sprite->SetVelocity(0, -BallStepSize, 0);
+   }
+   else if(leftPaddle->sprite->CheckBottom(canvas.bottom) < 1)
+   {
+      leftPaddle->sprite->SetVelocity(0, BallStepSize, 0);
+   }
+
+   if(rightPaddle->sprite->CheckTop(canvas.top) < 1)
+   {
+      rightPaddle->sprite->SetVelocity(0, -BallStepSize, 0);
+   }
+   else if(rightPaddle->sprite->CheckBottom(canvas.bottom) < 1)
+   {
+      rightPaddle->sprite->SetVelocity(0, BallStepSize, 0);
    }
 }
 
