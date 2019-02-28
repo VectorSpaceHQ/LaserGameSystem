@@ -214,17 +214,17 @@ void Sprite::CheckLimit(CoordinateRef diff)
    // If the CoordColor is set, then the limit is valid
    if(lowerLimit(CoordColor) > 0)
    {
-      if((position(CoordX) + diff(CoordX)) > lowerLimit(CoordX))
+      if((position(CoordX) + diff(CoordX)) < lowerLimit(CoordX))
       {
          diff(CoordX) = lowerLimit(CoordX) - position(CoordX);
       }
 
-      if((position(CoordY) + diff(CoordY)) > lowerLimit(CoordY))
+      if((position(CoordY) + diff(CoordY)) < lowerLimit(CoordY))
       {
          diff(CoordY) = lowerLimit(CoordY) - position(CoordY);
       }
 
-      if((position(CoordZ) + diff(CoordZ)) > lowerLimit(CoordZ))
+      if((position(CoordZ) + diff(CoordZ)) < lowerLimit(CoordZ))
       {
          diff(CoordZ) = lowerLimit(CoordZ) - position(CoordZ);
       }
@@ -232,17 +232,17 @@ void Sprite::CheckLimit(CoordinateRef diff)
 
    if(upperLimit(CoordColor) > 0)
    {
-      if((position(CoordX) + diff(CoordX)) < upperLimit(CoordX))
+      if((position(CoordX) + diff(CoordX)) > upperLimit(CoordX))
       {
          diff(CoordX) = upperLimit(CoordX) - position(CoordX);
       }
 
-      if((position(CoordY) + diff(CoordY)) < upperLimit(CoordY))
+      if((position(CoordY) + diff(CoordY)) > upperLimit(CoordY))
       {
          diff(CoordY) = upperLimit(CoordY) - position(CoordY);
       }
 
-      if((position(CoordZ) + diff(CoordZ)) < upperLimit(CoordZ))
+      if((position(CoordZ) + diff(CoordZ)) > upperLimit(CoordZ))
       {
          diff(CoordZ) = upperLimit(CoordZ) - position(CoordZ);
       }

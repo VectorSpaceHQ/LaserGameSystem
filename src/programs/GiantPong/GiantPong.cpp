@@ -94,18 +94,18 @@ void GiantPong::InitGamePlay()
    rightScore->Move(pos, canvas.top - 300, 0);
 
    // Set the limits of the ball
-   Coordinate lowerLimit((canvas.right - ballRadius), (canvas.top - ballRadius), 0, 0);
-   Coordinate upperLimit((canvas.left + ballRadius), (canvas.bottom + ballRadius), 0, 0);
+   Coordinate lowerLimit((canvas.left + ballRadius), (canvas.bottom + ballRadius), 0, 0);
+   Coordinate upperLimit((canvas.right - ballRadius), (canvas.top - ballRadius), 0, 0);
    ball->sprite->SetLimits(lowerLimit, upperLimit);
 
    // Set the limits of our left paddle
-   lowerLimit << (canvas.left + paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
-   upperLimit << (canvas.left + paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   lowerLimit << (canvas.left + paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   upperLimit << (canvas.left + paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
    leftPaddle->sprite->SetLimits(lowerLimit, upperLimit);
 
    // Set the limits of our left paddle
-   lowerLimit << (canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
-   upperLimit << (canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   lowerLimit << (canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
+   upperLimit << (canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
    rightPaddle->sprite->SetLimits(lowerLimit, upperLimit);
 }
 
