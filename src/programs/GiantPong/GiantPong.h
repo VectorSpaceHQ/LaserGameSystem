@@ -64,6 +64,7 @@ private:
    Ball*          ball;
    NumeralShape*  leftScore;
    NumeralShape*  rightScore;
+   Shape*         splash;
 
 public:
    GiantPong(Canvas& _display
@@ -81,6 +82,8 @@ public:
    void Draw();
    void HandleEvent(GameSystem::Events event);
 
+private:
+   void SetupSplash();
 };
 
 
