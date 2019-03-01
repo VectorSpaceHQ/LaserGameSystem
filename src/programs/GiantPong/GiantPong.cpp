@@ -36,9 +36,10 @@ PongPaddle::~PongPaddle()
 }
 
 
-Ball::Ball(uint16_t width)
+Ball::Ball(uint16_t _radius):
+   radius(_radius)
 {
-   shape = new Polygon(8, width);
+   shape = new Polygon(8, radius);
    sprite = new Sprite(shape);
 }
 
@@ -169,7 +170,7 @@ void GiantPong::PlayGame()
    if(ball->sprite->velocity(CoordX) < 1)
    {
       // And the ball is not already past the paddle
-      if(ball->sprite->position(CoordX) > leftPaddle->sprite->position(CoordX))
+      if((leftPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) > ball->radius)
       {
          // Check if the left paddle and ball have collided
          overlap = leftPaddle->sprite->CheckRight(*ball->sprite);
@@ -196,7 +197,7 @@ void GiantPong::PlayGame()
    else  // The ball is moving right
    {
       // And the ball is not already past the right paddle
-      if(ball->sprite->position(CoordX) < rightPaddle->sprite->position(CoordX))
+      if((ball->sprite->position(CoordX) - rightPaddle->sprite->position(CoordX)) > ball->radius)
       {
          // Check if the right paddle and ball have collided
          overlap = rightPaddle->sprite->CheckLeft(*ball->sprite);

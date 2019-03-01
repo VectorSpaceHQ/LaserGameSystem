@@ -30,8 +30,9 @@ struct Ball
 {
    Shape*   shape;
    Sprite*  sprite;
+   uint16_t radius;
 
-   Ball(uint16_t width);
+   Ball(uint16_t _radius);
    ~Ball();
 };
 
