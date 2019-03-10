@@ -5,11 +5,13 @@
  *      Author: athiessen
  */
 
+#include <functional>
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "Canvas.h"
 #include "CommonShapes.h"
+#include "FiniteStateMachine.h"
 #include "GameSystemEvents.h"
 #include "GiantPong.h"
 #include "NumeralShape.h"
@@ -56,17 +58,34 @@ GiantPong::GiantPong(Canvas& _display
          //GamePad& _gamePad2
          ):
    Program(_display/*, _gamePad1, _gamePad2*/),
-   state(StateSetupGamePlay),
-//   state(StateSetupSplash),
+   StateSplashScreen("PongSplashScreen",
+                     std::bind(&GiantPong::SplashScreenEnter, this),
+                     std::bind(&GiantPong::SplashScreenHandle, this, std::placeholders::_1, std::placeholders::_2),
+                     std::bind(&GiantPong::SplashScreenExit, this)),
+   StateGameReady("PongReady",
+                  std::bind(&GiantPong::GameReadyEnter, this),
+                  std::bind(&GiantPong::GameReadyHandle, this, std::placeholders::_1, std::placeholders::_2),
+                  nullptr),
+   StateGamePlay("PongPlay",
+                 std::bind(&GiantPong::StartGamePlay, this),
+                 std::bind(&GiantPong::GamePlayHandle, this, std::placeholders::_1, std::placeholders::_2),
+                 nullptr),
+   StateFinished("PongFinished",
+                 nullptr,
+                 std::bind(&GiantPong::FinishedHandle, this, std::placeholders::_1, std::placeholders::_2),
+                 nullptr),
+   fsm(StateSplashScreen),
    border(),
    leftPaddle(),
    rightPaddle(),
    ball(),
    leftScore(),
    rightScore(),
-   splash()
+   splash(),
+   frameCntr()
 {
 }
+
 
 void GiantPong::InitGamePlay()
 {
@@ -74,6 +93,10 @@ void GiantPong::InitGamePlay()
    int16_t  paddleXPos = canvas.width / 9;
    uint16_t ballRadius = canvas.width * BallScalePercent;
 
+   // First, clear the canvas
+   canvas.Clear();
+
+   frameCntr = 0;
    border = new Shape(7);
    border->vertices <<
             canvas.left, canvas.top, 0, 0,
@@ -111,12 +134,8 @@ void GiantPong::InitGamePlay()
    lowerLimit << (canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
    upperLimit << (canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
    rightPaddle->sprite->SetLimits(lowerLimit, upperLimit);
-}
 
-
-void GiantPong::StartGameReady()
-{
-   canvas.Clear();
+   // Now Fill out the canvas
    canvas.AddObject(border);
    canvas.AddObject(rightPaddle->sprite);
    canvas.AddObject(leftPaddle->sprite);
@@ -237,7 +256,7 @@ void GiantPong::PlayGame()
 }
 
 
-void GiantPong::Stop()
+void GiantPong::TearDownGamePlay()
 {
    canvas.Clear();
    delete(border);
@@ -249,55 +268,6 @@ void GiantPong::Stop()
 }
 
 
-void GiantPong::Run()
-{
-   static uint16_t   cntr = 0;
-
-   switch(state)
-   {
-      case StateSetupSplash:
-         SetupSplash();
-         break;
-
-      case StateSplash:
-      case StateStopSplash:
-         break;
-
-      default:
-      case StateSetupGamePlay:
-         InitGamePlay();
-         StartGameReady();
-         state = StateGameReady;
-         break;
-
-      case StateGameReady:
-         if(cntr++ >= 0.5 * 30)
-         {
-            cntr = 0;
-            StartGamePlay();
-            state = StateGamePlay;
-         }
-         break;
-
-      case StateGamePlay:
-         PlayGame();
-         break;
-
-      case StateGameOver:
-         break;
-
-      case StateStopGame:
-         break;
-
-   }
-}
-
-
-void GiantPong::Draw()
-{
-}
-
-
 void GiantPong::HandleEvent(GameSystem::Events event)
 {
    switch(event)
@@ -306,14 +276,18 @@ void GiantPong::HandleEvent(GameSystem::Events event)
          break;
 
       case GameSystem::EVENT_PROGRAM_START:
+         fsm.Start();
          break;
 
       case GameSystem::EVENT_PROGRAM_RUN:
-         Run();
+         fsm.HandleEvent(event, nullptr);
          break;
 
-      case GameSystem::EVENT_PROGRAM_DRAW:
-         Draw();
+      case GameSystem::EVENT_PROGRAM_STOP:
+         while(fsm.HandleEvent(event, nullptr))
+         {
+            //
+         }
          break;
 
       default:
@@ -322,14 +296,120 @@ void GiantPong::HandleEvent(GameSystem::Events event)
 }
 
 
-void GiantPong::SetupSplash()
+void GiantPong::GameReadyEnter()
 {
-   canvas.Clear();
+   frameCntr = 0;
+   InitGamePlay();
+}
 
+
+bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
+{
+   bool handled  = false;
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         if(frameCntr++ >= 0.5 * 30)
+         {
+            fsm.Transition(StateGamePlay);
+         }
+
+         handled = true;
+         break;
+
+      case GameSystem::EVENT_PROGRAM_STOP:
+         TearDownGamePlay();
+         fsm.Transition(StateFinished);
+         handled = true;
+         break;
+
+      default:
+         break;
+   }
+
+   return handled;
+}
+
+
+bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
+{
+   bool  handled = false;
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         PlayGame();
+         break;
+
+      case GameSystem::EVENT_PROGRAM_STOP:
+         TearDownGamePlay();
+         fsm.Transition(StateFinished);
+         handled = true;
+         break;
+
+      default:
+         break;
+   }
+
+   return handled;
+}
+
+
+bool GiantPong::FinishedHandle(GameSystem::Events e, void* data)
+{
+   bool  handled = false;
+   // Do nothing!
+   return handled;
+}
+
+
+bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
+{
+   bool  handled = false;
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         if(frameCntr++ >= 3 * 30)
+         {
+            fsm.Transition(StateGameReady);
+         }
+
+         handled = true;
+         break;
+
+      case GameSystem::EVENT_PROGRAM_STOP:
+         fsm.Transition(StateFinished);
+         handled = true;
+         break;
+
+      default:
+         break;
+   }
+
+   return handled;
+}
+
+
+void GiantPong::SplashScreenExit()
+{
    if(splash)
    {
       delete splash;
    }
+
+   if(border)
+   {
+      delete border;
+   }
+}
+
+
+void GiantPong::SplashScreenEnter()
+{
+   canvas.Clear();
+   frameCntr = 0;
 
    border = new Shape(5);
    border->vertices <<
@@ -340,7 +420,6 @@ void GiantPong::SetupSplash()
             canvas.left, canvas.top, 0, 1;
 
    splash = new Shape(166);
-
    splash->vertices <<
             -824, -53, 0, 0,
             -859, -104, 0, 1,

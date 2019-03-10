@@ -9,6 +9,7 @@
 #define SRC_PROGRAMS_PONG_GIANTPONG_H_
 
 #include "Canvas.h"
+#include "FiniteStateMachine.h"
 #include "GameSystemEvents.h"
 #include "NumeralShape.h"
 #include "Program.h"
@@ -40,24 +41,16 @@ struct Ball
 class GiantPong: public Program
 {
 private:
-   enum PongState
-   {
-      StateSetupSplash  = 0,
-      StateSplash,
-      StateStopSplash,
-
-      StateSetupGamePlay,
-      StateGameReady,
-      StateGamePlay,
-      StateGameOver,
-      StateStopGame
-   };
-
    static const float PaddleScalePercent;
    static const float BallScalePercent;
    static const float BallStepSize;
 
-   PongState      state;
+   GameSystem::FiniteState          StateSplashScreen;
+   GameSystem::FiniteState          StateGameReady;
+   GameSystem::FiniteState          StateGamePlay;
+   GameSystem::FiniteState          StateFinished;
+   GameSystem::FiniteStateMachine   fsm;
+
    Shape*         border;
    PongPaddle*    leftPaddle;
    PongPaddle*    rightPaddle;
@@ -65,6 +58,7 @@ private:
    NumeralShape*  leftScore;
    NumeralShape*  rightScore;
    Shape*         splash;
+   uint32_t       frameCntr;
 
 public:
    GiantPong(Canvas& _display
@@ -73,17 +67,22 @@ public:
             );
    ~GiantPong() {};
 
-   void InitGamePlay();
-   void StartGameReady();
-   void StartGamePlay();
-   void PlayGame();
-   void Stop();
-   void Run();
-   void Draw();
    void HandleEvent(GameSystem::Events event);
 
 private:
-   void SetupSplash();
+   void InitGamePlay();
+   void StartGamePlay();
+   void PlayGame();
+   void TearDownGamePlay();
+
+   // State methods
+   void SplashScreenEnter();
+   bool SplashScreenHandle(GameSystem::Events e, void* data);
+   void SplashScreenExit();
+   void GameReadyEnter();
+   bool GameReadyHandle(GameSystem::Events e, void* data);
+   bool GamePlayHandle(GameSystem::Events e, void* data);
+   bool FinishedHandle(GameSystem::Events e, void* data);
 };
 
 
