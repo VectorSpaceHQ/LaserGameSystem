@@ -188,10 +188,10 @@ void GiantPong::PlayGame()
    rightPaddle->sprite->Move();
 
    // If the ball is moving left...
-   if(ball->sprite->velocity(CoordX) < 1)
+   if(ball->sprite->velocity(CoordX) < 0)
    {
       // And the ball is not already past the paddle
-      if((leftPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) > ball->radius)
+      if((leftPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) < ball->radius)
       {
          // Check if the left paddle and ball have collided
          overlap = leftPaddle->sprite->CheckRight(*ball->sprite);
@@ -218,12 +218,12 @@ void GiantPong::PlayGame()
    else  // The ball is moving right
    {
       // And the ball is not already past the right paddle
-      if((ball->sprite->position(CoordX) - rightPaddle->sprite->position(CoordX)) > ball->radius)
+      if((rightPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) < ball->radius)
       {
          // Check if the right paddle and ball have collided
          overlap = rightPaddle->sprite->CheckLeft(*ball->sprite);
 
-         if(rightPaddle->sprite->CheckLeft(*ball->sprite) < 1)
+         if(overlap < 1)
          {
             int xVel = -ball->sprite->velocity(CoordX);
             ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
