@@ -23,6 +23,7 @@ namespace GameSystem
       // Gamepad Events
       EVENT_GAMEPAD_BUTTON_PRESS,
       EVENT_GAMEPAD_BUTTON_RELEASE,
+      EVENT_GAMEPAD_BUTTON_CLICK,               // Button was pressed and released within a small time window
 
       // Do not add past this line
       EVENT_MAX

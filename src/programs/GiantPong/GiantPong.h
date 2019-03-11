@@ -10,6 +10,7 @@
 
 #include "Canvas.h"
 #include "FiniteStateMachine.h"
+#include "GameSystemDefs.h"
 #include "GameSystemEvents.h"
 #include "NumeralShape.h"
 #include "Program.h"
@@ -40,14 +41,16 @@ struct Ball
 
 struct GameStatus
 {
-   bool  demoMode;
-   bool  computerPlaysLeft;
-   bool  computerPlaysRight;
+   bool                    demoMode;
+   bool                    computerPlaysLeft;
+   bool                    computerPlaysRight;
+   GameSystem::GamePadId   whoseServe;
 
    GameStatus():
       demoMode(true),
       computerPlaysLeft(true),
-      computerPlaysRight(true)
+      computerPlaysRight(true),
+      whoseServe(GameSystem::GAMEPAD_ID_ANY)
    {
    }
 };

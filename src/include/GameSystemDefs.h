@@ -10,37 +10,51 @@
 
 #include <stdint.h>
 
-enum AxisId
+
+namespace GameSystem
 {
-   AXIS_ID_LEFT_X = 0,
-   AXIS_ID_LEFT_Y,
-   AXIS_ID_RIGHT_X,
-   AXIS_ID_RIGHT_Y
-};
+   enum GamePadId
+   {
+      GAMEPAD_ID_ANY = 0,
+      GAMEPAD_ID_1,
+      GAMEPAD_ID_2,
+      GAMEPAD_ID_3,
+      GAMEPAD_ID_4
+   };
 
 
-struct Axis
-{
-   AxisId   id;
-   int16_t  position;
-};
+   enum AxisId
+   {
+      AXIS_ID_LEFT_X = 0,
+      AXIS_ID_LEFT_Y,
+      AXIS_ID_RIGHT_X,
+      AXIS_ID_RIGHT_Y
+   };
 
 
-enum ButtonId
-{
-   BUTTON_ID_A = 0,
-   BUTTON_ID_B,
-   BUTTON_ID_C,
-   BUTTON_ID_D,
-   BUTTON_ID_START
-};
+   struct Axis
+   {
+      AxisId   id;
+      int16_t  position;
+   };
 
 
-struct Button
-{
-   ButtonId    id;
-   bool        isPressed;
-};
+   enum ButtonId
+   {
+      BUTTON_ID_A = 0,
+      BUTTON_ID_B,
+      BUTTON_ID_C,
+      BUTTON_ID_D,
+      BUTTON_ID_START
+   };
 
+
+   struct Button
+   {
+      GamePadId   gamPadId;
+      ButtonId    id;
+      bool        isPressed;
+   };
+}
 
 #endif /* INCLUDE_GAMESYSTEMDEFS_H_ */

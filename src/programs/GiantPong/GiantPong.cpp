@@ -354,12 +354,37 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
-         // Auto-start if we're in demo mode
-         if(gameStatus.demoMode)
+         // Auto-start if we're in demo mode, or the computer is playing
+         if((gameStatus.demoMode) ||
+            (gameStatus.computerPlaysLeft  && gameStatus.whoseServe == GameSystem::GAMEPAD_ID_1) ||
+            (gameStatus.computerPlaysRight && gameStatus.whoseServe == GameSystem::GAMEPAD_ID_2)    )
          {
             if(frameCntr++ >= 0.5 * 30)
             {
                fsm.Transition(&StateGamePlay);
+            }
+
+            handled = true;
+         }
+         break;
+
+      case GameSystem::EVENT_GAMEPAD_BUTTON_CLICK:
+         if(data)
+         {
+            GameSystem::Button* buttonEvent = static_cast<GameSystem::Button*>(data);
+
+            if(gameStatus.whoseServe == GameSystem::GAMEPAD_ID_ANY)
+            {
+               // We don't care whose serve it is at the start
+               fsm.Transition(&StateGamePlay);
+            }
+            else
+            {
+               // The last player to score is the one who serves
+               if(gameStatus.whoseServe == buttonEvent->gamPadId)
+               {
+                  fsm.Transition(&StateGamePlay);
+               }
             }
 
             handled = true;
@@ -398,14 +423,7 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
 
          if(gameStatus.demoMode)
          {
-            frameCntr++;
-
-            if((frameCntr % 30 ) == 0)
-            {
-               rightScore->SetValue(rightScore->value + 1);
-            }
-
-            if(frameCntr >= DemoTimeout * 30)
+            if(frameCntr++ >= DemoTimeout * 30)
             {
                TearDownGamePlay();
                fsm.Transition(&StateSplashScreen);
