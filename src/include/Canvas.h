@@ -39,6 +39,7 @@ public:
 
    void Clear();
    void AddObject(CanvasObject* newObject);
+   void RemoveObject(CanvasObject* newObject);
    void Render();
 
 private:

@@ -64,11 +64,13 @@ private:
    static const float      BallStepSize;
    static const uint16_t   SplashTimeout;
    static const uint16_t   DemoTimeout;
+   static const uint8_t    MaxScore;
 
    GameSystem::FiniteState          StateSplashScreen;
    GameSystem::FiniteState          StateGameInit;       // A transition state to initialize the playing field
    GameSystem::FiniteState          StateGameReady;
    GameSystem::FiniteState          StateGamePlay;
+   GameSystem::FiniteState          StateGameOver;
    GameSystem::FiniteState          StateFinished;
    GameSystem::FiniteStateMachine   fsm;
 
@@ -94,7 +96,7 @@ public:
 private:
    void InitGamePlay();
    void StartGamePlay();
-   void PlayGame();
+   bool PlayGame();
    void TearDownGamePlay();
 
    void PlayPaddle(PongPaddle& paddle);
@@ -109,6 +111,7 @@ private:
    bool GameReadyHandle(GameSystem::Events e, void* data);
    void GamePlayEnter();
    bool GamePlayHandle(GameSystem::Events e, void* data);
+   bool GameOverHandle(GameSystem::Events e, void* data);
    bool FinishedHandle(GameSystem::Events e, void* data);
 };
 

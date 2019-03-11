@@ -55,6 +55,12 @@ void Canvas::AddObject(CanvasObject* newObject)
 }
 
 
+void Canvas::RemoveObject(CanvasObject* object)
+{
+   canvasObjects.remove(object);
+}
+
+
 int32_t Canvas::TotalVertices()
 {
    CanvasObjectList_t::iterator  it;

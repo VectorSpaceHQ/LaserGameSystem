@@ -122,6 +122,15 @@ void Sprite::Move(CoordType _diffX, CoordType _diffY)
 }
 
 
+void Sprite::MoveTo(CoordType _posX, CoordType _posY)
+{
+   CoordType diffX = _posX - position(CoordX);
+   CoordType diffY = _posY - position(CoordY);
+
+   Move(diffX, diffY);
+}
+
+
 void Sprite::Scale(CoordType _scale)
 {
    ShapeList_t::iterator  it;

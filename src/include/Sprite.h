@@ -46,6 +46,7 @@ public:
    void Restore();
    void Move();
    void Move(CoordType _diffX, CoordType _diffY);
+   void MoveTo(CoordType _posX, CoordType _posY);
    void Scale(CoordType _scale);
    void Scale(CoordType _xScale, CoordType _yScale, CoordType _zScale);
 

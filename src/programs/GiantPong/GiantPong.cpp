@@ -21,8 +21,9 @@
 const float    GiantPong::PaddleScalePercent    = 0.10;
 const float    GiantPong::BallScalePercent      = 0.01;
 const float    GiantPong::BallStepSize          = 80;
-const uint16_t GiantPong::SplashTimeout         = 1;
-const uint16_t GiantPong::DemoTimeout           = 7;
+const uint16_t GiantPong::SplashTimeout         = 5;
+const uint16_t GiantPong::DemoTimeout           = 10;
+const uint8_t  GiantPong::MaxScore              = 10;
 
 
 PongPaddle::PongPaddle(uint16_t width, uint16_t height, int16_t xPos)
@@ -75,6 +76,10 @@ GiantPong::GiantPong(Canvas& _display
    StateGamePlay("PongPlay",
                  std::bind(&GiantPong::GamePlayEnter, this),
                  std::bind(&GiantPong::GamePlayHandle, this, std::placeholders::_1, std::placeholders::_2),
+                 nullptr),
+   StateGameOver("PongOver",
+                 nullptr,
+                 std::bind(&GiantPong::GameOverHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
    StateFinished("PongFinished",
                  nullptr,
@@ -180,8 +185,9 @@ void GiantPong::StartGamePlay()
 }
 
 
-void GiantPong::PlayGame()
+bool GiantPong::PlayGame()
 {
+   bool        keepPlaying = true;
    int16_t     overlap;
 
    // Play the left paddle if the computer should
@@ -203,54 +209,64 @@ void GiantPong::PlayGame()
    if(ball->sprite->velocity(CoordX) < 0)
    {
       // And the ball is not already past the paddle
-      if((leftPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) < ball->radius)
+      if(ball->sprite->position(CoordX) <= (leftPaddle->sprite->position(CoordX) - ball->radius))
       {
-         // Check if the left paddle and ball have collided
-         overlap = leftPaddle->sprite->CheckRight(*ball->sprite);
+         // Check to see if the ball has hit the left side
+         overlap = ball->sprite->CheckLeft(canvas.left + ball->radius);
 
-         if(overlap < 1)
+         if(overlap <= 0)
          {
-            int xVel = -ball->sprite->velocity(CoordX);
-            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-            ball->sprite->Move(-overlap, 0);  // Prevent from showing the overlap
+            // Stop drawing the ball
+            canvas.RemoveObject(ball->sprite);
+            // Re-center the ball
+            ball->sprite->MoveTo(0, 0);
+            rightScore->SetValue(rightScore->value + 1);
+            keepPlaying = false;
          }
       }
       else
       {
-         // Check to see if the ball has hit the left side
-         overlap = ball->sprite->CheckLeft(canvas.left);
+         // Check if the left paddle and ball have collided
+         overlap = leftPaddle->sprite->CheckRight(*(ball->sprite));
 
-         if(overlap < 1)
+         if(overlap <= 0)
          {
+            ball->sprite->Move(-overlap, 0);
             int xVel = -ball->sprite->velocity(CoordX);
             ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+            ball->sprite->Move(-overlap, 0);  // Prevent from showing the overlap
          }
       }
    }
    else  // The ball is moving right
    {
       // And the ball is not already past the right paddle
-      if((rightPaddle->sprite->position(CoordX) - ball->sprite->position(CoordX)) < ball->radius)
+      if(ball->sprite->position(CoordX) >= (rightPaddle->sprite->position(CoordX) + ball->radius))
       {
-         // Check if the right paddle and ball have collided
-         overlap = rightPaddle->sprite->CheckLeft(*ball->sprite);
+         // Check to see if the ball has hit the right side
+         overlap = ball->sprite->CheckRight(canvas.right - ball->radius);
 
-         if(overlap < 1)
+         if(overlap <= 0)
          {
-            int xVel = -ball->sprite->velocity(CoordX);
-            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-            ball->sprite->Move(overlap, 0);  // Prevent from showing the overlap
+            // Stop drawing the ball
+            canvas.RemoveObject(ball->sprite);
+            // Re-center the ball
+            ball->sprite->MoveTo(0, 0);
+            leftScore->SetValue(leftScore->value + 1);
+            keepPlaying = false;
          }
       }
       else
       {
-         // Check to see if the ball has hit the left side
-         overlap = ball->sprite->CheckRight(canvas.right);
+         // Check if the right paddle and ball have collided
+         overlap = rightPaddle->sprite->CheckLeft(*(ball->sprite));
 
-         if(overlap < 1)
+         if(overlap <= 0)
          {
+            ball->sprite->Move(overlap, 0);
             int xVel = -ball->sprite->velocity(CoordX);
             ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
+            ball->sprite->Move(overlap, 0);  // Prevent from showing the overlap
          }
       }
    }
@@ -265,13 +281,14 @@ void GiantPong::PlayGame()
       int yVel = -ball->sprite->velocity(CoordY);
       ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
    }
+
+   return keepPlaying;
 }
 
 
 void GiantPong::PlayPaddle(PongPaddle& paddle)
 {
-   paddle.sprite->velocity = ball->sprite->velocity;
-   paddle.sprite->Move();
+   paddle.sprite->MoveTo(paddle.sprite->position(CoordX), ball->sprite->position(CoordY));
 }
 
 
@@ -419,7 +436,18 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
-         PlayGame();
+         if(!PlayGame())
+         {
+            if((leftScore->value >= MaxScore) || (rightScore->value >= MaxScore))
+            {
+               TearDownGamePlay();
+               fsm.Transition(&StateGameOver);
+            }
+            else
+            {
+               fsm.Transition(&StateGameReady);
+            }
+         }
 
          if(gameStatus.demoMode)
          {
@@ -441,6 +469,14 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
          break;
    }
 
+   return handled;
+}
+
+
+bool GiantPong::GameOverHandle(GameSystem::Events e, void* data)
+{
+   bool  handled = false;
+   // Do nothing!
    return handled;
 }
 
