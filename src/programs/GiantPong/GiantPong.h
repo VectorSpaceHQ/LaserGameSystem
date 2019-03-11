@@ -38,19 +38,38 @@ struct Ball
 };
 
 
+struct GameStatus
+{
+   bool  demoMode;
+   bool  computerPlaysLeft;
+   bool  computerPlaysRight;
+
+   GameStatus():
+      demoMode(true),
+      computerPlaysLeft(true),
+      computerPlaysRight(true)
+   {
+   }
+};
+
+
 class GiantPong: public Program
 {
 private:
-   static const float PaddleScalePercent;
-   static const float BallScalePercent;
-   static const float BallStepSize;
+   static const float      PaddleScalePercent;
+   static const float      BallScalePercent;
+   static const float      BallStepSize;
+   static const uint16_t   SplashTimeout;
+   static const uint16_t   DemoTimeout;
 
    GameSystem::FiniteState          StateSplashScreen;
+   GameSystem::FiniteState          StateGameInit;       // A transition state to initialize the playing field
    GameSystem::FiniteState          StateGameReady;
    GameSystem::FiniteState          StateGamePlay;
    GameSystem::FiniteState          StateFinished;
    GameSystem::FiniteStateMachine   fsm;
 
+   GameStatus     gameStatus;
    Shape*         border;
    PongPaddle*    leftPaddle;
    PongPaddle*    rightPaddle;
@@ -75,12 +94,17 @@ private:
    void PlayGame();
    void TearDownGamePlay();
 
+   void PlayPaddle(PongPaddle& paddle);
+
    // State methods
    void SplashScreenEnter();
    bool SplashScreenHandle(GameSystem::Events e, void* data);
    void SplashScreenExit();
+   void GameInitEnter();
+   bool GameInitHandle(GameSystem::Events e, void* data);
    void GameReadyEnter();
    bool GameReadyHandle(GameSystem::Events e, void* data);
+   void GamePlayEnter();
    bool GamePlayHandle(GameSystem::Events e, void* data);
    bool FinishedHandle(GameSystem::Events e, void* data);
 };

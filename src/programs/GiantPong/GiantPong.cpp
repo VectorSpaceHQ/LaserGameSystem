@@ -18,9 +18,11 @@
 #include "Program.h"
 
 
-const float GiantPong::PaddleScalePercent = 0.10;
-const float GiantPong::BallScalePercent = 0.01;
-const float GiantPong::BallStepSize = 80;
+const float    GiantPong::PaddleScalePercent    = 0.10;
+const float    GiantPong::BallScalePercent      = 0.01;
+const float    GiantPong::BallStepSize          = 80;
+const uint16_t GiantPong::SplashTimeout         = 1;
+const uint16_t GiantPong::DemoTimeout           = 7;
 
 
 PongPaddle::PongPaddle(uint16_t width, uint16_t height, int16_t xPos)
@@ -33,8 +35,8 @@ PongPaddle::PongPaddle(uint16_t width, uint16_t height, int16_t xPos)
 
 PongPaddle::~PongPaddle()
 {
-   delete(sprite);
-   delete(shape);
+   delete sprite;
+   delete shape;
 }
 
 
@@ -48,8 +50,8 @@ Ball::Ball(uint16_t _radius):
 
 Ball::~Ball()
 {
-   delete(sprite);
-   delete(shape);
+   delete sprite;
+   delete shape;
 }
 
 
@@ -62,19 +64,24 @@ GiantPong::GiantPong(Canvas& _display
                      std::bind(&GiantPong::SplashScreenEnter, this),
                      std::bind(&GiantPong::SplashScreenHandle, this, std::placeholders::_1, std::placeholders::_2),
                      std::bind(&GiantPong::SplashScreenExit, this)),
+   StateGameInit("PongInit",
+                 std::bind(&GiantPong::GameInitEnter, this),
+                 std::bind(&GiantPong::GameInitHandle, this, std::placeholders::_1, std::placeholders::_2),
+                 nullptr),
    StateGameReady("PongReady",
                   std::bind(&GiantPong::GameReadyEnter, this),
                   std::bind(&GiantPong::GameReadyHandle, this, std::placeholders::_1, std::placeholders::_2),
                   nullptr),
    StateGamePlay("PongPlay",
-                 std::bind(&GiantPong::StartGamePlay, this),
+                 std::bind(&GiantPong::GamePlayEnter, this),
                  std::bind(&GiantPong::GamePlayHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
    StateFinished("PongFinished",
                  nullptr,
                  std::bind(&GiantPong::FinishedHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
-   fsm(StateSplashScreen),
+   fsm(&StateSplashScreen),
+   gameStatus(),
    border(),
    leftPaddle(),
    rightPaddle(),
@@ -96,7 +103,6 @@ void GiantPong::InitGamePlay()
    // First, clear the canvas
    canvas.Clear();
 
-   frameCntr = 0;
    border = new Shape(7);
    border->vertices <<
             canvas.left, canvas.top, 0, 0,
@@ -178,14 +184,20 @@ void GiantPong::PlayGame()
 {
    int16_t     overlap;
 
-   // Match the paddles to the ball
-   leftPaddle->sprite->velocity = ball->sprite->velocity;
-   rightPaddle->sprite->velocity = ball->sprite->velocity;
+   // Play the left paddle if the computer should
+   if(gameStatus.computerPlaysLeft)
+   {
+      PlayPaddle(*leftPaddle);
+   }
 
-   // Move the sprites
+   // Play the right paddle if the computer should
+   if(gameStatus.computerPlaysRight)
+   {
+      PlayPaddle(*rightPaddle);
+   }
+
+   // Move the ball
    ball->sprite->Move();
-   leftPaddle->sprite->Move();
-   rightPaddle->sprite->Move();
 
    // If the ball is moving left...
    if(ball->sprite->velocity(CoordX) < 0)
@@ -256,15 +268,22 @@ void GiantPong::PlayGame()
 }
 
 
+void GiantPong::PlayPaddle(PongPaddle& paddle)
+{
+   paddle.sprite->velocity = ball->sprite->velocity;
+   paddle.sprite->Move();
+}
+
+
 void GiantPong::TearDownGamePlay()
 {
    canvas.Clear();
-   delete(border);
-   delete(leftPaddle);
-   delete(rightPaddle);
-   delete(ball);
-   delete(leftScore);
-   delete(rightScore);
+   delete border;
+   delete leftPaddle;
+   delete rightPaddle;
+   delete ball;
+   delete leftScore;
+   delete rightScore;
 }
 
 
@@ -296,31 +315,21 @@ void GiantPong::HandleEvent(GameSystem::Events event)
 }
 
 
-void GiantPong::GameReadyEnter()
+void GiantPong::GameInitEnter()
 {
-   frameCntr = 0;
    InitGamePlay();
 }
 
 
-bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
+bool GiantPong::GameInitHandle(GameSystem::Events e, void* data)
 {
    bool handled  = false;
 
    switch(e)
    {
+      // Just go directly to the Ready state
       case GameSystem::EVENT_PROGRAM_RUN:
-         if(frameCntr++ >= 0.5 * 30)
-         {
-            fsm.Transition(StateGamePlay);
-         }
-
-         handled = true;
-         break;
-
-      case GameSystem::EVENT_PROGRAM_STOP:
-         TearDownGamePlay();
-         fsm.Transition(StateFinished);
+         fsm.Transition(&StateGameReady);
          handled = true;
          break;
 
@@ -332,6 +341,52 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
 }
 
 
+void GiantPong::GameReadyEnter()
+{
+   frameCntr = 0;
+}
+
+
+bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
+{
+   bool handled  = false;
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         // Auto-start if we're in demo mode
+         if(gameStatus.demoMode)
+         {
+            if(frameCntr++ >= 0.5 * 30)
+            {
+               fsm.Transition(&StateGamePlay);
+            }
+
+            handled = true;
+         }
+         break;
+
+      case GameSystem::EVENT_PROGRAM_STOP:
+         TearDownGamePlay();
+         fsm.Transition(&StateFinished);
+         handled = true;
+         break;
+
+      default:
+         break;
+   }
+
+   return handled;
+}
+
+
+void GiantPong::GamePlayEnter()
+{
+   frameCntr = 0;
+   StartGamePlay();
+}
+
+
 bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
 {
    bool  handled = false;
@@ -340,11 +395,27 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
          PlayGame();
+
+         if(gameStatus.demoMode)
+         {
+            frameCntr++;
+
+            if((frameCntr % 30 ) == 0)
+            {
+               rightScore->SetValue(rightScore->value + 1);
+            }
+
+            if(frameCntr >= DemoTimeout * 30)
+            {
+               TearDownGamePlay();
+               fsm.Transition(&StateSplashScreen);
+            }
+         }
          break;
 
       case GameSystem::EVENT_PROGRAM_STOP:
          TearDownGamePlay();
-         fsm.Transition(StateFinished);
+         fsm.Transition(&StateFinished);
          handled = true;
          break;
 
@@ -371,16 +442,19 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
-         if(frameCntr++ >= 3 * 30)
+         if(frameCntr++ >= SplashTimeout * 30)
          {
-            fsm.Transition(StateGameReady);
+            gameStatus.computerPlaysLeft = true;
+            gameStatus.computerPlaysRight = true;
+            gameStatus.demoMode = true;
+            fsm.Transition(&StateGameInit);
          }
 
          handled = true;
          break;
 
       case GameSystem::EVENT_PROGRAM_STOP:
-         fsm.Transition(StateFinished);
+         fsm.Transition(&StateFinished);
          handled = true;
          break;
 

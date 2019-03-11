@@ -42,10 +42,10 @@ namespace GameSystem
    class FiniteStateMachine
    {
    protected:
-      FiniteState& currState;
+      FiniteState* currState;
 
    public:
-      FiniteStateMachine(FiniteState& initialState):
+      FiniteStateMachine(FiniteState* initialState):
          currState(initialState)
       {
       }
@@ -54,34 +54,34 @@ namespace GameSystem
 
       void Start()
       {
-         if(currState.Enter != nullptr)
+         if(currState->Enter != nullptr)
          {
-            currState.Enter();
+            currState->Enter();
          }
       }
 
 
-      void Transition(FiniteState const & newState)
+      void Transition(FiniteState* newState)
       {
-         if(currState.Exit != nullptr)
+         if(currState->Exit != nullptr)
          {
-            currState.Exit();
+            currState->Exit();
          }
 
          currState = newState;
 
-         if(currState.Enter != nullptr)
+         if(currState->Enter != nullptr)
          {
-            currState.Enter();
+            currState->Enter();
          }
       }
 
 
       bool HandleEvent(Events e, void* data)
       {
-         if(currState.Handle != nullptr)
+         if(currState->Handle != nullptr)
          {
-            return currState.Handle(e, data);
+            return currState->Handle(e, data);
          }
          else
          {
