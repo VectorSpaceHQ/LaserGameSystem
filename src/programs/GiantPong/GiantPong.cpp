@@ -18,7 +18,7 @@
 #include "Program.h"
 
 
-const float    GiantPong::PaddleScalePercent    = 0.10;
+const float    Player::PaddleScalePercent       = 0.10;
 const float    GiantPong::BallScalePercent      = 0.01;
 const float    GiantPong::BallStepSize          = 80;
 const uint16_t GiantPong::SplashTimeout         = 5;
@@ -26,26 +26,24 @@ const uint16_t GiantPong::DemoTimeout           = 10;
 const uint8_t  GiantPong::MaxScore              = 10;
 
 
-PongPaddle::PongPaddle(uint16_t width, uint16_t height, int16_t xPos)
-{
-   shape = new Rectangle(width, height);
-   sprite = new Sprite(shape);
-   sprite->Move(xPos, 0);
-}
-
-
-PongPaddle::~PongPaddle()
-{
-   delete sprite;
-   delete shape;
-}
-
 
 Ball::Ball(uint16_t _radius):
-   radius(_radius)
+   radius(_radius),
+   shape(),
+   sprite()
+{
+}
+
+
+void Ball::Init(Canvas& canvas)
 {
    shape = new Polygon(8, radius);
    sprite = new Sprite(shape);
+
+   // Set the limits of the ball
+   Coordinate lowerLimit((canvas.left + radius), (canvas.bottom + radius), 0, 0);
+   Coordinate upperLimit((canvas.right - radius), (canvas.top - radius), 0, 0);
+   sprite->SetLimits(lowerLimit, upperLimit);
 }
 
 
@@ -53,6 +51,103 @@ Ball::~Ball()
 {
    delete sprite;
    delete shape;
+}
+
+
+void Player::Init(Canvas& canvas)
+{
+   uint16_t paddleHeight = canvas.height * PaddleScalePercent;
+   int32_t  paddleXPos = canvas.width / 9;
+   int32_t  scorePos = canvas.width / 4;
+
+   shape = new Rectangle(40, paddleHeight);
+   sprite = new Sprite(shape);
+   score = new NumeralShape();
+   score->Scale(150);
+
+   if(id == PLAYER_LEFT)
+   {
+      // Set the limits of the paddle
+      Coordinate lowerLimit((canvas.left + paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0);
+      Coordinate upperLimit((canvas.left + paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0);
+
+      sprite->Move(canvas.left + paddleXPos, 0);
+      sprite->SetLimits(lowerLimit, upperLimit);
+      score->Move(0 - scorePos, canvas.top - 300, 0);
+   }
+   else
+   {
+      Coordinate lowerLimit((canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0);
+      Coordinate upperLimit((canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0);
+
+      sprite->Move(canvas.right - paddleXPos, 0);
+      sprite->SetLimits(lowerLimit, upperLimit);
+      score->Move(scorePos, canvas.top - 300, 0);
+   }
+}
+
+
+void Player::Score()
+{
+   if(score)
+   {
+      score->SetValue(score->value + 1);
+   }
+}
+
+
+uint8_t Player::GetScore()
+{
+   if(score)
+   {
+      return score->value;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+
+void Player::Play(Sprite& ball)
+{
+   if(computerPlays)
+   {
+      sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY));
+   }
+}
+
+
+CoordType Player::GetPosition(CoordPositions pos)
+{
+   if(sprite)
+   {
+      return sprite->position(pos);
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+
+int16_t Player::CheckCollision(Sprite& ball)
+{
+   int16_t  overlap = 1;   // No collision detected
+
+   if(sprite)
+   {
+      if(id == PLAYER_LEFT)
+      {
+         overlap = sprite->CheckRight(ball);
+      }
+      else
+      {
+         overlap = sprite->CheckLeft(ball);
+      }
+   }
+
+   return overlap;
 }
 
 
@@ -87,12 +182,10 @@ GiantPong::GiantPong(Canvas& _display
                  nullptr),
    fsm(&StateSplashScreen),
    gameStatus(),
+   ball(canvas.width * BallScalePercent),
+   leftPlayer(PLAYER_LEFT),
+   rightPlayer(PLAYER_RIGHT),
    border(),
-   leftPaddle(),
-   rightPaddle(),
-   ball(),
-   leftScore(),
-   rightScore(),
    splash(),
    frameCntr()
 {
@@ -101,10 +194,6 @@ GiantPong::GiantPong(Canvas& _display
 
 void GiantPong::InitGamePlay()
 {
-   uint16_t paddleHeight = canvas.height * PaddleScalePercent;
-   int16_t  paddleXPos = canvas.width / 9;
-   uint16_t ballRadius = canvas.width * BallScalePercent;
-
    // First, clear the canvas
    canvas.Clear();
 
@@ -118,40 +207,16 @@ void GiantPong::InitGamePlay()
             0, canvas.top, 0, 0,
             0, canvas.bottom, 0, 1;
 
-   leftPaddle = new PongPaddle(40, paddleHeight, canvas.left + paddleXPos);
-   rightPaddle = new PongPaddle(40, paddleHeight, canvas.right - paddleXPos);
-
-   ball = new Ball(ballRadius);
-   leftScore = new NumeralShape();
-   rightScore = new NumeralShape();
-   leftScore->Scale(150);
-   rightScore->Scale(150);
-
-   int32_t pos = (canvas.width / 4);
-   leftScore->Move(0 - pos, canvas.top - 300, 0);
-   rightScore->Move(pos, canvas.top - 300, 0);
-
-   // Set the limits of the ball
-   Coordinate lowerLimit((canvas.left + ballRadius), (canvas.bottom + ballRadius), 0, 0);
-   Coordinate upperLimit((canvas.right - ballRadius), (canvas.top - ballRadius), 0, 0);
-   ball->sprite->SetLimits(lowerLimit, upperLimit);
-
-   // Set the limits of our left paddle
-   lowerLimit << (canvas.left + paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
-   upperLimit << (canvas.left + paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
-   leftPaddle->sprite->SetLimits(lowerLimit, upperLimit);
-
-   // Set the limits of our left paddle
-   lowerLimit << (canvas.right - paddleXPos), (canvas.bottom + (paddleHeight /2)), 0, 0;
-   upperLimit << (canvas.right - paddleXPos), (canvas.top - (paddleHeight /2)), 0, 0;
-   rightPaddle->sprite->SetLimits(lowerLimit, upperLimit);
+   ball.Init(canvas);
+   leftPlayer.Init(canvas);
+   rightPlayer.Init(canvas);
 
    // Now Fill out the canvas
    canvas.AddObject(border);
-   canvas.AddObject(rightPaddle->sprite);
-   canvas.AddObject(leftPaddle->sprite);
-   canvas.AddObject(leftScore);
-   canvas.AddObject(rightScore);
+   canvas.AddObject(rightPlayer.sprite);
+   canvas.AddObject(leftPlayer.sprite);
+   canvas.AddObject(leftPlayer.score);
+   canvas.AddObject(rightPlayer.score);
 }
 
 
@@ -163,11 +228,11 @@ void GiantPong::StartGamePlay()
 
    if(rand() % 1)
    {
-      ball->sprite->Move(0, pos);
+      ball.sprite->Move(0, pos);
    }
    else
    {
-      ball->sprite->Move(0, -pos);
+      ball.sprite->Move(0, -pos);
    }
 
    if(rand() %1)
@@ -180,8 +245,8 @@ void GiantPong::StartGamePlay()
    }
 
    ballXVel = BallStepSize / (rand() % 2 + 1);
-   ball->sprite->SetVelocity(ballXVel, ballYVel, 0);
-   canvas.AddObject(ball->sprite);
+   ball.sprite->SetVelocity(ballXVel, ballYVel, 0);
+   canvas.AddObject(ball.sprite);
 }
 
 
@@ -190,105 +255,90 @@ bool GiantPong::PlayGame()
    bool        keepPlaying = true;
    int16_t     overlap;
 
-   // Play the left paddle if the computer should
-   if(gameStatus.computerPlaysLeft)
-   {
-      PlayPaddle(*leftPaddle);
-   }
-
-   // Play the right paddle if the computer should
-   if(gameStatus.computerPlaysRight)
-   {
-      PlayPaddle(*rightPaddle);
-   }
 
    // Move the ball
-   ball->sprite->Move();
+   ball.sprite->Move();
+   leftPlayer.Play(*(ball.sprite));
+   rightPlayer.Play(*(ball.sprite));
 
    // If the ball is moving left...
-   if(ball->sprite->velocity(CoordX) < 0)
+   if(ball.sprite->velocity(CoordX) < 0)
    {
       // And the ball is not already past the paddle
-      if(ball->sprite->position(CoordX) <= (leftPaddle->sprite->position(CoordX) - ball->radius))
+      if(ball.sprite->position(CoordX) <= (leftPlayer.GetPosition(CoordX) - ball.radius))
       {
          // Check to see if the ball has hit the left side
-         overlap = ball->sprite->CheckLeft(canvas.left + ball->radius);
+         overlap = ball.sprite->CheckLeft(canvas.left + ball.radius);
 
          if(overlap <= 0)
          {
             // Stop drawing the ball
-            canvas.RemoveObject(ball->sprite);
+            canvas.RemoveObject(ball.sprite);
             // Re-center the ball
-            ball->sprite->MoveTo(0, 0);
-            rightScore->SetValue(rightScore->value + 1);
+            ball.sprite->MoveTo(0, 0);
+            rightPlayer.Score();
             keepPlaying = false;
          }
       }
       else
       {
          // Check if the left paddle and ball have collided
-         overlap = leftPaddle->sprite->CheckRight(*(ball->sprite));
+         overlap = leftPlayer.CheckCollision(*(ball.sprite));
 
          if(overlap <= 0)
          {
-            ball->sprite->Move(-overlap, 0);
-            int xVel = -ball->sprite->velocity(CoordX);
-            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-            ball->sprite->Move(-overlap, 0);  // Prevent from showing the overlap
+            ball.sprite->Move(-overlap, 0);
+            int xVel = -ball.sprite->velocity(CoordX);
+            ball.sprite->SetVelocity(xVel, ball.sprite->velocity(CoordY), 0);
+            ball.sprite->Move(-overlap, 0);  // Prevent from showing the overlap
          }
       }
    }
    else  // The ball is moving right
    {
       // And the ball is not already past the right paddle
-      if(ball->sprite->position(CoordX) >= (rightPaddle->sprite->position(CoordX) + ball->radius))
+      if(ball.sprite->position(CoordX) >= (rightPlayer.GetPosition(CoordX) + ball.radius))
       {
          // Check to see if the ball has hit the right side
-         overlap = ball->sprite->CheckRight(canvas.right - ball->radius);
+         overlap = ball.sprite->CheckRight(canvas.right - ball.radius);
 
          if(overlap <= 0)
          {
             // Stop drawing the ball
-            canvas.RemoveObject(ball->sprite);
+            canvas.RemoveObject(ball.sprite);
             // Re-center the ball
-            ball->sprite->MoveTo(0, 0);
-            leftScore->SetValue(leftScore->value + 1);
+            ball.sprite->MoveTo(0, 0);
+            leftPlayer.Score();
             keepPlaying = false;
          }
       }
       else
       {
          // Check if the right paddle and ball have collided
-         overlap = rightPaddle->sprite->CheckLeft(*(ball->sprite));
+         overlap = rightPlayer.CheckCollision(*(ball.sprite));
 
          if(overlap <= 0)
          {
-            ball->sprite->Move(overlap, 0);
-            int xVel = -ball->sprite->velocity(CoordX);
-            ball->sprite->SetVelocity(xVel, ball->sprite->velocity(CoordY), 0);
-            ball->sprite->Move(overlap, 0);  // Prevent from showing the overlap
+            ball.sprite->Move(overlap, 0);
+            int xVel = -ball.sprite->velocity(CoordX);
+            ball.sprite->SetVelocity(xVel, ball.sprite->velocity(CoordY), 0);
+            ball.sprite->Move(overlap, 0);  // Prevent from showing the overlap
          }
       }
    }
 
-   if(ball->sprite->CheckTop(canvas.top) < 1)
+   if(ball.sprite->CheckTop(canvas.top) < 1)
    {
-      int yVel = -ball->sprite->velocity(CoordY);
-      ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
+      int yVel = -ball.sprite->velocity(CoordY);
+      ball.sprite->SetVelocity(ball.sprite->velocity(CoordX), yVel, 0);
    }
-   else if(ball->sprite->CheckBottom(canvas.bottom) < 1)
+   else if(ball.sprite->CheckBottom(canvas.bottom) < 1)
    {
-      int yVel = -ball->sprite->velocity(CoordY);
-      ball->sprite->SetVelocity(ball->sprite->velocity(CoordX), yVel, 0);
+      int yVel = -ball.sprite->velocity(CoordY);
+      ball.sprite->SetVelocity(ball.sprite->velocity(CoordX), yVel, 0);
    }
 
    return keepPlaying;
-}
-
-
-void GiantPong::PlayPaddle(PongPaddle& paddle)
-{
-   paddle.sprite->MoveTo(paddle.sprite->position(CoordX), ball->sprite->position(CoordY));
 }
 
 
@@ -296,11 +346,6 @@ void GiantPong::TearDownGamePlay()
 {
    canvas.Clear();
    delete border;
-   delete leftPaddle;
-   delete rightPaddle;
-   delete ball;
-   delete leftScore;
-   delete rightScore;
 }
 
 
@@ -438,7 +483,7 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
       case GameSystem::EVENT_PROGRAM_RUN:
          if(!PlayGame())
          {
-            if((leftScore->value >= MaxScore) || (rightScore->value >= MaxScore))
+            if((leftPlayer.GetScore() >= MaxScore) || (rightPlayer.GetScore() >= MaxScore))
             {
                TearDownGamePlay();
                fsm.Transition(&StateGameOver);

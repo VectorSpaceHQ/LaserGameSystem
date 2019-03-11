@@ -17,25 +17,70 @@
 #include "Shape.h"
 #include "Sprite.h"
 
-
-struct PongPaddle
+enum PlayerId
 {
-   Shape*   shape;
-   Sprite*  sprite;
-
-   PongPaddle(uint16_t width, uint16_t height, int16_t xPos);
-   ~PongPaddle();
+   PLAYER_LEFT = 0,
+   PLAYER_RIGHT
 };
 
 
 struct Ball
 {
+   uint16_t radius;
    Shape*   shape;
    Sprite*  sprite;
-   uint16_t radius;
 
    Ball(uint16_t _radius);
+   void Init(Canvas& canvas);
    ~Ball();
+};
+
+
+struct Player
+{
+   static const float      PaddleScalePercent;
+
+   PlayerId       id;
+   bool           computerPlays;
+   Shape*         shape;
+   Sprite*        sprite;
+   NumeralShape*  score;
+
+
+   Player(PlayerId _id):
+      id(_id),
+      computerPlays(true),
+      shape(),
+      sprite(),
+      score()
+   {
+   }
+
+
+   ~Player()
+   {
+      if(shape)
+      {
+         delete shape;
+      }
+
+      if(sprite)
+      {
+         delete sprite;
+      }
+
+      if(score)
+      {
+         delete score;
+      }
+   }
+
+   void Init(Canvas& canvas);
+   void Score();
+   uint8_t GetScore();
+   void Play(Sprite& ball);
+   CoordType GetPosition(CoordPositions pos);
+   int16_t CheckCollision(Sprite& ball);
 };
 
 
@@ -59,7 +104,6 @@ struct GameStatus
 class GiantPong: public Program
 {
 private:
-   static const float      PaddleScalePercent;
    static const float      BallScalePercent;
    static const float      BallStepSize;
    static const uint16_t   SplashTimeout;
@@ -75,12 +119,10 @@ private:
    GameSystem::FiniteStateMachine   fsm;
 
    GameStatus     gameStatus;
+   Ball           ball;
+   Player         leftPlayer;
+   Player         rightPlayer;
    Shape*         border;
-   PongPaddle*    leftPaddle;
-   PongPaddle*    rightPaddle;
-   Ball*          ball;
-   NumeralShape*  leftScore;
-   NumeralShape*  rightScore;
    Shape*         splash;
    uint32_t       frameCntr;
 
@@ -98,8 +140,6 @@ private:
    void StartGamePlay();
    bool PlayGame();
    void TearDownGamePlay();
-
-   void PlayPaddle(PongPaddle& paddle);
 
    // State methods
    void SplashScreenEnter();
