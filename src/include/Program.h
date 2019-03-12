@@ -12,30 +12,27 @@
 #include "GamePad.h"
 #include "GameSystemEvents.h"
 
-
-// TODO: For now, use ScheduledInterval.
-//       When we get a clock, we will want to use TimedInterval... until we have something better.
-class Program
+namespace GameSystem
 {
-protected:
-   Canvas&    canvas;
-//   GamePad&    gamePad1;
-//   GamePad&    gamePad2;
+   class Program
+   {
+   protected:
+      Canvas&    canvas;
+      GamePad&   gamePad1;
+      GamePad&   gamePad2;
 
-public:
-   // TODO: Implement the game pads
-   Program(Canvas& _canvas
-           //GamePad& _gamePad1,
-           //GamePad& _gamePad2
-          );
+   public:
+      Program(Canvas& _canvas,
+              GamePad& _gamePad1,
+              GamePad& _gamePad2);
 
-   virtual void HandleEvent(GameSystem::Events event) = 0;
+      virtual void HandleEvent(GameSystem::Events event, void* data) = 0;
 
-protected:
-   virtual ~Program() {};
+   protected:
+      virtual ~Program() {};
 
-};
+   };
 
-
+}
 
 #endif /* __program_h__ */

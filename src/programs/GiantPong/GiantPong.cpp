@@ -64,6 +64,37 @@ Ball::~Ball()
 }
 
 
+Player::Player(PlayerId _id, GameSystem::GamePad& _gamePad):
+   id(_id),
+   computerPlays(true),
+   gamePad(_gamePad),
+   lastAxis(0),
+   shape(),
+   sprite(),
+   score()
+{
+}
+
+
+Player::~Player()
+{
+   if(shape)
+   {
+      delete shape;
+   }
+
+   if(sprite)
+   {
+      delete sprite;
+   }
+
+   if(score)
+   {
+      delete score;
+   }
+}
+
+
 void Player::Init(Canvas& canvas)
 {
    uint16_t paddleHeight = canvas.height * PaddleScalePercent;
@@ -109,6 +140,8 @@ void Player::Init(Canvas& canvas)
       sprite->SetLimits(lowerLimit, upperLimit);
       score->Move(scorePos, canvas.top - 300, 0);
    }
+
+   lastAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
 }
 
 
@@ -139,6 +172,14 @@ void Player::Play(Sprite& ball)
    if(computerPlays)
    {
       sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY));
+   }
+   else
+   {
+      int32_t  currAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
+
+      // Move the difference between the two since our last poll
+      sprite->Move(0, currAxis - lastAxis);
+      lastAxis = currAxis;
    }
 }
 
@@ -176,11 +217,10 @@ int16_t Player::CheckCollision(Sprite& ball)
 }
 
 
-GiantPong::GiantPong(Canvas& _display
-         //GamePad& _gamePad1,
-         //GamePad& _gamePad2
-         ):
-   Program(_display/*, _gamePad1, _gamePad2*/),
+GiantPong::GiantPong(Canvas&              _display,
+                     GameSystem::GamePad& _gamePad1,
+                     GameSystem::GamePad& _gamePad2):
+   Program(_display, _gamePad1, _gamePad2),
    StateSplashScreen("PongSplashScreen",
                      std::bind(&GiantPong::SplashScreenEnter, this),
                      std::bind(&GiantPong::SplashScreenHandle, this, std::placeholders::_1, std::placeholders::_2),
@@ -208,8 +248,8 @@ GiantPong::GiantPong(Canvas& _display
    fsm(&StateGameInit),
    gameStatus(),
    ball(canvas.width * BallScalePercent),
-   leftPlayer(PLAYER_LEFT),
-   rightPlayer(PLAYER_RIGHT),
+   leftPlayer(PLAYER_LEFT, gamePad1),
+   rightPlayer(PLAYER_RIGHT, gamePad2),
    border(),
    splash(),
    frameCntr()
@@ -374,7 +414,7 @@ void GiantPong::TearDownGamePlay()
 }
 
 
-void GiantPong::HandleEvent(GameSystem::Events event)
+void GiantPong::HandleEvent(GameSystem::Events event, void* data)
 {
    switch(event)
    {

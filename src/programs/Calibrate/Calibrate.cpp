@@ -14,11 +14,11 @@
 #include "Sprite.h"
 
 
-Calibrate::Calibrate(Canvas& _canvas
-         //GamePad& _gamePad1,
-         //GamePad& _gamePad2
+Calibrate::Calibrate(Canvas&              _canvas,
+                     GameSystem::GamePad& _gamePad1,
+                     GameSystem::GamePad& _gamePad2
          ):
-   Program(_canvas/*, _gamePad1, _gamePad2*/),
+   Program(_canvas, _gamePad1, _gamePad2),
    cursor(),
    border()
 {
@@ -65,7 +65,7 @@ void Calibrate::Draw()
 }
 
 
-void Calibrate::HandleEvent(GameSystem::Events event)
+void Calibrate::HandleEvent(GameSystem::Events event, void* data)
 {
    switch(event)
    {

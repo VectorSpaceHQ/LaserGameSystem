@@ -5,18 +5,19 @@
  *      Author: athiessen
  */
 
-#include <Canvas.h>
+#include "Canvas.h"
 #include "Program.h"
 #include "GamePad.h"
 
-
-Program::Program(Canvas& _canvas
-                 //GamePad& _gamePad1,
-                 //GamePad& _gamePad2
-                 ):
-   canvas(_canvas)
-//   gamePad1(),
-//   gamePad2()
+namespace GameSystem
 {
-}
+   Program::Program(Canvas& _canvas,
+                    GamePad& _gamePad1,
+                    GamePad& _gamePad2):
+      canvas(_canvas),
+      gamePad1(_gamePad1),
+      gamePad2(_gamePad2)
+   {
+   }
 
+}

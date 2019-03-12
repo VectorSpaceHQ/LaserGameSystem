@@ -10,6 +10,7 @@
 
 #include "Canvas.h"
 #include "FiniteStateMachine.h"
+#include "GamePad.h"
 #include "GameSystemDefs.h"
 #include "GameSystemEvents.h"
 #include "NumeralShape.h"
@@ -36,44 +37,22 @@ struct Ball
 };
 
 
-struct Player
+class Player
 {
    static const float      PaddleScalePercent;
 
-   PlayerId       id;
-   bool           computerPlays;
-   Shape*         shape;
-   Sprite*        sprite;
-   NumeralShape*  score;
+public:
+   PlayerId             id;
+   bool                 computerPlays;
+   GameSystem::GamePad& gamePad;
+   int32_t              lastAxis;
+   Shape*               shape;
+   Sprite*              sprite;
+   NumeralShape*        score;
 
 
-   Player(PlayerId _id):
-      id(_id),
-      computerPlays(true),
-      shape(),
-      sprite(),
-      score()
-   {
-   }
-
-
-   ~Player()
-   {
-      if(shape)
-      {
-         delete shape;
-      }
-
-      if(sprite)
-      {
-         delete sprite;
-      }
-
-      if(score)
-      {
-         delete score;
-      }
-   }
+   Player(PlayerId _id, GameSystem::GamePad& _gamePad);
+   ~Player();
 
    void Init(Canvas& canvas);
    void Score();
@@ -101,7 +80,7 @@ struct GameStatus
 };
 
 
-class GiantPong: public Program
+class GiantPong: public GameSystem::Program
 {
 private:
    static const float      BallScalePercent;
@@ -127,13 +106,12 @@ private:
    uint32_t       frameCntr;
 
 public:
-   GiantPong(Canvas& _display
-            //GamePad& _gamePad1,
-            //GamePad& _gamePad2
-            );
+   GiantPong(Canvas&                _display,
+             GameSystem::GamePad&   _gamePad1,
+             GameSystem::GamePad&   _gamePad2);
    ~GiantPong() {};
 
-   void HandleEvent(GameSystem::Events event);
+   void HandleEvent(GameSystem::Events event, void* data);
 
 private:
    void InitGamePlay();

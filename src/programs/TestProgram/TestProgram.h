@@ -10,12 +10,13 @@
 
 
 #include "GameSystemEvents.h"
+#include "GamePad.h"
 #include "Program.h"
 #include "Shape.h"
 #include "Sprite.h"
 
 
-class TestProgram: public Program
+class TestProgram: public GameSystem::Program
 {
 private:
    Shape*      shapePtrs[5];
@@ -26,10 +27,9 @@ private:
    static const int  MaxSize;
 
 public:
-   TestProgram(Canvas& _display
-            //GamePad& _gamePad1,
-            //GamePad& _gamePad2
-            );
+   TestProgram(Canvas&              _display,
+               GameSystem::GamePad& _gamePad1,
+               GameSystem::GamePad& _gamePad2);
    ~TestProgram() {};
 
    void Init();
@@ -37,7 +37,7 @@ public:
    void Stop();
    void Run();
    void Draw();
-   void HandleEvent(GameSystem::Events event);
+   void HandleEvent(GameSystem::Events event, void* data);
    void CheckSprite(Sprite* sprite);
 };
 

@@ -11,22 +11,22 @@
 #include "CommonShapes.h"
 #include "CursorShape.h"
 #include "GameSystemEvents.h"
+#include "GamePad.h"
 #include "Program.h"
 #include "Shape.h"
 #include "Sprite.h"
 
 
-class Calibrate: public Program
+class Calibrate: public GameSystem::Program
 {
 private:
    CursorShape*            cursor;
    Shape*                  border;
 
 public:
-   Calibrate(Canvas& _display
-            //GamePad& _gamePad1,
-            //GamePad& _gamePad2
-            );
+   Calibrate(Canvas&                _display,
+             GameSystem::GamePad&   _gamePad1,
+             GameSystem::GamePad&   _gamePad2);
    ~Calibrate() {};
 
    void Init();
@@ -34,7 +34,7 @@ public:
    void Stop();
    void Run();
    void Draw();
-   void HandleEvent(GameSystem::Events event);
+   void HandleEvent(GameSystem::Events event, void* data);
 };
 
 

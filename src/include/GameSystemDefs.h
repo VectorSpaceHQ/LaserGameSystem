@@ -35,7 +35,7 @@ namespace GameSystem
    struct Axis
    {
       AxisId   id;
-      int16_t  position;
+      int32_t  position;
    };
 
 

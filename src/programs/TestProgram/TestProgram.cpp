@@ -5,13 +5,14 @@
  *      Author: athiessen
  */
 
-#include <TestProgram/TestProgram.h>
 #include "CanvasObject.h"
 #include "CommonShapes.h"
+#include "GamePad.h"
 #include "GameSystemEvents.h"
 #include "Program.h"
 #include "Shape.h"
 #include "Sprite.h"
+#include "TestProgram.h"
 
 
 // MaxSize is 4096  -- resolution of the laser
@@ -21,11 +22,10 @@ const int TestProgram::MaxSize = 1024;
 const int TestProgram::StepSize = 100;
 
 
-TestProgram::TestProgram(Canvas& _canvas
-         //GamePad& _gamePad1,
-         //GamePad& _gamePad2
-         ):
-   Program(_canvas/*, _gamePad1, _gamePad2*/),
+TestProgram::TestProgram(Canvas&                _canvas,
+                         GameSystem::GamePad&   _gamePad1,
+                         GameSystem::GamePad&   _gamePad2):
+   Program(_canvas, _gamePad1, _gamePad2),
    shapePtrs(),
    spritePtrs(),
    currShape(0)
@@ -166,7 +166,7 @@ void TestProgram::Draw()
 }
 
 
-void TestProgram::HandleEvent(GameSystem::Events event)
+void TestProgram::HandleEvent(GameSystem::Events event, void* data)
 {
    switch(event)
    {

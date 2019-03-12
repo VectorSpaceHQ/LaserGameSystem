@@ -11,27 +11,24 @@
 #include "Program.h"
 #include "Calibrate/Calibrate.h"
 #include "GiantPong/GiantPong.h"
-#include "TestProgram/TestProgram.h"
 
-
-struct Programs
+namespace GameSystem
 {
-   Calibrate   calibrateProgram;
-   TestProgram testProgram;
-   GiantPong   pongProgram;
-
-   // TODO: Implement
-   Programs(Canvas& _display
-            //GamePad& _gamePad1,
-            //GamePad& _gamePad2
-            ):
-      calibrateProgram(_display),
-      testProgram(_display),
-      pongProgram(_display)
+   struct Programs
    {
-   }
-};
+      Calibrate   calibrateProgram;
+      GiantPong   pongProgram;
 
+      Programs(Canvas& _display,
+               GamePad& _gamePad1,
+               GamePad& _gamePad2):
+         calibrateProgram(_display, _gamePad1, _gamePad2),
+         pongProgram(_display, _gamePad1, _gamePad2)
+      {
+      }
+   };
+
+}
 
 
 #endif /* SYSTEM_PROGRAMS_H_ */

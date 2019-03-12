@@ -6,25 +6,58 @@
  */
 
 
+#include "GamePad.h"
 #include "GameSystem.h"
+#include "GameSystemDefs.h"
 #include "GameSystemEvents.h"
 #include "hal.h"
 #include "Programs.h"
 
+
 namespace GameSystem
 {
    const uint32_t System::GameWidth = 4094;
-   //const uint32_t System::GameHeight = 4094;    // For 1:1 ratio
+//   const uint32_t System::GameHeight = 4094;    // For 1:1 ratio
    const uint32_t System::GameHeight = 3072;    // For 4:3 ratio
 //   const uint32_t System::GameHeight = 2302;    // For 16:9 ratio
 
+   Events ButtonStatus::CheckButton(Button& buttonState)
+   {
+      Events buttonEvent = EVENT_MAX;
 
-   System::System(HAL::Hal& _hal, DisplayIfc& _displayIfc):
-            hal(_hal),
-            canvas(GameWidth, GameHeight, _displayIfc),
-            programs(canvas),
-            currentProgram(programs.pongProgram),
-            runTime(0)
+      buttonState.gamPadId = gamePad.GetId();
+      buttonState.id = buttonId;
+      buttonState.isPressed = gamePad.GetButton(buttonId);
+
+      frameCntr++;
+
+      if(buttonState.isPressed != lastStatus)
+      {
+         if(frameCntr < 0.5 * 30)
+         {
+            buttonEvent = EVENT_GAMEPAD_BUTTON_CLICK;
+         }
+
+         frameCntr = 0;
+      }
+
+      lastStatus = buttonState.isPressed;
+
+      return buttonEvent;
+   }
+
+
+   System::System(HAL::Hal& _hal,
+                  DisplayIfc& _displayIfc,
+                  GamePad& _gamePad1,
+                  GamePad& _gamePad2):
+      hal(_hal),
+      canvas(GameWidth, GameHeight, _displayIfc),
+      programs(canvas, _gamePad1, _gamePad2),
+      currentProgram(programs.pongProgram),
+      runTime(0),
+      button1Status(_gamePad1, BUTTON_ID_A),
+      button2Status(_gamePad2, BUTTON_ID_A)
    {
    }
 
@@ -52,8 +85,27 @@ namespace GameSystem
 
       while(timeLeft > 0)
       {
-         currentProgram.HandleEvent(EVENT_PROGRAM_RUN);
-         currentProgram.HandleEvent(EVENT_PROGRAM_DRAW);
+         Events buttonEvent;
+         Button buttonState;
+
+         // Check the button status for Game Pad 1
+         buttonEvent = button1Status.CheckButton(buttonState);
+
+         if(buttonEvent != EVENT_MAX)
+         {
+            currentProgram.HandleEvent(buttonEvent, &buttonState);
+         }
+
+         // Check the button status for Game Pad 2
+         buttonEvent = button2Status.CheckButton(buttonState);
+
+         if(buttonEvent != EVENT_MAX)
+         {
+            currentProgram.HandleEvent(buttonEvent, &buttonState);
+         }
+
+         currentProgram.HandleEvent(EVENT_PROGRAM_RUN, nullptr);
+         currentProgram.HandleEvent(EVENT_PROGRAM_DRAW, nullptr);
          canvas.Render();
          hal.Delay(33);
 
@@ -67,14 +119,14 @@ namespace GameSystem
 
    void System::StartCurrentProgram()
    {
-      currentProgram.HandleEvent(EVENT_PROGRAM_INIT);
-      currentProgram.HandleEvent(EVENT_PROGRAM_START);
+      currentProgram.HandleEvent(EVENT_PROGRAM_INIT, nullptr);
+      currentProgram.HandleEvent(EVENT_PROGRAM_START, nullptr);
    }
 
 
    void System::StopCurrentProgram()
    {
-      currentProgram.HandleEvent(EVENT_PROGRAM_STOP);
+      currentProgram.HandleEvent(EVENT_PROGRAM_STOP, nullptr);
    }
 
 }
