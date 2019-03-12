@@ -7,6 +7,8 @@
 #include "NucleoHal.h"
 #include "GameSystem.h"
 #include "LaserDisplay.h"
+#include "GameSystemDefs.h"
+#include "GamePadPaddle.h"
 
 TIM_HandleTypeDef timerHandle;
 static OS_STK App_TaskStartStk[APP_CFG_TASK_START_STK_SIZE];
@@ -93,8 +95,13 @@ static void AppTaskStart (void *p_arg)
 
    SetupTimerInterrupt();
 
+   GamePadPaddle player1Paddle(GameSystem::GAMEPAD_ID_1, TIM3, GPIO_PIN_8);
+   GamePadPaddle player2Paddle(GameSystem::GAMEPAD_ID_2, TIM1, GPIO_PIN_9);
+
    GameSystem::System  sys(dynamic_cast<HAL::Hal&>(nucleoHal),
-                           dynamic_cast<DisplayIfc&>(laserDisplay));
+                           dynamic_cast<DisplayIfc&>(laserDisplay),
+                           dynamic_cast<GameSystem::GamePad&>(player1Paddle),
+                           dynamic_cast<GameSystem::GamePad&>(player2Paddle));
 
    sys.Start(0);
 }

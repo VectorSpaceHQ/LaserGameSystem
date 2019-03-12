@@ -84,3 +84,89 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
 }
+
+void HAL_TIM_Encoder_MspInit(TIM_HandleTypeDef *hTimer)
+{
+   if (hTimer->Instance == TIM3)
+   {
+       // Timer 3 Channel 1 and Channel 2 pins are on PC6 and PC7
+       // Enable GPIO Port C clock
+       __HAL_RCC_GPIOC_CLK_ENABLE();
+
+       // Enable Timer 3 clock
+       __HAL_RCC_TIM3_CLK_ENABLE();
+
+       // Structure used to initialize GPIO pins
+       GPIO_InitTypeDef gpioInit;
+
+       // Configure GPIO Timer 3 channel 1 pin
+       gpioInit.Pin = GPIO_PIN_6;
+       gpioInit.Mode =  GPIO_MODE_AF_PP;
+       gpioInit.Alternate = GPIO_AF2_TIM3;
+       gpioInit.Pull = GPIO_PULLUP;
+       gpioInit.Speed = GPIO_SPEED_FAST;
+
+       HAL_GPIO_Init(GPIOC, &gpioInit);
+
+       // Configure GPIO Timer 3 channel 2 pin
+       gpioInit.Pin = GPIO_PIN_7;
+       gpioInit.Mode =  GPIO_MODE_AF_PP;
+       gpioInit.Alternate = GPIO_AF2_TIM3;
+       gpioInit.Pull = GPIO_PULLUP;
+       gpioInit.Speed = GPIO_SPEED_FAST;
+
+       HAL_GPIO_Init(GPIOC, &gpioInit);
+   }
+   else if (hTimer->Instance == TIM1)
+   {
+       // Timer 1 Channel 1 and Channel 2 pins are on PA8 and PA9
+       // Enable GPIO Port A clock
+       __HAL_RCC_GPIOA_CLK_ENABLE();
+
+       // Enable Timer 1 clock
+       __HAL_RCC_TIM1_CLK_ENABLE();
+
+       // Structure used to initialize GPIO pins
+       GPIO_InitTypeDef gpioInit;
+
+       // Configure GPIO Timer 1 channel 1 pin
+       gpioInit.Pin = GPIO_PIN_8;
+       gpioInit.Mode =  GPIO_MODE_AF_PP;
+       gpioInit.Alternate = GPIO_AF1_TIM1;
+       gpioInit.Pull = GPIO_PULLUP;
+       gpioInit.Speed = GPIO_SPEED_FAST;
+
+       HAL_GPIO_Init(GPIOA, &gpioInit);
+
+       // Configure GPIO Timer 1 channel 2 pin
+       gpioInit.Pin = GPIO_PIN_9;
+       gpioInit.Mode =  GPIO_MODE_AF_PP;
+       gpioInit.Alternate = GPIO_AF1_TIM1;
+       gpioInit.Pull = GPIO_PULLUP;
+       gpioInit.Speed = GPIO_SPEED_FAST;
+
+       HAL_GPIO_Init(GPIOA, &gpioInit);
+   }
+}
+
+void HAL_TIM_Encoder_MspDeInit(TIM_HandleTypeDef *hTimer)
+{
+   if (hTimer->Instance == TIM3)
+   {
+       // Reset Timer 3
+       __HAL_RCC_TIM3_FORCE_RESET();
+       __HAL_RCC_TIM3_RELEASE_RESET();
+
+       // Put GPIO pins back to default state
+       HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6 | GPIO_PIN_7);
+   }
+   else if (hTimer->Instance == TIM1)
+   {
+       // Reset Timer 1
+       __HAL_RCC_TIM1_FORCE_RESET();
+       __HAL_RCC_TIM1_RELEASE_RESET();
+
+       // Put GPIO pins back to default state
+       HAL_GPIO_DeInit(GPIOA, GPIO_PIN_8 | GPIO_PIN_9);
+   }
+}

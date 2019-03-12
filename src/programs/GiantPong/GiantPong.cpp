@@ -66,7 +66,7 @@ Ball::~Ball()
 
 Player::Player(PlayerId _id, GameSystem::GamePad& _gamePad):
    id(_id),
-   computerPlays(true),
+   computerPlays(false),
    gamePad(_gamePad),
    lastAxis(0),
    shape(),
