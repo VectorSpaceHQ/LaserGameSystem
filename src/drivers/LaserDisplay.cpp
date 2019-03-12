@@ -89,6 +89,10 @@ void LaserDisplay::Update()
 
       vertIndex++;
    }
+   else
+   {
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+   }
 }
 
 

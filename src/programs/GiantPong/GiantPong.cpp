@@ -130,6 +130,8 @@ void Player::Init(Canvas& canvas)
       sprite->Move(canvas.left + paddleXPos, 0);
       sprite->SetLimits(lowerLimit, upperLimit);
       score->Move(0 - scorePos, canvas.top - 300, 0);
+
+      computerPlays = false;
    }
    else
    {
@@ -171,14 +173,14 @@ void Player::Play(Sprite& ball)
 {
    if(computerPlays)
    {
-      sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY));
+      sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY) + ((rand() % 1000) - 500));
    }
    else
    {
       int32_t  currAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
 
       // Move the difference between the two since our last poll
-      sprite->Move(0, currAxis - lastAxis);
+      sprite->Move(0, (currAxis - lastAxis) * 5);
       lastAxis = currAxis;
    }
 }
@@ -275,6 +277,7 @@ void GiantPong::InitGamePlay()
    ball.Init(canvas);
    leftPlayer.Init(canvas);
    rightPlayer.Init(canvas);
+   gameStatus.whoseServe = GameSystem::GAMEPAD_ID_ANY;
 
    // Now Fill out the canvas
    canvas.AddObject(border);
@@ -309,7 +312,15 @@ void GiantPong::StartGamePlay()
       ballYVel = -BallStepSize;
    }
 
-   ballXVel = BallStepSize / (rand() % 2 + 1);
+   if(gameStatus.whoseServe != GameSystem::GAMEPAD_ID_2)
+   {
+      ballXVel = BallStepSize / (rand() % 2 + 1);
+   }
+   else
+   {
+      ballXVel = -BallStepSize / (rand() % 2 + 1);
+   }
+
    ball.sprite->SetVelocity(ballXVel, ballYVel, 0);
    canvas.AddObject(ball.sprite);
 }
@@ -342,6 +353,7 @@ bool GiantPong::PlayGame()
             // Re-center the ball
             ball.sprite->MoveTo(0, 0);
             rightPlayer.Score();
+            gameStatus.whoseServe = GameSystem::GAMEPAD_ID_2;
             keepPlaying = false;
          }
       }
@@ -374,6 +386,7 @@ bool GiantPong::PlayGame()
             // Re-center the ball
             ball.sprite->MoveTo(0, 0);
             leftPlayer.Score();
+            gameStatus.whoseServe = GameSystem::GAMEPAD_ID_1;
             keepPlaying = false;
          }
       }
@@ -427,6 +440,12 @@ void GiantPong::HandleEvent(GameSystem::Events event, void* data)
 
       case GameSystem::EVENT_PROGRAM_RUN:
          fsm.HandleEvent(event, nullptr);
+         break;
+
+      case GameSystem::EVENT_GAMEPAD_BUTTON_PRESS:
+      case GameSystem::EVENT_GAMEPAD_BUTTON_RELEASE:
+      case GameSystem::EVENT_GAMEPAD_BUTTON_CLICK:
+         fsm.HandleEvent(event, data);
          break;
 
       case GameSystem::EVENT_PROGRAM_STOP:
@@ -483,8 +502,8 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
       case GameSystem::EVENT_PROGRAM_RUN:
          // Auto-start if we're in demo mode, or the computer is playing
          if((gameStatus.demoMode) ||
-            (gameStatus.computerPlaysLeft  && gameStatus.whoseServe == GameSystem::GAMEPAD_ID_1) ||
-            (gameStatus.computerPlaysRight && gameStatus.whoseServe == GameSystem::GAMEPAD_ID_2)    )
+            ((gameStatus.whoseServe == GameSystem::GAMEPAD_ID_1) && leftPlayer.computerPlays)  ||
+            ((gameStatus.whoseServe == GameSystem::GAMEPAD_ID_2) && rightPlayer.computerPlays)    )
          {
             if(frameCntr++ >= 0.5 * 30)
             {
@@ -551,6 +570,7 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
             if((leftPlayer.GetScore() >= MaxScore) || (rightPlayer.GetScore() >= MaxScore))
             {
                TearDownGamePlay();
+               frameCntr = 0;
                fsm.Transition(&StateGameOver);
             }
             else
@@ -586,7 +606,20 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
 bool GiantPong::GameOverHandle(GameSystem::Events e, void* data)
 {
    bool  handled = false;
-   // Do nothing!
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         if(frameCntr++ >= 3 * 30)
+         {
+            fsm.Transition(&StateGameInit);
+         }
+         break;
+
+      default:
+         break;
+   }
+
    return handled;
 }
 
@@ -608,8 +641,6 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
       case GameSystem::EVENT_PROGRAM_RUN:
          if(frameCntr++ >= SplashTimeout * 30)
          {
-            gameStatus.computerPlaysLeft = true;
-            gameStatus.computerPlaysRight = true;
             gameStatus.demoMode = true;
             fsm.Transition(&StateGameInit);
          }
