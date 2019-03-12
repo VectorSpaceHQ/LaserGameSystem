@@ -66,14 +66,10 @@ public:
 struct GameStatus
 {
    bool                    demoMode;
-   bool                    computerPlaysLeft;
-   bool                    computerPlaysRight;
    GameSystem::GamePadId   whoseServe;
 
    GameStatus():
-      demoMode(true),
-      computerPlaysLeft(true),
-      computerPlaysRight(true),
+      demoMode(false),
       whoseServe(GameSystem::GAMEPAD_ID_ANY)
    {
    }

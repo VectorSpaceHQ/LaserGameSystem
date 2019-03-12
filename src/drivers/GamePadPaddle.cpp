@@ -48,7 +48,7 @@ GamePadPaddle::GamePadPaddle(GameSystem::GamePadId gamePadId, TIM_TypeDef* timer
 
    // Configure GPIO for button
    gpioInit.Pin        = buttonPin;
-   gpioInit.Mode       = GPIO_MODE_OUTPUT_PP;
+   gpioInit.Mode       = GPIO_MODE_INPUT;
    gpioInit.Pull       = GPIO_PULLUP;
    gpioInit.Speed      = GPIO_SPEED_FAST;
    HAL_GPIO_Init(GPIOB, &gpioInit);
