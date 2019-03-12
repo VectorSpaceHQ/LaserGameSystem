@@ -37,6 +37,16 @@ Ball::Ball(uint16_t _radius):
 
 void Ball::Init(Canvas& canvas)
 {
+   if(shape)
+   {
+      delete shape;
+   }
+
+   if(sprite)
+   {
+      delete sprite;
+   }
+
    shape = new Polygon(8, radius);
    sprite = new Sprite(shape);
 
@@ -59,6 +69,21 @@ void Player::Init(Canvas& canvas)
    uint16_t paddleHeight = canvas.height * PaddleScalePercent;
    int32_t  paddleXPos = canvas.width / 9;
    int32_t  scorePos = canvas.width / 4;
+
+   if(shape)
+   {
+      delete shape;
+   }
+
+   if(sprite)
+   {
+      delete sprite;
+   }
+
+   if(score)
+   {
+      delete score;
+   }
 
    shape = new Rectangle(40, paddleHeight);
    sprite = new Sprite(shape);
@@ -180,7 +205,7 @@ GiantPong::GiantPong(Canvas& _display
                  nullptr,
                  std::bind(&GiantPong::FinishedHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
-   fsm(&StateSplashScreen),
+   fsm(&StateGameInit),
    gameStatus(),
    ball(canvas.width * BallScalePercent),
    leftPlayer(PLAYER_LEFT),
@@ -494,14 +519,14 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
             }
          }
 
-         if(gameStatus.demoMode)
-         {
-            if(frameCntr++ >= DemoTimeout * 30)
-            {
-               TearDownGamePlay();
-               fsm.Transition(&StateSplashScreen);
-            }
-         }
+//         if(gameStatus.demoMode)
+//         {
+//            if(frameCntr++ >= DemoTimeout * 30)
+//            {
+//               TearDownGamePlay();
+//               fsm.Transition(&StateSplashScreen);
+//            }
+//         }
          break;
 
       case GameSystem::EVENT_PROGRAM_STOP:
