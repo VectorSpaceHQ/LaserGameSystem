@@ -16,8 +16,8 @@ public:
    virtual void Render(VertexListRef vertices) = 0;
 
 protected:
-   virtual ~DisplayIfc() {}
    DisplayIfc() {}
+   virtual ~DisplayIfc() {}
 };
 
 
