@@ -551,6 +551,7 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
             if((leftPlayer.GetScore() >= MaxScore) || (rightPlayer.GetScore() >= MaxScore))
             {
                TearDownGamePlay();
+               frameCntr = 0;
                fsm.Transition(&StateGameOver);
             }
             else
@@ -586,7 +587,23 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
 bool GiantPong::GameOverHandle(GameSystem::Events e, void* data)
 {
    bool  handled = false;
-   // Do nothing!
+
+   switch(e)
+   {
+      case GameSystem::EVENT_PROGRAM_RUN:
+         if(gameStatus.demoMode)
+         {
+            if(frameCntr++ >= 3 * 30)
+            {
+               fsm.Transition(&StateGameInit);
+            }
+         }
+         break;
+
+      default:
+         break;
+   }
+
    return handled;
 }
 
