@@ -54,12 +54,14 @@ public:
    Player(PlayerId _id, GameSystem::GamePad& _gamePad);
    ~Player();
 
-   void Init(Canvas& canvas);
+   void SelectInit(Canvas& canvas, bool selected);
+   void GameInit(Canvas& canvas);
    void Score();
    uint8_t GetScore();
    void Play(Sprite& ball);
    CoordType GetPosition(CoordPositions pos);
    int16_t CheckCollision(Sprite& ball);
+   void Clear();
 };
 
 
@@ -86,6 +88,7 @@ private:
    static const uint8_t    MaxScore;
 
    GameSystem::FiniteState          StateSplashScreen;
+   GameSystem::FiniteState          StateSelectPlayers;
    GameSystem::FiniteState          StateGameInit;       // A transition state to initialize the playing field
    GameSystem::FiniteState          StateGameReady;
    GameSystem::FiniteState          StateGamePlay;
@@ -111,14 +114,17 @@ public:
 
 private:
    void InitGamePlay();
-   void StartGamePlay();
    bool PlayGame();
    void TearDownGamePlay();
+   void DrawBorder(bool includeCenterline);
 
    // State methods
    void SplashScreenEnter();
    bool SplashScreenHandle(GameSystem::Events e, void* data);
    void SplashScreenExit();
+   void PlayerSelectEnter();
+   bool PlayerSelectHandle(GameSystem::Events e, void* data);
+   void PlayerSelectExit();
    void GameInitEnter();
    bool GameInitHandle(GameSystem::Events e, void* data);
    void GameReadyEnter();

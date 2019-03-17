@@ -48,6 +48,8 @@ namespace GameSystem
       Programs       programs;
       Program&       currentProgram;
       uint32_t       runTime;
+      GamePad&       gamePad1;
+      GamePad&       gamePad2;
       ButtonStatus   button1Status;
       ButtonStatus   button2Status;
 

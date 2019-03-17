@@ -21,6 +21,9 @@ public:
 
    void SetValue(uint8_t newValue);
 
+   void operator++();
+   void operator--();
+
 };
 
 

@@ -18,6 +18,7 @@ private:
    GameSystem::GamePadId   gamePadId;
    int32_t                 axisLeftX;
    bool                    buttonA;
+   uint32_t                frameCtr;
 
 public:
    TestGamePadPaddle(GameSystem::GamePadId _id);
@@ -26,6 +27,7 @@ public:
    virtual GameSystem::GamePadId GetId();
    virtual int32_t GetAxis(GameSystem::AxisId axis);
    virtual bool GetButton(GameSystem::ButtonId button);
+   virtual void Run();
 
 };
 

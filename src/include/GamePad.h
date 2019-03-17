@@ -18,6 +18,7 @@ namespace GameSystem
       virtual GamePadId GetId() = 0;
       virtual int32_t   GetAxis(AxisId axis) = 0;
       virtual bool      GetButton(ButtonId button) = 0;
+      virtual void      Run() = 0;
 
    protected:
       GamePad() {};

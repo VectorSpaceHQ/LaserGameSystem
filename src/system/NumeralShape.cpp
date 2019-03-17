@@ -139,3 +139,29 @@ void NumeralShape::SetValue(uint8_t newValue)
    Scale(scale);
    MoveToPosition();
 }
+
+
+void NumeralShape::operator++()
+{
+   if(value == 9)
+   {
+      SetValue(0);
+   }
+   else
+   {
+      SetValue(value + 1);
+   }
+}
+
+
+void NumeralShape::operator--()
+{
+   if(value == 0)
+   {
+      SetValue(9);
+   }
+   else
+   {
+      SetValue(value - 1);
+   }
+}

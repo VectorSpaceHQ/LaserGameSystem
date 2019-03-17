@@ -22,6 +22,7 @@ public:
    virtual int32_t GetAxis(GameSystem::AxisId axisId);
    virtual bool GetButton(GameSystem::ButtonId axisId);
    virtual GameSystem::GamePadId GetId() { return id; }
+   virtual void Run() {};
 
 private:
    TIM_HandleTypeDef hTimer;

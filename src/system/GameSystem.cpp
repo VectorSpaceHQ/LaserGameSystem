@@ -56,8 +56,10 @@ namespace GameSystem
       programs(canvas, _gamePad1, _gamePad2),
       currentProgram(programs.pongProgram),
       runTime(0),
-      button1Status(_gamePad1, BUTTON_ID_A),
-      button2Status(_gamePad2, BUTTON_ID_A)
+      gamePad1(_gamePad1),
+      gamePad2(_gamePad2),
+      button1Status(gamePad1, BUTTON_ID_A),
+      button2Status(gamePad2, BUTTON_ID_A)
    {
    }
 
@@ -87,6 +89,9 @@ namespace GameSystem
       {
          Events buttonEvent;
          Button buttonState;
+
+         gamePad1.Run();
+         gamePad2.Run();
 
          // Check the button status for Game Pad 1
          buttonEvent = button1Status.CheckButton(buttonState);

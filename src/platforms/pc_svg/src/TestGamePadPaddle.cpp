@@ -13,7 +13,8 @@
 TestGamePadPaddle::TestGamePadPaddle(GameSystem::GamePadId _id):
    gamePadId(_id),
    axisLeftX(0),
-   buttonA(false)
+   buttonA(false),
+   frameCtr(0)
 {
 }
 
@@ -51,5 +52,32 @@ bool TestGamePadPaddle::GetButton(GameSystem::ButtonId button)
    else
    {
       return false;
+   }
+}
+
+#include <iostream>
+
+void TestGamePadPaddle::Run()
+{
+   frameCtr++;
+
+   if( ( (gamePadId == GameSystem::GAMEPAD_ID_1) && (frameCtr > 3 * 30) && (frameCtr < 3.3 * 30)) ||
+       ( (gamePadId == GameSystem::GAMEPAD_ID_2) && (frameCtr > 6 * 30) && (frameCtr < 6.3 * 30)))
+   {
+      if(!buttonA)
+      {
+         std::cout << "GamePad " << gamePadId << " Button Pressed: " << frameCtr << std::endl;
+      }
+
+      buttonA = true;
+   }
+   else
+   {
+      if(buttonA)
+      {
+         std::cout << "GamePad " << gamePadId << " Button Released: " << frameCtr << std::endl;
+      }
+
+      buttonA = false;
    }
 }
