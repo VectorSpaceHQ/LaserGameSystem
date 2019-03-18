@@ -62,6 +62,7 @@ void TestGamePadPaddle::Run()
    frameCtr++;
 
    if( ( (gamePadId == GameSystem::GAMEPAD_ID_1) && (frameCtr > 3 * 30) && (frameCtr < 3.3 * 30)) ||
+       ( (gamePadId == GameSystem::GAMEPAD_ID_1) && (frameCtr > 8 * 30) && (frameCtr < 8.3 * 30)) ||
        ( (gamePadId == GameSystem::GAMEPAD_ID_2) && (frameCtr > 6 * 30) && (frameCtr < 6.3 * 30)))
    {
       if(!buttonA)

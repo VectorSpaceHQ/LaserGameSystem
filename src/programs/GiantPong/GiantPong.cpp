@@ -5,11 +5,13 @@
  *      Author: athiessen
  */
 
+#include <Eigen/Dense>
 #include <functional>
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "Canvas.h"
+#include "CanvasObject.h"
 #include "CommonShapes.h"
 #include "FiniteStateMachine.h"
 #include "GameSystemEvents.h"
@@ -35,19 +37,15 @@ Ball::Ball(uint16_t _radius):
 }
 
 
+Ball::~Ball()
+{
+   Clear();
+}
+
+
 void Ball::Init(Canvas& canvas)
 {
-   if(shape)
-   {
-      delete shape;
-      shape = nullptr;
-   }
-
-   if(sprite)
-   {
-      delete sprite;
-      sprite = nullptr;
-   }
+   Clear();
 
    shape = new Polygon(8, radius);
    sprite = new Sprite(shape);
@@ -59,7 +57,7 @@ void Ball::Init(Canvas& canvas)
 }
 
 
-Ball::~Ball()
+void Ball::Clear()
 {
    if(sprite)
    {
@@ -291,13 +289,14 @@ GiantPong::GiantPong(Canvas&              _display,
                  std::bind(&GiantPong::FinishedHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
    fsm(&StateSplashScreen),
-   gameStatus(),
    ball(canvas.width * BallScalePercent),
    leftPlayer(PLAYER_LEFT, gamePad1),
    rightPlayer(PLAYER_RIGHT, gamePad2),
    border(),
    splash(),
-   frameCntr()
+   frameCntr(),
+   demoMode(false),
+   whoseServe(GameSystem::GAMEPAD_ID_ANY)
 {
 }
 
@@ -346,7 +345,7 @@ void GiantPong::InitGamePlay()
    ball.Init(canvas);
    leftPlayer.GameInit(canvas);
    rightPlayer.GameInit(canvas);
-   gameStatus.whoseServe = GameSystem::GAMEPAD_ID_ANY;
+   whoseServe = GameSystem::GAMEPAD_ID_ANY;
 
    // Now Fill out the canvas
    canvas.AddObject(border);
@@ -384,7 +383,7 @@ bool GiantPong::PlayGame()
             // Re-center the ball
             ball.sprite->MoveTo(0, 0);
             rightPlayer.Score();
-            gameStatus.whoseServe = GameSystem::GAMEPAD_ID_2;
+            whoseServe = GameSystem::GAMEPAD_ID_2;
             keepPlaying = false;
          }
       }
@@ -417,7 +416,7 @@ bool GiantPong::PlayGame()
             // Re-center the ball
             ball.sprite->MoveTo(0, 0);
             leftPlayer.Score();
-            gameStatus.whoseServe = GameSystem::GAMEPAD_ID_1;
+            whoseServe = GameSystem::GAMEPAD_ID_1;
             keepPlaying = false;
          }
       }
@@ -457,6 +456,7 @@ void GiantPong::TearDownGamePlay()
 
    leftPlayer.Clear();
    rightPlayer.Clear();
+   ball.Clear();
 
    if(border)
    {
@@ -609,11 +609,11 @@ void GiantPong::GameReadyEnter()
 
    if(leftPlayer.computerPlays && rightPlayer.computerPlays)
    {
-      gameStatus.demoMode = true;
+      demoMode = true;
    }
    else
    {
-      gameStatus.demoMode = false;
+      demoMode = false;
    }
 }
 
@@ -626,9 +626,9 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
          // Auto-start if we're in demo mode, or the computer is playing
-         if((gameStatus.demoMode) ||
-            ((gameStatus.whoseServe == GameSystem::GAMEPAD_ID_1) && leftPlayer.computerPlays)  ||
-            ((gameStatus.whoseServe == GameSystem::GAMEPAD_ID_2) && rightPlayer.computerPlays)    )
+         if((demoMode) ||
+            ((whoseServe == GameSystem::GAMEPAD_ID_1) && leftPlayer.computerPlays)  ||
+            ((whoseServe == GameSystem::GAMEPAD_ID_2) && rightPlayer.computerPlays)    )
          {
             if(frameCntr++ >= 0.5 * 30)
             {
@@ -644,7 +644,7 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
          {
             GameSystem::Button* buttonEvent = static_cast<GameSystem::Button*>(data);
 
-            if(gameStatus.whoseServe == GameSystem::GAMEPAD_ID_ANY)
+            if(whoseServe == GameSystem::GAMEPAD_ID_ANY)
             {
                // We don't care whose serve it is at the start
                fsm.Transition(&StateGamePlay);
@@ -652,7 +652,7 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
             else
             {
                // The last player to score is the one who serves
-               if(gameStatus.whoseServe == buttonEvent->gamPadId)
+               if(whoseServe == buttonEvent->gamPadId)
                {
                   fsm.Transition(&StateGamePlay);
                }
@@ -702,7 +702,7 @@ void GiantPong::GamePlayEnter()
       ballYVel = -BallStepSize;
    }
 
-   if(gameStatus.whoseServe != GameSystem::GAMEPAD_ID_2)
+   if(whoseServe != GameSystem::GAMEPAD_ID_2)
    {
       ballXVel = BallStepSize / (rand() % 2 + 1);
    }
@@ -737,7 +737,7 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
             }
          }
 
-         if(gameStatus.demoMode)
+         if(demoMode)
          {
             if(frameCntr++ >= DemoTimeout * 30)
             {
@@ -790,6 +790,24 @@ bool GiantPong::FinishedHandle(GameSystem::Events e, void* data)
 }
 
 
+void GiantPong::SplashScreenEnter()
+{
+   canvas.Clear();
+   frameCntr = 0;
+   leftPlayer.computerPlays = true;
+   rightPlayer.computerPlays = true;
+
+//   InitGamePlay();
+
+   DrawBorder(false);
+
+   uint32_t numPts = sizeof(Giant) / sizeof(float) / 4;
+   splash = new Shape(numPts);
+   VertexListConstMap_t giantMap(&Giant[0], numPts, static_cast<int>(CoordMax));
+   splash->vertices = giantMap;
+}
+
+
 bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
 {
    bool  handled = false;
@@ -797,9 +815,16 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
-         if(frameCntr++ >= SplashTimeout * 30)
+         // Give time for the Laser Display to clear out it's vertices before adding the large splash
+         frameCntr++;
+         if(frameCntr == 2)
          {
-            gameStatus.demoMode = true;
+            canvas.AddObject(border);
+            canvas.AddObject(splash);
+         }
+         else if(frameCntr >= SplashTimeout * 30)
+         {
+            demoMode = true;
             fsm.Transition(&StateGameInit);
          }
 
@@ -857,120 +882,105 @@ void GiantPong::SplashScreenExit()
 }
 
 
-void GiantPong::SplashScreenEnter()
+const float GiantPong::Giant[396] =
 {
-   canvas.Clear();
-   frameCntr = 0;
-   leftPlayer.computerPlays = true;
-   rightPlayer.computerPlays = true;
-
-   // For now, just use a static version of the game screen as the splash
-//   InitGamePlay();
-
-   DrawBorder(false);
-
-   splash = new Shape(99);
-   splash->vertices <<
-            -824, -53, 0, 0,
-            -859, -104, 0, 1,
-            -899, -99, 0, 1,
-            -960, -299, 0, 1,
-            -1099, -431, 0, 1,
-            -1273, -376, 0, 1,
-            -1363, -247, 0, 1,
-            -1392, -28, 0, 1,
-            -1346, 266, 0, 1,
-            -1214, 424, 0, 1,
-            -1076, 393, 0, 1,
-            -972, 318, 0, 1,
-            -943, 234, 0, 1,
-            -924, 130, 0, 1,
-            -955, 78, 0, 1,
-            -1033, 92, 0, 1,
-            -1111, 123, 0, 1,
-            -1116, 196, 0, 1,
-            -1132, 267, 0, 1,
-            -1192, 153, 0, 1,
-            -1216, -83, 0, 1,
-            -1163, -301, 0, 1,
-            -1120, -246, 0, 1,
-            -1087, -128, 0, 1,
-            -1148, -97, 0, 1,
-            -1187, -71, 0, 1,
-            -1148, 7, 0, 1,
-            -1058, 18, 0, 1,
-            -956, 47, 0, 1,
-            -872, 1, 0, 1,
-            -824, -53, 0, 1,
-            -558, 377, 0, 0,
-            -580, 281, 0, 1,
-            -580, -332, 0, 1,
-            -568, -369, 0, 1,
-            -592, -438, 0, 1,
-            -736, -400, 0, 1,
-            -758, -365, 0, 1,
-            -750, -339, 0, 1,
-            -750, 365, 0, 1,
-            -720, 422, 0, 1,
-            -602, 411, 0, 1,
-            -558, 377, 0, 1,
-            147, -352, 0, 0,
-            118, -425, 0, 1,
-            -36, -370, 0, 1,
-            -77, -199, 0, 1,
-            -283, -264, 0, 1,
-            -323, -370, 0, 1,
-            -356, -419, 0, 1,
-            -495, -361, 0, 1,
-            -439, -194, 0, 1,
-            -460, -152, 0, 1,
-            -398, -98, 0, 1,
-            -269, 343, 0, 1,
-            -238, 426, 0, 1,
-            0, 359, 0, 1,
-            45, 26, 0, 1,
-            147, -352, 0, 1,
-            -114, -48, 0, 0,
-            -145, 174, 0, 1,
-            -223, -76, 0, 1,
-            -114, -48, 0, 1,
-            793, 377, 0, 0,
-            780, 329, 0, 1,
-            780, -330, 0, 1,
-            773, -427, 0, 1,
-            542, -376, 0, 1,
-            409, -8, 0, 1,
-            409, -304, 0, 1,
-            430, -373, 0, 1,
-            394, -413, 0, 1,
-            227, -362, 0, 1,
-            239, -290, 0, 1,
-            235, 373, 0, 1,
-            296, 421, 0, 1,
-            376, 411, 0, 1,
-            450, 377, 0, 1,
-            523, 194, 0, 1,
-            609, -60, 0, 1,
-            609, 333, 0, 1,
-            603, 389, 0, 1,
-            691, 419, 0, 1,
-            793, 377, 0, 1,
-            1306, 268, 0, 0,
-            1203, 240, 0, 1,
-            1203, -286, 0, 1,
-            1215, -387, 0, 1,
-            1186, -427, 0, 1,
-            1016, -385, 0, 1,
-            1030, -299, 0, 1,
-            1030, 196, 0, 1,
-            923, 164, 0, 1,
-            825, 296, 0, 1,
-            923, 332, 0, 1,
-            1329, 438, 0, 1,
-            1382, 371, 0, 1,
-            1386, 269, 0, 1,
-            1306, 268, 0, 1;
-
-   canvas.AddObject(border);
-   canvas.AddObject(splash);
-}
+   -824, -53, 0, 0,
+   -859, -104, 0, 1,
+   -899, -99, 0, 1,
+   -960, -299, 0, 1,
+   -1099, -431, 0, 1,
+   -1273, -376, 0, 1,
+   -1363, -247, 0, 1,
+   -1392, -28, 0, 1,
+   -1346, 266, 0, 1,
+   -1214, 424, 0, 1,
+   -1076, 393, 0, 1,
+   -972, 318, 0, 1,
+   -943, 234, 0, 1,
+   -924, 130, 0, 1,
+   -955, 78, 0, 1,
+   -1033, 92, 0, 1,
+   -1111, 123, 0, 1,
+   -1116, 196, 0, 1,
+   -1132, 267, 0, 1,
+   -1192, 153, 0, 1,
+   -1216, -83, 0, 1,
+   -1163, -301, 0, 1,
+   -1120, -246, 0, 1,
+   -1087, -128, 0, 1,
+   -1148, -97, 0, 1,
+   -1187, -71, 0, 1,
+   -1148, 7, 0, 1,
+   -1058, 18, 0, 1,
+   -956, 47, 0, 1,
+   -872, 1, 0, 1,
+   -824, -53, 0, 1,
+   -558, 377, 0, 0,
+   -580, 281, 0, 1,
+   -580, -332, 0, 1,
+   -568, -369, 0, 1,
+   -592, -438, 0, 1,
+   -736, -400, 0, 1,
+   -758, -365, 0, 1,
+   -750, -339, 0, 1,
+   -750, 365, 0, 1,
+   -720, 422, 0, 1,
+   -602, 411, 0, 1,
+   -558, 377, 0, 1,
+   147, -352, 0, 0,
+   118, -425, 0, 1,
+   -36, -370, 0, 1,
+   -77, -199, 0, 1,
+   -283, -264, 0, 1,
+   -323, -370, 0, 1,
+   -356, -419, 0, 1,
+   -495, -361, 0, 1,
+   -439, -194, 0, 1,
+   -460, -152, 0, 1,
+   -398, -98, 0, 1,
+   -269, 343, 0, 1,
+   -238, 426, 0, 1,
+   0, 359, 0, 1,
+   45, 26, 0, 1,
+   147, -352, 0, 1,
+   -114, -48, 0, 0,
+   -145, 174, 0, 1,
+   -223, -76, 0, 1,
+   -114, -48, 0, 1,
+   793, 377, 0, 0,
+   780, 329, 0, 1,
+   780, -330, 0, 1,
+   773, -427, 0, 1,
+   542, -376, 0, 1,
+   409, -8, 0, 1,
+   409, -304, 0, 1,
+   430, -373, 0, 1,
+   394, -413, 0, 1,
+   227, -362, 0, 1,
+   239, -290, 0, 1,
+   235, 373, 0, 1,
+   296, 421, 0, 1,
+   376, 411, 0, 1,
+   450, 377, 0, 1,
+   523, 194, 0, 1,
+   609, -60, 0, 1,
+   609, 333, 0, 1,
+   603, 389, 0, 1,
+   691, 419, 0, 1,
+   793, 377, 0, 1,
+   1306, 268, 0, 0,
+   1203, 240, 0, 1,
+   1203, -286, 0, 1,
+   1215, -387, 0, 1,
+   1186, -427, 0, 1,
+   1016, -385, 0, 1,
+   1030, -299, 0, 1,
+   1030, 196, 0, 1,
+   923, 164, 0, 1,
+   825, 296, 0, 1,
+   923, 332, 0, 1,
+   1329, 438, 0, 1,
+   1382, 371, 0, 1,
+   1386, 269, 0, 1,
+   1306, 268, 0, 1
+};

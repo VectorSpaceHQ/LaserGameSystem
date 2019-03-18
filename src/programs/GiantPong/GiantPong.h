@@ -33,6 +33,7 @@ struct Ball
 
    Ball(uint16_t _radius);
    void Init(Canvas& canvas);
+   void Clear();
    ~Ball();
 };
 
@@ -65,19 +66,6 @@ public:
 };
 
 
-struct GameStatus
-{
-   bool                    demoMode;
-   GameSystem::GamePadId   whoseServe;
-
-   GameStatus():
-      demoMode(false),
-      whoseServe(GameSystem::GAMEPAD_ID_ANY)
-   {
-   }
-};
-
-
 class GiantPong: public GameSystem::Program
 {
 private:
@@ -86,6 +74,7 @@ private:
    static const uint16_t   SplashTimeout;
    static const uint16_t   DemoTimeout;
    static const uint8_t    MaxScore;
+   static const float      Giant[396];
 
    GameSystem::FiniteState          StateSplashScreen;
    GameSystem::FiniteState          StateSelectPlayers;
@@ -96,13 +85,14 @@ private:
    GameSystem::FiniteState          StateFinished;
    GameSystem::FiniteStateMachine   fsm;
 
-   GameStatus     gameStatus;
-   Ball           ball;
-   Player         leftPlayer;
-   Player         rightPlayer;
-   Shape*         border;
-   Shape*         splash;
-   uint32_t       frameCntr;
+   Ball                    ball;
+   Player                  leftPlayer;
+   Player                  rightPlayer;
+   Shape*                  border;
+   Shape*                  splash;
+   uint32_t                frameCntr;
+   bool                    demoMode;
+   GameSystem::GamePadId   whoseServe;
 
 public:
    GiantPong(Canvas&                _display,

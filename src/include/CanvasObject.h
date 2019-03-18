@@ -29,6 +29,7 @@ typedef Eigen::Array<CoordType, 1, 3>                                      Magni
 typedef Eigen::Array<CoordType, Eigen::Dynamic, CoordMax, Eigen::RowMajor> VertexList_t;  //
 typedef Eigen::Ref<VertexList_t> VertexListRef;
 typedef Eigen::Ref<Coordinate> CoordinateRef;
+typedef Eigen::Map<const VertexList_t> VertexListConstMap_t;
 
 
 class CanvasObject
