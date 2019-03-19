@@ -77,6 +77,7 @@ private:
    static const uint16_t   DemoTimeout;
    static const uint8_t    MaxScore;
    static const float      Giant[396];
+   static const float      Pong[80];
 
    GameSystem::FiniteState          StateSplashScreen;
    GameSystem::FiniteState          StateSelectPlayers;

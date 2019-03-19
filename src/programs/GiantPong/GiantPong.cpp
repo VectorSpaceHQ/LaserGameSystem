@@ -898,14 +898,15 @@ void GiantPong::SplashScreenEnter()
    leftPlayer.computerPlays = true;
    rightPlayer.computerPlays = true;
 
-   InitGamePlay();
-
    DrawBorder(false);
 
-//   uint32_t numPts = sizeof(Giant) / sizeof(float) / 4;
-//   splash = new Shape(numPts);
-//   VertexListConstMap_t giantMap(&Giant[0], numPts, static_cast<int>(CoordMax));
-//   splash->vertices = giantMap;
+   uint32_t numPts = sizeof(Pong) / sizeof(float) / 4;
+   splash = new Shape(numPts);
+   VertexListConstMap_t giantMap(&Pong[0], numPts, static_cast<int>(CoordMax));
+   splash->vertices = giantMap;
+
+   canvas.AddObject(border);
+   canvas.AddObject(splash);
 }
 
 
@@ -918,12 +919,8 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
       case GameSystem::EVENT_PROGRAM_RUN:
          // Give time for the Laser Display to clear out it's vertices before adding the large splash
          frameCntr++;
-         if(frameCntr == 2)
-         {
-//            canvas.AddObject(border);
-//            canvas.AddObject(splash);
-         }
-         else if(frameCntr >= SplashTimeout * 30)
+
+         if(frameCntr >= SplashTimeout * 30)
          {
             demoMode = true;
             fsm.Transition(&StateGameInit);
@@ -967,8 +964,6 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
 
 void GiantPong::SplashScreenExit()
 {
-   TearDownGamePlay();
-
    if(splash)
    {
       delete splash;
@@ -1084,4 +1079,29 @@ const float GiantPong::Giant[396] =
    1382, 371, 0, 1,
    1386, 269, 0, 1,
    1306, 268, 0, 1
+};
+
+
+const float GiantPong::Pong[80] =
+{
+   -1386, -321, 0, 0,
+   -1386, 314, 0, 1,
+   -812, 311, 0, 1,
+   -812, -34, 0, 1,
+   -1386, -37, 0, 1,
+   -653, -317, 0, 0,
+   -650, 315, 0, 1,
+   -83, 315, 0, 1,
+   -80, -320, 0, 1,
+   -654, -320, 0, 1,
+   80, -317, 0, 0,
+   80, 315, 0, 1,
+   654, -320, 0, 1,
+   654, 312, 0, 1,
+   1386, 321, 0, 0,
+   812, 321, 0, 1,
+   812, -314, 0, 1,
+   1386, -314, 0, 1,
+   1386, -27, 0, 1,
+   1099, -27, 0, 1,
 };
