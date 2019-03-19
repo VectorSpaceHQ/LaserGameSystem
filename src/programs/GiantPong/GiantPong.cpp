@@ -25,7 +25,7 @@ const float    GiantPong::BallScalePercent      = 0.01;
 const float    GiantPong::BallStepSize          = 80;
 const uint16_t GiantPong::SplashTimeout         = 5;
 const uint16_t GiantPong::DemoTimeout           = 10;
-const uint8_t  GiantPong::MaxScore              = 10;
+const uint8_t  GiantPong::MaxScore              = 3;
 
 
 
@@ -92,24 +92,39 @@ Player::~Player()
 }
 
 
-void Player::SelectInit(Canvas& canvas, bool selected)
+void Player::SelectOrOverInit(Canvas& canvas, bool selected, bool gameOver)
 {
    int32_t  scorePos = canvas.width / 4;
 
    Clear();
 
-   // Draw a check mark
-   shape = new Shape(3);
-   shape->vertices <<
-                   -1.0,   0.0, 0, 0,
-                   -0.3,  -1.0, 0, 1,
-                    1.0,   1.0, 0, 1;
+   if(!gameOver)
+   {
+      score = 0;
+
+      // Draw a check mark
+      shape = new Shape(3);
+      shape->vertices <<
+                      -1.0,   0.0, 0, 0,
+                      -0.3,  -1.0, 0, 1,
+                       1.0,   1.0, 0, 1;
+   }
+   else
+   {
+      // Draw a W for WINNER!
+      shape = new Shape(5);
+      shape->vertices <<
+                      -1.0,   1.0, 0, 0,
+                      -0.5,  -1.0, 0, 1,
+                       0.0,   0.5, 0, 1,
+                       0.5,  -1.0, 0, 1,
+                       1.0,   1.0, 0, 1;
+   }
 
    scoreShape = new NumeralShape();
    sprite = new Sprite(scoreShape);
    sprite->AddShape(shape);
    sprite->Scale(300);
-   score = 0;
 
    if(selected)
    {
@@ -167,6 +182,8 @@ void Player::GameInit(Canvas& canvas)
 
 void Player::Score()
 {
+   score++;
+
    if(scoreShape)
    {
       scoreShape->operator++();
@@ -176,14 +193,7 @@ void Player::Score()
 
 uint8_t Player::GetScore()
 {
-   if(scoreShape)
-   {
-      return score;
-   }
-   else
-   {
-      return 0;
-   }
+   return score;
 }
 
 
@@ -284,9 +294,9 @@ GiantPong::GiantPong(Canvas&              _display,
                  std::bind(&GiantPong::GamePlayHandle, this, std::placeholders::_1, std::placeholders::_2),
                  nullptr),
    StateGameOver("PongOver",
-                 nullptr,
+                 std::bind(&GiantPong::GameOverEnter, this),
                  std::bind(&GiantPong::GameOverHandle, this, std::placeholders::_1, std::placeholders::_2),
-                 nullptr),
+                 std::bind(&GiantPong::PlayerSelectExit, this)), // Same teardown as player select
    StateFinished("PongFinished",
                  nullptr,
                  std::bind(&GiantPong::FinishedHandle, this, std::placeholders::_1, std::placeholders::_2),
@@ -500,8 +510,8 @@ void GiantPong::PlayerSelectEnter()
 {
    canvas.Clear();
    DrawBorder(true);
-   leftPlayer.SelectInit(canvas, !leftPlayer.computerPlays);
-   rightPlayer.SelectInit(canvas, !rightPlayer.computerPlays);
+   leftPlayer.SelectOrOverInit(canvas, !leftPlayer.computerPlays);
+   rightPlayer.SelectOrOverInit(canvas, !rightPlayer.computerPlays);
    frameCntr = 5.5 * 30;
 
    leftPlayer.scoreShape->SetValue(5);
@@ -811,6 +821,38 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
 }
 
 
+void GiantPong::GameOverEnter()
+{
+   canvas.Clear();
+   frameCntr = 0;
+
+   DrawBorder(true);
+
+   if(leftPlayer.GetScore() >= MaxScore)
+   {
+      leftPlayer.SelectOrOverInit(canvas, true, true);
+      rightPlayer.SelectOrOverInit(canvas, false, true);
+   }
+   else if(rightPlayer.GetScore() >= MaxScore)
+   {
+      leftPlayer.SelectOrOverInit(canvas, false, true);
+      rightPlayer.SelectOrOverInit(canvas, true, true);
+   }
+   else
+   {
+      leftPlayer.SelectOrOverInit(canvas, false, true);
+      rightPlayer.SelectOrOverInit(canvas, false, true);
+   }
+
+   leftPlayer.scoreShape->SetValue(leftPlayer.GetScore());
+   rightPlayer.scoreShape->SetValue(rightPlayer.GetScore());
+
+   canvas.AddObject(border);
+   canvas.AddObject(leftPlayer.sprite);
+   canvas.AddObject(rightPlayer.sprite);
+}
+
+
 bool GiantPong::GameOverHandle(GameSystem::Events e, void* data)
 {
    bool  handled = false;
@@ -818,9 +860,17 @@ bool GiantPong::GameOverHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
-         if(frameCntr++ >= 3 * 30)
+         if(frameCntr++ >= 10 * 30)
          {
-            fsm.Transition(&StateGameInit);
+            fsm.Transition(&StateSplashScreen);
+         }
+         break;
+
+      case GameSystem::EVENT_GAMEPAD_BUTTON_CLICK:
+         // Display the score for at least three seconds
+         if(frameCntr >= 3 * 30)
+         {
+            fsm.Transition(&StateSplashScreen);
          }
          break;
 

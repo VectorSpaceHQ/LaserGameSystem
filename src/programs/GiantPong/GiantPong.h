@@ -56,7 +56,7 @@ public:
    Player(PlayerId _id, GameSystem::GamePad& _gamePad);
    ~Player();
 
-   void SelectInit(Canvas& canvas, bool selected);
+   void SelectOrOverInit(Canvas& canvas, bool selected, bool over = false);
    void GameInit(Canvas& canvas);
    void Score();
    uint8_t GetScore();
@@ -122,6 +122,7 @@ private:
    bool GameReadyHandle(GameSystem::Events e, void* data);
    void GamePlayEnter();
    bool GamePlayHandle(GameSystem::Events e, void* data);
+   void GameOverEnter();
    bool GameOverHandle(GameSystem::Events e, void* data);
    bool FinishedHandle(GameSystem::Events e, void* data);
 };
