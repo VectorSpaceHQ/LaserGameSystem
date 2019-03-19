@@ -198,11 +198,18 @@ uint8_t Player::GetScore()
 }
 
 
-void Player::Play(Sprite& ball)
+void Player::Play(Sprite& ball, bool demo)
 {
    if(computerPlays)
    {
-      sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY) + ((rand() % 1000) - 500));
+      CoordType trackError = 0;
+
+      if(!demo)
+      {
+         trackError = ((rand() % 1000) - 500);
+      }
+
+      sprite->MoveTo(sprite->position(CoordX), ball.position(CoordY) + trackError);
    }
    else
    {
@@ -378,8 +385,8 @@ bool GiantPong::PlayGame()
 
    // Move the ball
    ball.sprite->Move();
-   leftPlayer.Play(*(ball.sprite));
-   rightPlayer.Play(*(ball.sprite));
+   leftPlayer.Play(*(ball.sprite), demoMode);
+   rightPlayer.Play(*(ball.sprite), demoMode);
 
    // If the ball is moving left...
    if(ball.sprite->velocity(CoordX) < 0)
@@ -640,8 +647,8 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
          // Players can move their paddles in the ready state
-         leftPlayer.Play(*(ball.sprite));
-         rightPlayer.Play(*(ball.sprite));
+         leftPlayer.Play(*(ball.sprite), demoMode);
+         rightPlayer.Play(*(ball.sprite), demoMode);
 
          // Auto-start if we're in demo mode, or the computer is playing
          if((demoMode) ||

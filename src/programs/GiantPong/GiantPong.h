@@ -61,7 +61,7 @@ public:
    void GameInit(Canvas& canvas);
    void Score();
    uint8_t GetScore();
-   void Play(Sprite& ball);
+   void Play(Sprite& ball, bool demo);
    CoordType GetPosition(CoordPositions pos);
    int16_t CheckCollision(Sprite& ball);
    void Clear();
