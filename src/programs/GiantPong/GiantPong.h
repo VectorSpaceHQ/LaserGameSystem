@@ -48,7 +48,8 @@ public:
    uint8_t              score;
    bool                 computerPlays;
    GameSystem::GamePad& gamePad;
-   int32_t              lastAxis;
+   uint32_t             lastAxis;
+   int32_t              halfCanvas;
    Shape*               shape;
    Sprite*              sprite;
    NumeralShape*        scoreShape;

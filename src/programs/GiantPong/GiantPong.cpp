@@ -80,6 +80,7 @@ Player::Player(PlayerId _id, GameSystem::GamePad& _gamePad):
    computerPlays(true),
    gamePad(_gamePad),
    lastAxis(0),
+   halfCanvas(0),
    shape(),
    sprite(),
    scoreShape()
@@ -96,6 +97,7 @@ Player::~Player()
 void Player::SelectOrOverInit(Canvas& canvas, bool selected, bool gameOver)
 {
    int32_t  scorePos = canvas.width / 4;
+   halfCanvas = canvas.height / 2;
 
    Clear();
 
@@ -148,6 +150,7 @@ void Player::GameInit(Canvas& canvas)
    uint16_t paddleHeight = canvas.height * PaddleScalePercent;
    int32_t  paddleXPos = canvas.width / 9;
    int32_t  scorePos = canvas.width / 4;
+   halfCanvas = canvas.height / 2;
 
    Clear();
 
@@ -213,10 +216,16 @@ void Player::Play(Sprite& ball, bool demo)
    }
    else
    {
-      int32_t  currAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
+      uint32_t  currAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
+      int32_t   diff = currAxis - lastAxis;
 
-      // Move the difference between the two since our last poll
-      sprite->Move(0, (currAxis - lastAxis) * PaddleSpeed);
+      // Detect and ignore a wrap condition
+      if(abs(diff) * PaddleSpeed < halfCanvas)
+      {
+         // Move the difference between the two since our last poll
+         sprite->Move(0, diff * PaddleSpeed);
+      }
+
       lastAxis = currAxis;
    }
 }

@@ -16,7 +16,7 @@ class TestGamePadPaddle: public GameSystem::GamePad
 {
 private:
    GameSystem::GamePadId   gamePadId;
-   int32_t                 axisLeftX;
+   uint32_t                axisLeftX;
    bool                    buttonA;
    uint32_t                frameCtr;
 

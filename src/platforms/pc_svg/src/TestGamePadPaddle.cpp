@@ -30,7 +30,7 @@ GameSystem::GamePadId TestGamePadPaddle::GetId()
 }
 
 
-int32_t TestGamePadPaddle::GetAxis(GameSystem::AxisId axis)
+uint32_t TestGamePadPaddle::GetAxis(GameSystem::AxisId axis)
 {
    if(axis == GameSystem::AXIS_ID_LEFT_X)
    {

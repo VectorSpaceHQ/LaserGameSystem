@@ -19,7 +19,7 @@ public:
    GamePadPaddle(GameSystem::GamePadId gamePadId, TIM_TypeDef *aTimerInstance, int theButtonPin);
    ~GamePadPaddle();
 
-   virtual int32_t GetAxis(GameSystem::AxisId axisId);
+   virtual uint32_t GetAxis(GameSystem::AxisId axisId);
    virtual bool GetButton(GameSystem::ButtonId axisId);
    virtual GameSystem::GamePadId GetId() { return id; }
    virtual void Run() {};

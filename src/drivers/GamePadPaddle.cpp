@@ -62,10 +62,10 @@ GamePadPaddle::~GamePadPaddle()
    HAL_GPIO_DeInit(GPIOB, buttonPin);
 }
 
-int32_t
+uint32_t
 GamePadPaddle::GetAxis(GameSystem::AxisId axisId)
 {
-   int32_t axisPosition = 0;
+   uint32_t axisPosition = 0;
 
    if (axisId == GameSystem::AXIS_ID_LEFT_X)
    {
