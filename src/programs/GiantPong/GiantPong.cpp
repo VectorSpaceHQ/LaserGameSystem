@@ -20,12 +20,13 @@
 #include "Program.h"
 
 
-const float    Player::PaddleScalePercent       = 0.10;
-const float    GiantPong::BallScalePercent      = 0.01;
-const float    GiantPong::BallStepSize          = 80;
-const uint16_t GiantPong::SplashTimeout         = 5;
-const uint16_t GiantPong::DemoTimeout           = 10;
-const uint8_t  GiantPong::MaxScore              = 3;
+const float    Player::PaddleScalePercent       = 0.10;     // Percent of canvas height for paddle scale
+const uint16_t Player::PaddleSpeed              = 5;        // Multiplier for paddle movement speed
+const float    GiantPong::BallScalePercent      = 0.01;     // Percent of canvas height for ball scale
+const float    GiantPong::BallStepSize          = 80;       // How far to move the ball in a single frame
+const uint16_t GiantPong::SplashTimeout         = 5;        // How long to show the splash screen
+const uint16_t GiantPong::DemoTimeout           = 10;       // How long to display the demo game play
+const uint8_t  GiantPong::MaxScore              = 3;        // The max score to play to (must be <= 10)
 
 
 
@@ -208,7 +209,7 @@ void Player::Play(Sprite& ball)
       int32_t  currAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
 
       // Move the difference between the two since our last poll
-      sprite->Move(0, (currAxis - lastAxis) * 5);
+      sprite->Move(0, (currAxis - lastAxis) * PaddleSpeed);
       lastAxis = currAxis;
    }
 }

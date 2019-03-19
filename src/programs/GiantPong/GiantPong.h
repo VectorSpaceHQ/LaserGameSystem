@@ -41,6 +41,7 @@ struct Ball
 class Player
 {
    static const float      PaddleScalePercent;
+   static const uint16_t   PaddleSpeed;
 
 public:
    PlayerId             id;
