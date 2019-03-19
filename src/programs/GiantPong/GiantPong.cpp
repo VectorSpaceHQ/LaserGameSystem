@@ -75,12 +75,13 @@ void Ball::Clear()
 
 Player::Player(PlayerId _id, GameSystem::GamePad& _gamePad):
    id(_id),
+   score(0),
    computerPlays(true),
    gamePad(_gamePad),
    lastAxis(0),
    shape(),
    sprite(),
-   score()
+   scoreShape()
 {
 }
 
@@ -104,10 +105,11 @@ void Player::SelectInit(Canvas& canvas, bool selected)
                    -0.3,  -1.0, 0, 1,
                     1.0,   1.0, 0, 1;
 
-   score = new NumeralShape();
-   sprite = new Sprite(score);
+   scoreShape = new NumeralShape();
+   sprite = new Sprite(scoreShape);
    sprite->AddShape(shape);
    sprite->Scale(300);
+   score = 0;
 
    if(selected)
    {
@@ -135,8 +137,9 @@ void Player::GameInit(Canvas& canvas)
 
    shape = new Rectangle(40, paddleHeight);
    sprite = new Sprite(shape);
-   score = new NumeralShape();
-   score->Scale(150);
+   scoreShape = new NumeralShape();
+   scoreShape->Scale(150);
+   score = 0;
 
    if(id == PLAYER_LEFT)
    {
@@ -146,7 +149,7 @@ void Player::GameInit(Canvas& canvas)
 
       sprite->Move(canvas.left + paddleXPos, 0);
       sprite->SetLimits(lowerLimit, upperLimit);
-      score->Move(0 - scorePos, canvas.top - 300, 0);
+      scoreShape->Move(0 - scorePos, canvas.top - 300, 0);
    }
    else
    {
@@ -155,7 +158,7 @@ void Player::GameInit(Canvas& canvas)
 
       sprite->Move(canvas.right - paddleXPos, 0);
       sprite->SetLimits(lowerLimit, upperLimit);
-      score->Move(scorePos, canvas.top - 300, 0);
+      scoreShape->Move(scorePos, canvas.top - 300, 0);
    }
 
    lastAxis = gamePad.GetAxis(GameSystem::AXIS_ID_LEFT_X);
@@ -164,18 +167,18 @@ void Player::GameInit(Canvas& canvas)
 
 void Player::Score()
 {
-   if(score)
+   if(scoreShape)
    {
-      score->operator++();
+      scoreShape->operator++();
    }
 }
 
 
 uint8_t Player::GetScore()
 {
-   if(score)
+   if(scoreShape)
    {
-      return score->value;
+      return score;
    }
    else
    {
@@ -242,10 +245,10 @@ void Player::Clear()
       sprite = nullptr;
    }
 
-   if(score)
+   if(scoreShape)
    {
-      delete score;
-      score = nullptr;
+      delete scoreShape;
+      scoreShape = nullptr;
    }
 
    if(shape)
@@ -351,8 +354,8 @@ void GiantPong::InitGamePlay()
    canvas.AddObject(border);
    canvas.AddObject(rightPlayer.sprite);
    canvas.AddObject(leftPlayer.sprite);
-   canvas.AddObject(leftPlayer.score);
-   canvas.AddObject(rightPlayer.score);
+   canvas.AddObject(leftPlayer.scoreShape);
+   canvas.AddObject(rightPlayer.scoreShape);
 }
 
 
@@ -501,8 +504,8 @@ void GiantPong::PlayerSelectEnter()
    rightPlayer.SelectInit(canvas, !rightPlayer.computerPlays);
    frameCntr = 5.5 * 30;
 
-   leftPlayer.score->SetValue(5);
-   rightPlayer.score->SetValue(5);
+   leftPlayer.scoreShape->SetValue(5);
+   rightPlayer.scoreShape->SetValue(5);
 
    canvas.AddObject(border);
    canvas.AddObject(leftPlayer.sprite);
@@ -523,8 +526,8 @@ bool GiantPong::PlayerSelectHandle(GameSystem::Events e, void* data)
          }
          else if(frameCntr % 30 == 0)
          {
-            leftPlayer.score->operator--();
-            rightPlayer.score->operator--();
+            leftPlayer.scoreShape->operator--();
+            rightPlayer.scoreShape->operator--();
          }
          break;
 
@@ -625,6 +628,10 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
    switch(e)
    {
       case GameSystem::EVENT_PROGRAM_RUN:
+         // Players can move their paddles in the ready state
+         leftPlayer.Play(*(ball.sprite));
+         rightPlayer.Play(*(ball.sprite));
+
          // Auto-start if we're in demo mode, or the computer is playing
          if((demoMode) ||
             ((whoseServe == GameSystem::GAMEPAD_ID_1) && leftPlayer.computerPlays)  ||
@@ -747,6 +754,49 @@ bool GiantPong::GamePlayHandle(GameSystem::Events e, void* data)
          }
          break;
 
+      case GameSystem::EVENT_GAMEPAD_BUTTON_CLICK:
+         if(data)
+         {
+            GameSystem::Button* buttonEvent = static_cast<GameSystem::Button*>(data);
+
+            if(demoMode)
+            {
+               if(buttonEvent->gamPadId == GameSystem::GAMEPAD_ID_1)
+               {
+                  leftPlayer.computerPlays = false;
+                  fsm.Transition(&StateSelectPlayers);
+               }
+               else if(buttonEvent->gamPadId == GameSystem::GAMEPAD_ID_2)
+               {
+                  rightPlayer.computerPlays = false;
+                  fsm.Transition(&StateSelectPlayers);
+               }
+            }
+            else
+            {
+               // During game play, pressing both buttons simultaneously will reset the game
+               if(buttonEvent->gamPadId == GameSystem::GAMEPAD_ID_1)
+               {
+                  if(gamePad2.GetButton(GameSystem::BUTTON_ID_A))
+                  {
+                     TearDownGamePlay();
+                     fsm.Transition(&StateSplashScreen);
+                  }
+               }
+               else if(buttonEvent->gamPadId == GameSystem::GAMEPAD_ID_2)
+               {
+                  if(gamePad1.GetButton(GameSystem::BUTTON_ID_A))
+                  {
+                     TearDownGamePlay();
+                     fsm.Transition(&StateSplashScreen);
+                  }
+               }
+            }
+
+            handled = true;
+         }
+         break;
+
       case GameSystem::EVENT_PROGRAM_STOP:
          TearDownGamePlay();
          fsm.Transition(&StateFinished);
@@ -797,14 +847,14 @@ void GiantPong::SplashScreenEnter()
    leftPlayer.computerPlays = true;
    rightPlayer.computerPlays = true;
 
-//   InitGamePlay();
+   InitGamePlay();
 
    DrawBorder(false);
 
-   uint32_t numPts = sizeof(Giant) / sizeof(float) / 4;
-   splash = new Shape(numPts);
-   VertexListConstMap_t giantMap(&Giant[0], numPts, static_cast<int>(CoordMax));
-   splash->vertices = giantMap;
+//   uint32_t numPts = sizeof(Giant) / sizeof(float) / 4;
+//   splash = new Shape(numPts);
+//   VertexListConstMap_t giantMap(&Giant[0], numPts, static_cast<int>(CoordMax));
+//   splash->vertices = giantMap;
 }
 
 
@@ -819,8 +869,8 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
          frameCntr++;
          if(frameCntr == 2)
          {
-            canvas.AddObject(border);
-            canvas.AddObject(splash);
+//            canvas.AddObject(border);
+//            canvas.AddObject(splash);
          }
          else if(frameCntr >= SplashTimeout * 30)
          {
@@ -832,7 +882,7 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
          break;
 
       case GameSystem::EVENT_GAMEPAD_BUTTON_CLICK:
-         if(data)
+         if(data && (frameCntr > 2 * 30))
          {
             GameSystem::Button* buttonEvent = static_cast<GameSystem::Button*>(data);
 
@@ -866,7 +916,7 @@ bool GiantPong::SplashScreenHandle(GameSystem::Events e, void* data)
 
 void GiantPong::SplashScreenExit()
 {
-//   TearDownGamePlay();
+   TearDownGamePlay();
 
    if(splash)
    {

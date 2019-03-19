@@ -24,6 +24,7 @@ namespace GameSystem
    {
       bool     lastStatus;
       uint32_t frameCntr;
+      uint32_t timeout;
       GamePad& gamePad;
       ButtonId buttonId;
 
@@ -31,6 +32,7 @@ namespace GameSystem
       ButtonStatus(GamePad& _gamePad, ButtonId _buttonId):
          lastStatus(false),
          frameCntr(0),
+         timeout(0),
          gamePad(_gamePad),
          buttonId(_buttonId)
       {

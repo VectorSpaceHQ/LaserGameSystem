@@ -29,13 +29,20 @@ namespace GameSystem
       buttonState.id = buttonId;
       buttonState.isPressed = gamePad.GetButton(buttonId);
 
-      frameCntr++;
+      ++frameCntr;
+
+      if(timeout > 0)
+      {
+         --timeout;
+      }
 
       if(buttonState.isPressed != lastStatus)
       {
-         if(frameCntr < 0.5 * 30)
+         if((timeout == 0) && (frameCntr < 0.5 * 30))
          {
             buttonEvent = EVENT_GAMEPAD_BUTTON_CLICK;
+            // Wait 1 second before we register another click
+            timeout = 1 * 30;
          }
 
          frameCntr = 0;

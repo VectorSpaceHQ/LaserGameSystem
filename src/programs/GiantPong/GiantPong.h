@@ -44,12 +44,13 @@ class Player
 
 public:
    PlayerId             id;
+   uint8_t              score;
    bool                 computerPlays;
    GameSystem::GamePad& gamePad;
    int32_t              lastAxis;
    Shape*               shape;
    Sprite*              sprite;
-   NumeralShape*        score;
+   NumeralShape*        scoreShape;
 
 
    Player(PlayerId _id, GameSystem::GamePad& _gamePad);
