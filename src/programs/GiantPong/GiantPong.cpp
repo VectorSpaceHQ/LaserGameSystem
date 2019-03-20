@@ -21,12 +21,12 @@
 
 
 const float    Player::PaddleScalePercent       = 0.10;     // Percent of canvas height for paddle scale
-const uint16_t Player::PaddleSpeed              = 5;        // Multiplier for paddle movement speed
+const uint16_t Player::PaddleSpeed              = 4;        // Multiplier for paddle movement speed
 const float    GiantPong::BallScalePercent      = 0.01;     // Percent of canvas height for ball scale
 const float    GiantPong::BallStepSize          = 80;       // How far to move the ball in a single frame
 const uint16_t GiantPong::SplashTimeout         = 5;        // How long to show the splash screen
 const uint16_t GiantPong::DemoTimeout           = 10;       // How long to display the demo game play
-const uint8_t  GiantPong::MaxScore              = 3;        // The max score to play to (must be <= 10)
+const uint8_t  GiantPong::MaxScore              = 5;        // The max score to play to (must be <= 10)
 
 
 
@@ -81,6 +81,8 @@ Player::Player(PlayerId _id, GameSystem::GamePad& _gamePad):
    gamePad(_gamePad),
    lastAxis(0),
    halfCanvas(0),
+   paddleHeight(0),
+   velocity(0),
    shape(),
    sprite(),
    scoreShape()
@@ -147,13 +149,13 @@ void Player::SelectOrOverInit(Canvas& canvas, bool selected, bool gameOver)
 
 void Player::GameInit(Canvas& canvas)
 {
-   uint16_t paddleHeight = canvas.height * PaddleScalePercent;
    int32_t  paddleXPos = canvas.width / 9;
    int32_t  scorePos = canvas.width / 4;
-   halfCanvas = canvas.height / 2;
 
    Clear();
 
+   halfCanvas = canvas.height / 2;
+   paddleHeight = canvas.height * PaddleScalePercent;
    shape = new Rectangle(40, paddleHeight);
    sprite = new Sprite(shape);
    scoreShape = new NumeralShape();
@@ -205,7 +207,7 @@ void Player::Play(Sprite& ball, bool demo)
 {
    if(computerPlays)
    {
-      CoordType trackError = 0;
+      CoordType trackError = 10;
 
       if(!demo)
       {
@@ -226,6 +228,7 @@ void Player::Play(Sprite& ball, bool demo)
          sprite->Move(0, diff * PaddleSpeed);
       }
 
+      velocity = diff * PaddleSpeed;
       lastAxis = currAxis;
    }
 }
@@ -261,6 +264,39 @@ int16_t Player::CheckCollision(Sprite& ball)
    }
 
    return overlap;
+}
+
+
+CoordType Player::BounceBall(Sprite& ball)
+{
+   CoordType  returnVal = 0;
+//   CoordType  realDiff = ball.position(CoordY) - sprite->position(CoordY);
+//   CoordType  percentDiff = abs(realDiff) / (paddleHeight / 2);
+//
+//   if(percentDiff > 0.7)
+//   {
+//      returnVal = 0.4;
+//   }
+//   else if(percentDiff > 0.4)
+//   {
+//      returnVal = 0.6;
+//   }
+//   else if(percentDiff > 0.1)
+//   {
+//      returnVal = 0.8;
+//   }
+//   else
+//   {
+//      returnVal = 1;
+//   }
+//
+//   if(realDiff < 0)
+//   {
+//      returnVal *= -1;
+//   }
+   returnVal = 0.3 * velocity;
+
+   return returnVal;
 }
 
 
@@ -424,9 +460,23 @@ bool GiantPong::PlayGame()
 
          if(overlap <= 0)
          {
+            CoordType bounce = leftPlayer.BounceBall(*(ball.sprite));
+
             ball.sprite->Move(-overlap, 0);
+
             int xVel = -ball.sprite->velocity(CoordX);
-            ball.sprite->SetVelocity(xVel, ball.sprite->velocity(CoordY), 0);
+            int yVel = ball.sprite->velocity(CoordY) + bounce;
+
+            if(yVel > BallStepSize * 2)
+            {
+               yVel = BallStepSize * 2;
+            }
+            else if(yVel < BallStepSize / 2)
+            {
+               yVel = BallStepSize / 2;
+            }
+
+            ball.sprite->SetVelocity(xVel, yVel, 0);
             ball.sprite->Move(-overlap, 0);  // Prevent from showing the overlap
          }
       }
@@ -457,9 +507,23 @@ bool GiantPong::PlayGame()
 
          if(overlap <= 0)
          {
+            CoordType bounce = rightPlayer.BounceBall(*(ball.sprite));
+
             ball.sprite->Move(overlap, 0);
+
             int xVel = -ball.sprite->velocity(CoordX);
-            ball.sprite->SetVelocity(xVel, ball.sprite->velocity(CoordY), 0);
+            int yVel = ball.sprite->velocity(CoordY) + bounce;
+
+            if(yVel > BallStepSize * 2)
+            {
+               yVel = BallStepSize * 2;
+            }
+            else if(yVel < BallStepSize / 2)
+            {
+               yVel = BallStepSize / 2;
+            }
+
+            ball.sprite->SetVelocity(xVel, yVel, 0);
             ball.sprite->Move(overlap, 0);  // Prevent from showing the overlap
          }
       }
@@ -680,7 +744,10 @@ bool GiantPong::GameReadyHandle(GameSystem::Events e, void* data)
 
             if(whoseServe == GameSystem::GAMEPAD_ID_ANY)
             {
-               // We don't care whose serve it is at the start
+               // But once they start, we need to set our variable
+               whoseServe = buttonEvent->gamPadId;
+
+               // We don't care who starts the serve at the start
                fsm.Transition(&StateGamePlay);
             }
             else

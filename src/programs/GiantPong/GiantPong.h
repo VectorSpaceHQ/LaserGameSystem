@@ -50,6 +50,8 @@ public:
    GameSystem::GamePad& gamePad;
    uint32_t             lastAxis;
    int32_t              halfCanvas;
+   uint16_t             paddleHeight;
+   CoordType            velocity;
    Shape*               shape;
    Sprite*              sprite;
    NumeralShape*        scoreShape;
@@ -65,6 +67,7 @@ public:
    void Play(Sprite& ball, bool demo);
    CoordType GetPosition(CoordPositions pos);
    int16_t CheckCollision(Sprite& ball);
+   CoordType BounceBall(Sprite& ball);
    void Clear();
 };
 
